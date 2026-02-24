@@ -73,7 +73,6 @@
     .proj-overlay {
       position:fixed; inset:0;
       background:rgba(22,18,14,.92);
-      backdrop-filter:blur(10px);
       z-index:800;
       display:flex; align-items:center; justify-content:center;
       padding:2rem;
@@ -168,7 +167,7 @@
     .proj-modal-content .pm-links a:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
 
     /* CONTACT MODAL */
-    .modal-overlay { position:fixed; inset:0; background:rgba(22,18,14,.85); backdrop-filter:blur(6px); z-index:810; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s; }
+    .modal-overlay { position:fixed; inset:0; background:rgba(22,18,14,.85); z-index:810; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s; }
     .modal-overlay.active { opacity:1; pointer-events:all; }
     .modal { background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2.8rem; width:90%; max-width:480px; position:relative; transform:translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1); }
     .modal-overlay.active .modal { transform:none; }
