@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nicolò Dalmasso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inconsolata:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #16120e;
+      --bg2:         #1c1710;
+      --sand:        #e8dcc8;
+      --sand-dim:    rgba(232,220,200,0.42);
+      --sand-faint:  rgba(232,220,200,0.12);
+      --rust:        #d67134;
+      --rust-dim:    rgba(214, 113, 52, 0.5);
+      --charcoal:    #2e2920;
+      --border:      #282420;
+      --font-s:      'Playfair Display', serif;
+      --font-m:      'Inconsolata', monospace;
+    }
+
+    html { scroll-behavior: smooth; font-size: 110%; }
+
+    body {
+      background: var(--bg);
+      color: var(--sand);
+      font-family: var(--font-m);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    .hero-eyebrow, .s-num, .about-label, .cv-group-title, .b-tag,
+    .tl-date, .social-item span, .about-stat-label, .b-link {
+      color: var(--rust);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-size: 0.75rem;
+    }
+
+    /* CURSOR */
+    #cursor { position:fixed; width:8px; height:8px; background:var(--rust); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+    #cursor-ring { position:fixed; width:32px; height:32px; border:1px solid var(--rust-dim); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .25s,height .25s; }
+    body.hovered #cursor-ring { width:52px; height:52px; }
+
+    body::after {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9997; opacity:.035;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    section { position:relative; z-index:1; }
+    .wrap { max-width:1200px; margin:0 auto; padding:0 clamp(2rem,5vw,5rem); }
+
+    /* HERO */
+    #hero { padding:clamp(6rem,15vh,12rem) 0 6rem; }
+    .hero-inner { display:flex; align-items:center; justify-content:space-between; gap:4rem; }
+    .hero-main { flex:1 1 0; min-width:0; }
+    .hero-eyebrow { margin-bottom:2.5rem; opacity:0; animation:up .9s .2s cubic-bezier(.16,1,.3,1) forwards; }
+    .hero-name { font-family:var(--font-s); font-size:clamp(4rem,10vw,9.5rem); font-weight:400; line-height:.85; color:var(--sand); opacity:0; animation:up .9s .35s cubic-bezier(.16,1,.3,1) forwards; }
+    .hero-name span { display:block; font-style:italic; color:rgba(232,220,200,.55); font-size:.72em; }
+    .hero-photo-wrap { flex:0 0 clamp(220px,32vw,450px); opacity:0; animation:up .9s .5s cubic-bezier(.16,1,.3,1) forwards; }
+    .hero-photo { width:100%; border:1px solid var(--border); border-radius:3px; overflow:hidden; }
+    .hero-photo img { width:100%; height:auto; display:block; }
+
+    /* ══ PROJECT MODAL ══ */
+    .proj-overlay {
+      position:fixed; inset:0;
+      background:rgba(22,18,14,.92);
+      backdrop-filter:blur(10px);
+      z-index:800;
+      display:flex; align-items:center; justify-content:center;
+      padding:2rem;
+      opacity:0; pointer-events:none;
+      transition:opacity .35s;
+    }
+    .proj-overlay.active { opacity:1; pointer-events:all; }
+
+    /* Arrow buttons outside the modal box */
+    .proj-nav {
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:48px; height:48px;
+      background:var(--charcoal); border:1px solid var(--border); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.25rem; color:var(--sand-dim);
+      cursor:pointer; transition:all .25s; z-index:10;
+    }
+    .proj-nav:hover { background:var(--rust); border-color:var(--rust); color:#fff; }
+    .proj-nav:disabled { opacity:.18; pointer-events:none; }
+    .proj-nav.prev { left:max(1.5rem, calc(50% - 390px - 72px)); }
+    .proj-nav.next { right:max(1.5rem, calc(50% - 390px - 72px)); }
+
+    .proj-modal {
+      background:var(--bg2); border:1px solid var(--border); border-radius:4px;
+      width:90%; max-width:780px; max-height:90vh;
+      overflow-y:auto; position:relative;
+      transform:translateY(24px) scale(.98);
+      transition:transform .4s cubic-bezier(.16,1,.3,1);
+      scrollbar-width:thin; scrollbar-color:var(--charcoal) transparent;
+    }
+    .proj-overlay.active .proj-modal { transform:none; }
+
+    /* Sticky header row inside modal */
+    .proj-modal-header {
+      position:sticky; top:0; z-index:20;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:.9rem 1.4rem;
+      background:var(--bg2); border-bottom:1px solid var(--border);
+    }
+    .proj-counter { font-size:.68rem; color:var(--rust); font-weight:700; letter-spacing:.22em; text-transform:uppercase; }
+    .proj-modal-close {
+      width:30px; height:30px; border-radius:50%;
+      background:var(--charcoal); border:1px solid var(--border);
+      font-size:1rem; color:var(--sand-dim); cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:all .2s;
+    }
+    .proj-modal-close:hover { background:var(--rust); border-color:var(--rust); color:#fff; }
+
+    /* Blog-style body */
+    .proj-modal-body { padding:2.8rem 3rem 3.5rem; }
+
+    .proj-modal-tag { color:var(--rust); font-weight:700; text-transform:uppercase; letter-spacing:.25em; font-size:.7rem; margin-bottom:1rem; }
+    .proj-modal-title { font-family:var(--font-s); font-size:clamp(1.6rem,3vw,2.4rem); color:var(--sand); line-height:1.15; margin-bottom:.5rem; }
+    .proj-modal-year { font-size:.82rem; color:var(--sand-dim); margin-bottom:2.5rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
+
+    /* Rich content */
+    .proj-modal-content p { font-size:1rem; color:var(--sand-dim); line-height:1.95; margin-bottom:1.5em; }
+    .proj-modal-content p strong { color:var(--sand); font-weight:400; }
+    .proj-modal-content h3 { font-family:var(--font-s); font-size:1.25rem; color:var(--sand); font-weight:400; margin:2.5rem 0 .8rem; }
+
+    .proj-modal-content .pm-img {
+      width:100%; display:block;
+      border:1px solid var(--border); border-radius:3px;
+      margin:2rem 0; background:var(--charcoal);
+    }
+    .proj-modal-content .pm-img img { width:100%; display:block; border-radius:2px; }
+    .proj-modal-content .pm-img.placeholder {
+      aspect-ratio:16/7;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.68rem; color:var(--sand-dim);
+      text-transform:uppercase; letter-spacing:.12em;
+    }
+    .proj-modal-content .pm-caption {
+      font-size:.75rem; color:var(--sand-dim);
+      text-align:center; margin-top:-1.5rem; margin-bottom:2rem;
+      font-style:italic; letter-spacing:.03em;
+    }
+    .proj-modal-content .pm-img-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:2rem 0 .5rem; }
+    .proj-modal-content .pm-img-row .pm-img { margin:0; }
+
+    .proj-modal-content .pm-links {
+      display:flex; flex-wrap:wrap; gap:.8rem;
+      margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--border);
+    }
+    .proj-modal-content .pm-links a {
+      color:var(--rust); font-weight:700; text-transform:uppercase;
+      letter-spacing:.2em; font-size:.72rem; text-decoration:none;
+      border:1px solid var(--rust-dim); padding:.5rem 1.2rem; border-radius:2px;
+      transition:all .25s;
+    }
+    .proj-modal-content .pm-links a:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
+
+    /* CONTACT MODAL */
+    .modal-overlay { position:fixed; inset:0; background:rgba(22,18,14,.85); backdrop-filter:blur(6px); z-index:810; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s; }
+    .modal-overlay.active { opacity:1; pointer-events:all; }
+    .modal { background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2.8rem; width:90%; max-width:480px; position:relative; transform:translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1); }
+    .modal-overlay.active .modal { transform:none; }
+    .modal-close { position:absolute; top:1.2rem; right:1.5rem; font-size:1.5rem; color:var(--sand-dim); cursor:pointer; background:none; border:none; }
+    .modal h3 { font-family:var(--font-s); font-size:1.8rem; color:var(--sand); margin-bottom:.5rem; }
+    .form-row { display:flex; flex-direction:column; gap:1rem; margin-bottom:1.2rem; }
+    .form-row input, .form-row textarea { background:var(--charcoal); border:1px solid var(--border); padding:.8rem; color:var(--sand); font-family:var(--font-m); outline:none; border-radius:2px; }
+    .form-submit { width:100%; padding:1rem; background:var(--rust); color:#fff; border:none; font-family:var(--font-m); text-transform:uppercase; letter-spacing:.2em; cursor:pointer; border-radius:2px; }
+
+    /* SECTIONS */
+    .s-head { display:flex; align-items:baseline; gap:1.5rem; margin-bottom:5rem; }
+    .s-title { font-family:var(--font-s); font-size:clamp(2.2rem,4vw,3.2rem); font-weight:400; color:var(--sand); line-height:1; }
+
+    /* ABOUT */
+    #about { padding:6rem 0; }
+    .about-grid { display:grid; grid-template-columns:1fr 1.6fr; gap:clamp(3rem,8vw,8rem); align-items:start; }
+    .about-location { font-size:1rem; color:var(--sand-dim); margin-bottom:2.5rem; }
+    .about-stat { border-top:1px solid var(--border); padding:1.5rem 0; display:flex; flex-direction:column; gap:.2rem; }
+    .about-stat-num { font-family:var(--font-s); font-size:2.5rem; color:var(--sand); line-height:1; }
+    .about-right p { font-size:1.05rem; color:var(--sand-dim); line-height:1.9; margin-bottom:1.5em; }
+    .about-right p strong { color:var(--sand); }
+    .tags { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:2.5rem; }
+    .tag { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; padding:.4rem .9rem; border:1px solid var(--border); color:var(--sand-dim); transition:all .3s; cursor:pointer; }
+    .tag:hover { border-color:var(--rust); color:var(--rust); }
+
+    /* PROJECTS GRID — exactly 2 cols, first item spans full width when count is odd */
+    #projects { padding:6rem 0; }
+    .bubbles { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); }
+    .bubbles.odd-count .bubble:first-child { grid-column:1 / -1; }
+
+    .bubble { background:var(--bg); padding:2.5rem; cursor:pointer; transition:background .3s; position:relative; overflow:hidden; }
+    .bubble:hover { background:var(--bg2); }
+    .bubble::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--rust); transform:scaleX(0); transition:transform .4s cubic-bezier(.16,1,.3,1); }
+    .bubble:hover::after { transform:scaleX(1); }
+
+    /* FIX: no dashed border on thumbnails */
+    .b-thumb { width:100%; aspect-ratio:16/7; margin-bottom:1.5rem; object-fit:cover; display:block; border-radius:2px; }
+    .b-thumb-ph { width:100%; background:var(--charcoal); margin-bottom:1.5rem; display:flex; align-items:center; justify-content:center; font-size:.7rem; color:var(--sand-dim); text-transform:uppercase; letter-spacing:.1em; border-radius:2px; overflow:hidden; }
+    .b-thumb-ph:not(:has(img)) { aspect-ratio:16/7; }
+    .b-thumb-ph img { width:100%; height:auto; display:block; }
+
+    .b-title { font-family:var(--font-s); font-size:1.4rem; color:var(--sand); margin-bottom:.4rem; }
+    .b-year { font-size:.8rem; color:var(--sand-dim); }
+    /* FIX: b-toggle removed entirely */
+
+    /* EXPERIENCE */
+    #cv { padding:6rem 0; }
+    .cv-cols { display:grid; grid-template-columns:1fr 1fr; gap:5rem; }
+    .cv-group-title { margin-bottom:2.5rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+    .tl-item { display:grid; grid-template-columns:110px 1fr; gap:2rem; padding:2rem 0; border-bottom:1px solid var(--border); }
+    .tl-title { font-family:var(--font-s); font-size:1.25rem; color:var(--sand); margin-bottom:.4rem; line-height:1.3; }
+    .tl-org { font-size:.95rem; color:var(--sand-dim); font-style:italic; margin-bottom:.5rem; }
+    .tl-note { font-size:.95rem; color:var(--sand-dim); line-height:1.7; }
+    .btn-cv { display:inline-flex; align-items:center; gap:.8rem; font-size:.8rem; letter-spacing:.2em; text-transform:uppercase; color:var(--sand); text-decoration:none; border:1px solid var(--border); padding:1rem 2rem; transition:all .3s; margin-top:4rem; }
+    .btn-cv:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
+
+    /* CONTACT */
+    #contact { padding:6rem 0 10rem; }
+    .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:end; }
+    .contact-left p { font-size:1.1rem; color:var(--sand-dim); margin-bottom:2.5rem; }
+    .btn-rust { font-family:var(--font-m); font-size:.8rem; padding:1rem 2.2rem; background:var(--rust); color:var(--bg); border:none; cursor:pointer; text-transform:uppercase; font-weight:bold; letter-spacing:.15em; border-radius:2px; }
+    .social-item { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; border-bottom:1px solid var(--border); width:100%; background:none; border-top:none; border-left:none; border-right:none; color:var(--sand-dim); font-family:var(--font-m); font-size:1.1rem; cursor:pointer; text-align:left; }
+    .social-item:first-child { border-top:1px solid var(--border); }
+    .social-item:hover { color:var(--sand); }
+
+    footer { border-top:1px solid var(--border); padding:3rem 5rem; display:flex; justify-content:space-between; }
+    footer p { font-size:.8rem; color:var(--sand-dim); }
+
+    .reveal { opacity:0; transform:translateY(30px); transition:all .8s cubic-bezier(.16,1,.3,1); }
+    .reveal.in { opacity:1; transform:none; }
+    @keyframes up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+
+    @media (max-width:900px) {
+      .wrap { padding:0 2rem; }
+      .about-grid,.cv-cols,.contact-inner { grid-template-columns:1fr; gap:4rem; }
+      .hero-inner { flex-direction:column-reverse; text-align:center; }
+      .hero-photo-wrap { width:clamp(200px,60vw,350px); }
+      .bubbles { grid-template-columns:1fr; }
+      .bubbles.odd-count .bubble:first-child { grid-column:1; }
+      .proj-modal-body { padding:2rem 1.5rem; }
+      .proj-modal-content .pm-img-row { grid-template-columns:1fr; }
+      .proj-nav { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- PROJECT MODAL -->
+<div class="proj-overlay" id="projOverlay" onclick="overlayClick(event)">
+  <button class="proj-nav prev" id="projPrev" onclick="navProj(-1)" aria-label="Previous">&#8592;</button>
+  <button class="proj-nav next" id="projNext" onclick="navProj(+1)"  aria-label="Next">&#8594;</button>
+
+  <div class="proj-modal" id="projModal">
+    <div class="proj-modal-header">
+      <span class="proj-counter" id="projCounter"></span>
+      <button class="proj-modal-close" onclick="closeProjModal()" aria-label="Close">&#x2715;</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-modal-tag"     id="projModalTag"></div>
+      <div class="proj-modal-title"   id="projModalTitle"></div>
+      <div class="proj-modal-year"    id="projModalYear"></div>
+      <div class="proj-modal-content" id="projModalContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3>Get in touch</h3>
+    <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <input type="text"  name="name"    placeholder="Your name"    required />
+        <input type="email" name="email"   placeholder="Your email"   required />
+        <textarea name="message" rows="5"  placeholder="Your message" required></textarea>
+      </div>
+      <button class="form-submit" type="submit">Send Message</button>
+    </form>
+    <div id="formSuccess" style="display:none;text-align:center;padding-top:1rem;color:var(--rust);">
+      Thanks for reaching out — I'll be in touch.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-main">
+        <p class="hero-eyebrow">Data Scientist&nbsp;·&nbsp;Astrophysicist&nbsp;·&nbsp;Statistical Modelling&nbsp;·&nbsp;Algorithm Optimization&nbsp;·&nbsp;Data Engineering</p>
+        <h1 class="hero-name">Nicolò <span>Dalmasso</span></h1>
+      </div>
+      <div class="hero-photo-wrap">
+        <div class="hero-photo"><img src="images/ND_pic.jpg" alt="Nicolò Dalmasso"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="s-head reveal"><span class="s-num">01</span><h2 class="s-title">About</h2></div>
+    <div class="about-grid">
+      <div class="about-left reveal">
+        <p class="about-label">Based in</p>
+        <p class="about-location">Melbourne, Australia</p>
+        <div class="about-stat"><span class="about-stat-num">7</span><span class="about-stat-label">Peer-reviewed publications</span></div>
+        <div class="about-stat"><span class="about-stat-num">5</span><span class="about-stat-label">First-author papers</span></div>
+        <div class="about-stat"><span class="about-stat-num">4+</span><span class="about-stat-label">Quantitative research</span></div>
+      </div>
+      <div class="about-right reveal">
+        <p>Astrophysicist with expertise in <strong>galaxy clustering</strong> and <strong>large-scale data analysis</strong>, now applying my analytical background to the AI space. After completing my PhD on the connection between massive galaxies and dark matter halos, I transitioned out of academia to take on more applied, high-impact challenges.</p>
+        <p>Currently working on improving <strong>next-generation AI models</strong> by contributing to higher-quality training data, rigorous evaluation practices, and robust analytical workflows.</p>
+        <p>Actual <strong>cool stuff</strong>: cooking, aquascaping, travelling, hiking, camping, and MTG.</p>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Bayesian Inference</span><span class="tag">MCMC</span><span class="tag">NumPy · Pandas</span><span class="tag">SQL</span><span class="tag">Docker</span><span class="tag">Git</span><span class="tag">ML</span><span class="tag">LLM Evaluation</span><span class="tag">ETL Pipelines</span><span class="tag">Data Visualization</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="s-head reveal"><span class="s-num">02</span><h2 class="s-title">Projects</h2></div>
+    <div class="bubbles reveal">
+
+      <div class="bubble" onclick="openProj(0)">
+        <div class="b-thumb-ph"><img src="images/ACF_HOD.png"></div>
+        <div class="b-tag">Galaxy Clustering · HST · JWST · 2022–2025</div>
+        <div class="b-title">From HST to JWST: Pushing Galaxy Clustering to the Edge of the Observable</div>
+        <div class="b-year">3 papers · MNRAS</div>
+      </div>
+
+      <!-- <div class="bubble" onclick="openProj(1)">
+        <div class="b-thumb-ph">Cover image</div>
+        <div class="b-tag">Spectroscopy · Spectrographs · JWST · 2025</div>
+        <div class="b-title">Slit Loss Corrections in Spectroscopy</div>
+        <div class="b-year">MNRAS</div>
+      </div>
+
+      <div class="bubble" onclick="openProj(2)">
+        <div class="b-thumb-ph">Cover image</div>
+        <div class="b-tag">Spectroscopy · Catalog · JWST · 2025</div>
+        <div class="b-title">NIRISS Spectroscopic Catalog</div>
+        <div class="b-year">A&amp;A</div>
+      </div>
+
+      <div class="bubble" onclick="openProj(3)">
+        <div class="b-thumb-ph">Cover image</div>
+        <div class="b-tag">Galaxy Evolution · Morphology · JWST · 2024</div>
+        <div class="b-title">Galaxy Merger Rate from NIRCam</div>
+        <div class="b-year">MNRAS</div>
+      </div>
+
+      <div class="bubble" onclick="openProj(4)">
+        <div class="b-thumb-ph">Cover image</div>
+        <div class="b-tag">Galaxy Evolution · JWST · 2024</div>
+        <div class="b-title">Massive Interacting Galaxy System</div>
+        <div class="b-year">Nature Astronomy</div>
+      </div> -->
+
+    </div>
+  </div>
+</section>
+
+<section id="cv">
+  <div class="wrap">
+    <div class="s-head reveal"><span class="s-num">03</span><h2 class="s-title">Experience</h2></div>
+    <div class="cv-cols">
+      <div class="reveal">
+        <p class="cv-group-title">Work</p>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="tl-date">Sep 2025<br/>Present</div>
+            <div>
+              <div class="tl-title">LLM Training Specialist</div>
+              <div class="tl-org">Mercor Intelligence</div>
+              <div class="tl-note">Designing advanced STEM problems and evaluation frameworks to improve the reasoning capabilities of frontier AI models.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">Mar 2022<br/>Sep 2025</div>
+            <div>
+              <div class="tl-title">Doctoral Researcher</div>
+              <div class="tl-org">University of Melbourne</div>
+              <div class="tl-note">Studied galaxy formation using JWST and Hubble data, building statistical pipelines and leading international collaborations.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">Mar 2022<br/>Sep 2025</div>
+            <div>
+              <div class="tl-title">Teaching Assistant</div>
+              <div class="tl-org">University of Melbourne</div>
+              <div class="tl-note">Delivered tutorials in Physics and Astrophysics, and contributed to outreach programs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="cv-group-title">Education</p>
+        <div class="tl">
+          <div class="tl-item">
+            <div class="tl-date">2022<br/>2025</div>
+            <div><div class="tl-title">PhD in Physics — Astrophysics</div><div class="tl-org">University of Melbourne, AU</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2019<br/>2021</div>
+            <div>
+              <div class="tl-title">MSc in Astrophysics &amp; Theoretical Physics</div>
+              <div class="tl-org">Università degli Studi di Torino, IT</div>
+              <div class="tl-note">110/110 with distinction</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2016<br/>2019</div>
+            <div><div class="tl-title">BSc in Physics</div><div class="tl-org">Università degli Studi di Torino, IT</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <a href="files/Nicolo_Dalmasso_CV.pdf" download class="btn-cv">Download Full CV</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="s-head reveal"><span class="s-num">04</span><h2 class="s-title">Contact</h2></div>
+    <div class="contact-inner">
+      <div class="contact-left reveal">
+        <p>Always happy to talk science, data, or anything in between.</p>
+        <button class="btn-rust" onclick="openModal()">Send a Message</button>
+      </div>
+      <div class="contact-right reveal">
+        <button class="social-item" onclick="goLink('gh')">GitHub <span>Profile ↗</span></button>
+        <button class="social-item" onclick="goLink('li')">LinkedIn <span>Profile ↗</span></button>
+        <button class="social-item" onclick="goLink('gs')">Google Scholar <span>Publications ↗</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2025 Nicolò Dalmasso</p></footer>
+
+<script>
+/* ── CURSOR ── */
+const cur = document.getElementById('cursor'), ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+document.querySelectorAll('a,button,.bubble,.tag').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovered'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovered'));
+});
+(function anim(){ rx+=(mx-rx)*.15; ry+=(my-ry)*.15; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+
+/* ── REVEAL ── */
+const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── LINKS ── */
+const links={
+  gh:atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzbw=='),
+  li:atob('aHR0cHM6Ly93d3cubGlua2VkaW4uY29tL2luL25pY29sby1kYWxtYXNzby8='),
+  gs:atob('aHR0cHM6Ly9zY2hvbGFyLmdvb2dsZS5jb20vY2l0YXRpb25zP3VzZXI9Tjl3clJuUUFBQUomaGw9ZW4='),
+  acf_code:atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9hY2YtZ2FsYXh5LWNsdXN0ZXJpbmc='),
+  p1:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTI4LzEvODk4Lzc0ODAyNTg='),
+  p2:atob('aHR0cHM6Ly93d3cubmF0dXJlLmNvbS9hcnRpY2xlcy9zNDE1NTAtMDI0LTAyMjE4LTc='),
+  p3:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTMzLzIvMjM5MS83NzM4Mzkw'),
+  p4:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTMzLzQvNDQ3Mi83NzQ4NzU2'),
+  p5:atob('aHR0cHM6Ly93d3cuYWFuZGEub3JnL2FydGljbGVzL2FhL2Ficy8yMDI1LzA3L2FhNTQ5NTQtMjUvYWE1NDk1NC0yNS5odG1s'),
+  p6:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ2LzIvc3RhZzAwMS84NDE0MDUy'),
+  p7:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ0LzIvMTkxNS84MzAwODA4')
+};
+function goLink(k){ window.open(links[k],'_blank'); }
+function openLink(e,k){ e.stopPropagation(); window.open(links[k],'_blank'); }
+
+/* ═══════════════════════════════════════════════
+   PROJECT DATA  — blog-style content per project
+   ═══════════════════════════════════════════════
+   Each project's `content` is full HTML using:
+     <p>                            paragraph
+     <h3>                           sub-heading
+     <div class="pm-img placeholder"> placeholder block
+     <div class="pm-img"><img src="…"> real image
+     <p class="pm-caption">         caption
+     <div class="pm-img-row">       side-by-side pair
+     <div class="pm-links"><a>      paper buttons
+
+   To add real images: replace the placeholder divs with:
+     <div class="pm-img"><img src="images/your-file.jpg" alt="…"></div>
+*/
+const projects = [
+
+  /* 0 — Galaxy Clustering */
+  { tag:'Galaxy Clustering · HST · JWST · 2022–2025',
+    title:'From HST to JWST: Pushing Galaxy Clustering to the Edge of the Observable',
+    year:'3 papers · MNRAS',
+    content:`
+      <p>
+          How far can we really push clustering measurements at high redshift?<br>
+          How deep can we go before the signal becomes uncertain?<br>
+          Can we meaningfully probe the faint end of the luminosity function?<br><br>
+
+          This figure is the result of more than three years working on galaxy clustering in the early Universe. 
+          It brings together survey design, modelling, calibration and validation, moving from the depth of the 
+          Hubble Space Telescope (HST) to what the James Webb Space Telescope (JWST) now makes possible through a 
+          Halo Occupation Distribution (HOD) model.
+      </p>
+
+      <div class="pm-img">
+          <img src="images/ACF_HOD.png">
+      </div>
+      <p class="pm-caption">
+          Measured ACFs in the GOODS-S field at six mean redshifts. 
+          The blue line shows the HOD best fit, with one-halo and two-halo contributions separated. 
+          Magnitude thresholds and mean redshifts are indicated in each panel.
+      </p>
+
+      <h3>Galaxy Clustering?</h3>
+
+      <p>
+          The starting point was understanding how depth and completeness shape clustering measurements.
+
+          Using HST data from the heterogeneous GOODS North and South fields, we developed a method to account for spatial variations when recovering high redshift candidates. 
+          This enabled consistent clustering measurements across non uniform data, with particular attention to the faint end of the luminosity function.
+      </p>
+
+      <div style="text-align:center; margin: 2rem 0;">
+          <img src="images/GOODSN_rms.png" style="width:60%; height:auto;">
+          <p style="margin-top:0.5rem; font-size:0.9rem; color:#555;">
+              Depth variations across the GOODS-North field.
+          </p>
+      </div>
+
+      <p>
+          With the arrival of JWST, the question evolved. 
+          The same framework could now be pushed to fainter magnitudes and earlier cosmic times.
+
+          The result was a clustering analysis capable of measuring galaxy bias beyond redshift 10, offering a direct view of structure formation when the Universe was less than a billion years old.
+      </p>
+
+      <div class="pm-img">
+          <img src="images/ACF_ALL_app_mag_cut.png">
+      </div>
+      <p class="pm-caption">
+          Angular correlation functions measured across six redshift bins with power law fits.
+      </p>
+
+      <h3>Key Results</h3>
+
+      <p>
+          The final step was a physical interpretation through an HOD model fitted to the latest JWST data.
+
+          The clustering signal implies dark matter halo masses of 10¹¹ to 10¹² solar masses at redshift z = 7-11. 
+          Even at these early times, massive galaxies already appear to reside in substantial dark matter halos.
+      </p>
+
+      <div class="pm-img">
+          <img src="images/fsat_beff_Mh_vs_z.png">
+      </div>
+      <p class="pm-caption">
+          Evolution of satellite fraction, effective galaxy bias and characteristic halo mass with redshift.
+      </p>
+
+      <p>
+          An example implementation of the ACF estimator used in this work is available in a dedicated GitHub repository. 
+          Links to the related papers and to the code can be found below.
+      </p>
+
+      <div class="pm-links">
+          <a href="#" onclick="openLink(event,'p1')">HST Clustering paper →</a>
+          <a href="#" onclick="openLink(event,'p3')">JWST Clustering paper →</a>
+          <a href="#" onclick="openLink(event,'p6')">HOD Modelling paper →</a>
+      </div>
+
+      <div class="pm-links" style="margin-top:1rem;">
+          <a href="#" onclick="openLink(event,'acf_code')">ACF Clustering code →</a>
+      </div>
+    `
+  },
+
+  /* 1 — Slit Loss */
+  { tag:'Spectroscopy · Spectrographs · JWST · 2025',
+    title:'Slit Loss Corrections in JWST Spectroscopy',
+    year:'MNRAS',
+    content:`
+      <p>JWST carries two complementary spectrographs — NIRISS (slitless) and NIRSpec (multi-object slit) — that often observe the same targets. When comparing their flux measurements, I found <strong>systematic offsets up to ~30%</strong>, a problem that propagates directly into derived physical quantities like star-formation rates and stellar masses.</p>
+
+      <div class="pm-img placeholder">Figure 1 — Flux comparison NIRISS vs NIRSpec · replace with your image</div>
+      <p class="pm-caption">Median flux ratio NIRISS/NIRSpec as a function of source half-light radius, colour-coded by redshift.</p>
+
+      <h3>The Slit-Loss Problem</h3>
+      <p>NIRSpec's micro-shutter assembly (MSA) collects flux only from a small rectangular aperture. Extended or off-centre sources lose a fraction of their light at the slit edges — an effect that depends on source morphology, dithering, and position within the shutter. This <strong>slit loss</strong> is wavelength-dependent and non-trivial to model analytically.</p>
+
+      <div class="pm-img-row">
+        <div class="pm-img placeholder">MSA geometry diagram</div>
+        <div class="pm-img placeholder">Correction factor map</div>
+      </div>
+      <p class="pm-caption">Left: Micro-shutter geometry illustrating off-centre source truncation. Right: Derived correction factor as a function of position and source half-light radius.</p>
+
+      <h3>Statistical Framework</h3>
+      <p>I developed a <strong>forward-modelling framework</strong> that simultaneously fits source morphology and slit-loss correction factor from photometric priors, validated against high-S/N sources with independent flux calibration. Applied to the full GLASS-JWST sample, the corrections reduce systematic scatter by a factor of ~2.</p>
+
+      <div class="pm-links">
+        <a href="#" onclick="openLink(event,'p7')">Read the paper →</a>
+      </div>
+    `
+  },
+
+  /* 2 — NIRISS Catalog */
+  { tag:'Spectroscopy · Catalog · JWST · 2025',
+    title:'NIRISS Spectroscopic Catalog',
+    year:'A&A',
+    content:`
+      <p>As part of the <strong>GLASS-JWST Early Release Science</strong> program, I contributed to building the deepest NIRISS slitless spectroscopic catalog to date, covering redshifts 0.2 &lt; z &lt; 9 with hundreds of confirmed emission-line galaxies across the ABELL 2744 field.</p>
+
+      <div class="pm-img placeholder">Figure 1 — Redshift distribution of the NIRISS catalog · replace with your image</div>
+      <p class="pm-caption">Spectroscopic redshift distribution of GLASS-JWST NIRISS sources, compared to photometric redshift predictions from HST imaging.</p>
+
+      <h3>Data Reduction Pipeline</h3>
+      <p>NIRISS produces spectra for <em>every</em> source in the field simultaneously without target pre-selection — but contamination from overlapping spectra is a major challenge. I worked on improving <strong>contamination modelling</strong> and automated emission-line detection, increasing the reliable redshift yield by ~15% compared to earlier reduction strategies.</p>
+
+      <div class="pm-img-row">
+        <div class="pm-img placeholder">2D spectrum example</div>
+        <div class="pm-img placeholder">Line detection example</div>
+      </div>
+      <p class="pm-caption">Left: 2D NIRISS grism spectrum of a z~3 galaxy. Right: Automated emission-line detection with contamination mask overlaid.</p>
+
+      <div class="pm-links">
+        <a href="#" onclick="openLink(event,'p5')">Read the paper →</a>
+      </div>
+    `
+  },
+
+  /* 3 — Mergers */
+  { tag:'Galaxy Evolution · Morphology · JWST · 2024',
+    title:'Galaxy Merger Rate from NIRCam',
+    year:'MNRAS',
+    content:`
+      <p>Galaxy mergers are one of the primary drivers of mass growth and morphological transformation across cosmic time. Using ultra-deep JWST/NIRCam imaging from the GLASS-ERS program, I measured the <strong>galaxy major merger fraction</strong> up to 13.3 billion years of lookback time (z~7).</p>
+
+      <div class="pm-img placeholder">Figure 1 — Merger fraction vs redshift · replace with your image</div>
+      <p class="pm-caption">Galaxy major merger fraction as a function of redshift for stellar-mass-selected samples, compared to literature measurements and semi-analytic model predictions.</p>
+
+      <h3>Morphological Classification</h3>
+      <p>I combined <strong>non-parametric morphology statistics</strong> — Gini coefficient, M20 moment of light, asymmetry index — with an ensemble of machine-learning classifiers (Random Forest + Gradient Boosting) trained on visually classified subsamples. This hybrid approach reduced classification uncertainty by <strong>~15% relative to purely statistical cuts</strong> and improved completeness at high redshift where galaxy angular sizes are small.</p>
+
+      <div class="pm-img-row">
+        <div class="pm-img placeholder">Gini–M20 diagnostic plane</div>
+        <div class="pm-img placeholder">Merger postage stamps</div>
+      </div>
+      <p class="pm-caption">Left: Gini–M20 morphological plane with the merger selection boundary and colour-coded redshift bins. Right: NIRCam postage stamps of representative merging pairs at z~2–5.</p>
+
+      <h3>Results</h3>
+      <p>The merger fraction rises steeply from z~0 to z~3, then flattens at higher redshift — consistent with a picture in which mergers are a significant but not dominant growth channel in the first billion years, with <strong>cold gas accretion</strong> likely playing a larger role at early times.</p>
+
+      <div class="pm-links">
+        <a href="#" onclick="openLink(event,'p4')">Read the paper →</a>
+      </div>
+    `
+  },
+
+  /* 4 — Interacting Galaxy */
+  { tag:'Galaxy Evolution · JWST · 2024',
+    title:'Massive Interacting Galaxy System',
+    year:'Nature Astronomy',
+    content:`
+      <p>JWST has opened a window onto the first half-billion years of cosmic history with unprecedented clarity. As part of the GLASS-JWST ERS team, I contributed to the discovery of a <strong>massive, interacting galaxy system at z~8.8</strong> — just 510 million years after the Big Bang — one of the earliest such systems ever confirmed spectroscopically.</p>
+
+      <div class="pm-img placeholder">Figure 1 — JWST NIRCam composite · replace with your image</div>
+      <p class="pm-caption">JWST NIRCam three-colour composite (F115W / F200W / F356W) of the interacting system. The two components are separated by ~2 kpc in projection and show distinct rest-UV morphologies.</p>
+
+      <h3>Why It Matters</h3>
+      <p>Finding a merging system this massive this early challenges standard galaxy formation models. The combined stellar mass exceeds <strong>10¹⁰ M☉</strong>, implying extremely efficient star formation in both progenitors — in tension with the expected suppression of baryonic collapse at high redshift predicted by many simulations.</p>
+
+      <div class="pm-img-row">
+        <div class="pm-img placeholder">Spectral energy distribution</div>
+        <div class="pm-img placeholder">NIRSpec prism spectrum</div>
+      </div>
+      <p class="pm-caption">Left: Spectral energy distribution with best-fit stellar population model (log M★ ~ 10.1 M☉, young burst). Right: JWST NIRSpec prism spectrum confirming z = 8.76 via [OIII] and Hβ emission lines.</p>
+
+      <h3>My Contribution</h3>
+      <p>I led the <strong>photometric redshift analysis</strong> and cross-matched the system against existing HST catalogues to confirm its high-z nature prior to spectroscopic follow-up. I also contributed to the angular clustering context — placing this system within the broader landscape of early massive galaxy overdensities.</p>
+
+      <div class="pm-links">
+        <a href="#" onclick="openLink(event,'p2')">Read the paper →</a>
+      </div>
+    `
+  }
+
+];
+
+/* ── ODD/EVEN GRID ── */
+const bubblesEl = document.querySelector('.bubbles');
+if (projects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
+
+/* ── MODAL LOGIC ── */
+let currentProj = 0;
+
+function openProj(idx) {
+  currentProj = idx;
+  renderProj();
+  document.getElementById('projOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderProj() {
+  const p = projects[currentProj];
+  document.getElementById('projCounter').textContent     = `${currentProj + 1} / ${projects.length}`;
+  document.getElementById('projModalTag').textContent    = p.tag;
+  document.getElementById('projModalTitle').textContent  = p.title;
+  document.getElementById('projModalYear').textContent   = p.year;
+  document.getElementById('projModalContent').innerHTML  = p.content;
+  document.getElementById('projPrev').disabled = (currentProj === 0);
+  document.getElementById('projNext').disabled = (currentProj === projects.length - 1);
+  document.getElementById('projModal').scrollTop = 0;
+}
+
+function navProj(dir) {
+  const n = currentProj + dir;
+  if (n < 0 || n >= projects.length) return;
+  currentProj = n;
+  renderProj();
+}
+
+function closeProjModal() {
+  document.getElementById('projOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function overlayClick(e) {
+  if (e.target === document.getElementById('projOverlay')) closeProjModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('projOverlay').classList.contains('active')) return;
+  if (e.key === 'Escape')     closeProjModal();
+  if (e.key === 'ArrowLeft')  navProj(-1);
+  if (e.key === 'ArrowRight') navProj(+1);
+});
+
+/* ── CONTACT MODAL ── */
+function openModal()  { document.getElementById('contactModal').classList.add('active');    document.body.style.overflow='hidden'; }
+function closeModal() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow=''; }
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  try {
+    const res = await fetch(e.target.action, { method:'POST', body:new FormData(e.target), headers:{'Accept':'application/json'} });
+    if (res.ok) { e.target.style.display='none'; document.getElementById('formSuccess').style.display='block'; }
+  } catch { alert('Error sending message.'); }
+}
+</script>
+</body>
+</html>
