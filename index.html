@@ -47,8 +47,6 @@
 
     /* CURSOR */
     #cursor { position:fixed; width:8px; height:8px; background:var(--rust); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
-    #cursor-ring { position:fixed; width:32px; height:32px; border:1px solid var(--rust-dim); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .25s,height .25s; }
-    body.hovered #cursor-ring { width:52px; height:52px; }
 
     body::after {
       content:''; position:fixed; inset:0; pointer-events:none; z-index:9997; opacity:.035;
@@ -256,7 +254,6 @@
 <body>
 
 <div id="cursor"></div>
-<div id="cursor-ring"></div>
 
 <!-- PROJECT MODAL -->
 <div class="proj-overlay" id="projOverlay" onclick="overlayClick(event)">
@@ -461,14 +458,8 @@
 
 <script>
 /* ── CURSOR ── */
-const cur = document.getElementById('cursor'), ring = document.getElementById('cursor-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-document.querySelectorAll('a,button,.bubble,.tag').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('hovered'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovered'));
-});
-(function anim(){ rx+=(mx-rx)*.15; ry+=(my-ry)*.15; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+const cur = document.getElementById('cursor');
+document.addEventListener('mousemove', e=>{ cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
 
 /* ── REVEAL ── */
 const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
