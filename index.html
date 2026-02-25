@@ -46,7 +46,29 @@
     }
 
     /* CURSOR */
-    #cursor { position:fixed; width:8px; height:8px; background:var(--rust); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+
+    #cursor {
+      position: fixed;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--rust);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    #cursor::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      background: var(--rust);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
 
     body::after {
       content:''; position:fixed; inset:0; pointer-events:none; z-index:9997; opacity:.035;
