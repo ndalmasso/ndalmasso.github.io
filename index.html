@@ -32,13 +32,26 @@
       font-size: 1rem;
       font-weight: 300;
       line-height: 1.8;
+      /* FIX: overflow-x hidden on body breaks iOS scroll; apply to html instead */
       overflow-x: hidden;
-      cursor: none;
     }
 
-    html, body { cursor: none; }
+    html { overflow-x: hidden; }
 
-    a, button, [role="button"], input, textarea { cursor: none !important; }
+    /* FIX: Only hide cursor and apply custom cursor on non-touch devices */
+    @media (pointer: fine) {
+      body { cursor: none; }
+      html, body { cursor: none; }
+      a, button, [role="button"], input, textarea { cursor: none !important; }
+    }
+
+    /* FIX: On touch devices, restore normal cursor behaviour */
+    @media (pointer: coarse) {
+      body { cursor: auto; }
+      a, button, [role="button"] { cursor: pointer; }
+      input, textarea { cursor: text; }
+      #cursor { display: none !important; }
+    }
 
     .hero-eyebrow, .s-num, .about-label, .cv-group-title, .b-tag,
     .tl-date, .social-item span, .about-stat-label, .b-link {
@@ -49,7 +62,7 @@
       font-size: 0.75rem;
     }
 
-    /* CURSOR */
+    /* CURSOR — only rendered on pointer:fine via JS anyway, but keep styles */
     #cursor {
       position: fixed;
       width: 18px;
@@ -87,7 +100,7 @@
     #hero { padding:clamp(6rem,15vh,12rem) 0 6rem; }
     .hero-inner { display:flex; align-items:center; justify-content:space-between; gap:4rem; }
     .hero-main { flex:1 1 0; min-width:0; }
-    .hero-eyebrow { margin-bottom:2.5rem; opacity:0; animation:up .9s .2s cubic-bezier(.16,1,.3,1) forwards; }
+    .hero-eyebrow { margin-bottom:2.5rem; opacity:0; animation:up .9s .2s cubic-bezier(.16,1,.3,1) forwards; word-break: break-word; overflow-wrap: break-word; }
     .hero-name { font-family:var(--font-s); font-size:clamp(4rem,10vw,9.5rem); font-weight:400; line-height:.85; color:var(--sand); opacity:0; animation:up .9s .35s cubic-bezier(.16,1,.3,1) forwards; }
     .hero-name span { display:block; font-style:italic; color:rgba(232,220,200,.55); font-size:.72em; }
     .hero-photo-wrap { flex:0 0 clamp(220px,32vw,450px); opacity:0; animation:up .9s .5s cubic-bezier(.16,1,.3,1) forwards; }
@@ -100,9 +113,13 @@
       background:rgba(22,18,14,.92);
       z-index:800;
       display:flex; align-items:center; justify-content:center;
-      padding:2rem;
+      /* FIX: add padding for safe area on notched phones */
+      padding:env(safe-area-inset-top, 1rem) env(safe-area-inset-right, 1rem) env(safe-area-inset-bottom, 1rem) env(safe-area-inset-left, 1rem);
+      padding: max(env(safe-area-inset-top), 1rem) max(env(safe-area-inset-right), 1rem) max(env(safe-area-inset-bottom), 1rem) max(env(safe-area-inset-left), 1rem);
       opacity:0; pointer-events:none;
       transition:opacity .35s;
+      /* FIX: prevent scroll bleed-through on iOS */
+      -webkit-overflow-scrolling: touch;
     }
     .proj-overlay.active { opacity:1; pointer-events:all; }
 
@@ -112,7 +129,7 @@
       background:var(--charcoal); border:1px solid var(--border); border-radius:50%;
       display:flex; align-items:center; justify-content:center;
       font-size:1.25rem; color:var(--sand-dim);
-      cursor: none !important; transition:all .25s; z-index:10;
+      transition:all .25s; z-index:10;
     }
     .proj-nav:hover { background:var(--rust); border-color:var(--rust); color:#fff; }
     .proj-nav:disabled { opacity:.18; pointer-events:none; }
@@ -121,11 +138,17 @@
 
     .proj-modal {
       background:var(--bg2); border:1px solid var(--border); border-radius:4px;
-      width:90%; max-width:780px; max-height:90vh;
+      width:90%; max-width:780px;
+      /* FIX: use dvh (dynamic viewport height) which accounts for browser chrome on mobile */
+      max-height:85vh;
+      max-height:85dvh;
       overflow-y:auto; position:relative;
       transform:translateY(24px) scale(.98);
       transition:transform .4s cubic-bezier(.16,1,.3,1);
       scrollbar-width:thin; scrollbar-color:var(--charcoal) transparent;
+      /* FIX: enable momentum scrolling inside modal on iOS */
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
     .proj-overlay.active .proj-modal { transform:none; }
 
@@ -137,11 +160,13 @@
     }
     .proj-counter { font-size:.68rem; color:var(--rust); font-weight:700; letter-spacing:.22em; text-transform:uppercase; }
     .proj-modal-close {
-      width:30px; height:30px; border-radius:50%;
+      width:36px; height:36px; border-radius:50%;
       background:var(--charcoal); border:1px solid var(--border);
-      font-size:1rem; color:var(--sand-dim); cursor: none !important;
+      font-size:1rem; color:var(--sand-dim);
       display:flex; align-items:center; justify-content:center;
       transition:all .2s;
+      /* FIX: ensure tap target is large enough on mobile (44×44px minimum) */
+      min-width:44px; min-height:44px;
     }
     .proj-modal-close:hover { background:var(--rust); border-color:var(--rust); color:#fff; }
 
@@ -184,19 +209,45 @@
       letter-spacing:.2em; font-size:.72rem; text-decoration:none;
       border:1px solid var(--rust-dim); padding:.5rem 1.2rem; border-radius:2px;
       transition:all .25s;
+      /* FIX: minimum tap target */
+      min-height:44px; display:inline-flex; align-items:center;
     }
     .proj-modal-content .pm-links a:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
 
     /* CONTACT MODAL */
     .modal-overlay { position:fixed; inset:0; background:rgba(22,18,14,.85); z-index:810; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s; }
     .modal-overlay.active { opacity:1; pointer-events:all; }
-    .modal { background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2.8rem; width:90%; max-width:480px; position:relative; transform:translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1); }
+    .modal {
+      background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2.8rem;
+      width:90%; max-width:480px;
+      /* FIX: allow modal to scroll if viewport is short (e.g. landscape mobile) */
+      max-height:90vh; max-height:90dvh; overflow-y:auto;
+      -webkit-overflow-scrolling: touch;
+      position:relative;
+      transform:translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1);
+    }
     .modal-overlay.active .modal { transform:none; }
-    .modal-close { position:absolute; top:1.2rem; right:1.5rem; font-size:1.5rem; color:var(--sand-dim); cursor: none !important; background:none; border:none; }
+    .modal-close {
+      position:absolute; top:1.2rem; right:1.5rem; font-size:1.5rem; color:var(--sand-dim);
+      background:none; border:none;
+      /* FIX: tap target */
+      min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center;
+    }
     .modal h3 { font-family:var(--font-s); font-size:1.8rem; color:var(--sand); margin-bottom:.5rem; }
     .form-row { display:flex; flex-direction:column; gap:1rem; margin-bottom:1.2rem; }
-    .form-row input, .form-row textarea { background:var(--charcoal); border:1px solid var(--border); padding:.8rem; color:var(--sand); font-family:var(--font-m); outline:none; border-radius:2px; }
-    .form-submit { width:100%; padding:1rem; background:var(--rust); color:#fff; border:none; font-family:var(--font-m); text-transform:uppercase; letter-spacing:.2em; cursor: none !important; border-radius:2px; }
+    .form-row input, .form-row textarea {
+      background:var(--charcoal); border:1px solid var(--border); padding:.8rem; color:var(--sand);
+      font-family:var(--font-m); outline:none; border-radius:2px;
+      /* FIX: font-size 16px prevents iOS Safari from auto-zooming on focus */
+      font-size:16px;
+    }
+    .form-submit {
+      width:100%; padding:1rem; background:var(--rust); color:#fff; border:none;
+      font-family:var(--font-m); text-transform:uppercase; letter-spacing:.2em; border-radius:2px;
+      font-size:16px;
+      /* FIX: minimum tap target height */
+      min-height:44px;
+    }
 
     /* SECTIONS */
     .s-head { display:flex; align-items:baseline; gap:1.5rem; margin-bottom:5rem; }
@@ -211,7 +262,12 @@
     .about-right p { font-size:1.05rem; color:var(--sand-dim); line-height:1.9; margin-bottom:1.5em; }
     .about-right p strong { color:var(--sand); }
     .tags { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:2.5rem; }
-    .tag { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; padding:.4rem .9rem; border:1px solid var(--border); color:var(--sand-dim); transition:all .3s; cursor: none !important; }
+    .tag {
+      font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; padding:.4rem .9rem;
+      border:1px solid var(--border); color:var(--sand-dim); transition:all .3s;
+      /* FIX: minimum tap target */
+      min-height:36px; display:inline-flex; align-items:center;
+    }
     .tag:hover { border-color:var(--rust); color:var(--rust); }
 
     /* PROJECTS GRID */
@@ -219,8 +275,10 @@
     .bubbles { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); }
     .bubbles.odd-count .bubble:first-child { grid-column:1 / -1; }
 
-    .bubble { background:var(--bg); padding:2.5rem; cursor: none !important; transition:background .3s; position:relative; overflow:hidden; }
+    .bubble { background:var(--bg); padding:2.5rem; transition:background .3s; position:relative; overflow:hidden; }
     .bubble:hover { background:var(--bg2); }
+    /* FIX: active state for touch feedback */
+    .bubble:active { background:var(--bg2); }
     .bubble::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--rust); transform:scaleX(0); transition:transform .4s cubic-bezier(.16,1,.3,1); }
     .bubble:hover::after { transform:scaleX(1); }
 
@@ -239,40 +297,87 @@
     .tl-title { font-family:var(--font-s); font-size:1.25rem; color:var(--sand); margin-bottom:.4rem; line-height:1.3; }
     .tl-org { font-size:.95rem; color:var(--sand-dim); font-style:italic; margin-bottom:.5rem; }
     .tl-note { font-size:.95rem; color:var(--sand-dim); line-height:1.7; }
-    .btn-cv { display:inline-flex; align-items:center; gap:.8rem; font-size:.8rem; letter-spacing:.2em; text-transform:uppercase; color:var(--sand); text-decoration:none; border:1px solid var(--border); padding:1rem 2rem; transition:all .3s; margin-top:4rem; }
+    .btn-cv {
+      display:inline-flex; align-items:center; gap:.8rem; font-size:.8rem; letter-spacing:.2em;
+      text-transform:uppercase; color:var(--sand); text-decoration:none; border:1px solid var(--border);
+      padding:1rem 2rem; transition:all .3s; margin-top:4rem;
+      /* FIX: minimum tap target */
+      min-height:44px;
+    }
     .btn-cv:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
 
     /* CONTACT */
     #contact { padding:6rem 0 10rem; }
     .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:end; }
     .contact-left p { font-size:1.1rem; color:var(--sand-dim); margin-bottom:2.5rem; }
-    .btn-rust { font-family:var(--font-m); font-size:.8rem; padding:1rem 2.2rem; background:var(--rust); color:var(--bg); border:none; cursor: none !important; text-transform:uppercase; font-weight:bold; letter-spacing:.15em; border-radius:2px; }
-    .social-item { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; border-bottom:1px solid var(--border); width:100%; background:none; border-top:none; border-left:none; border-right:none; color:var(--sand-dim); font-family:var(--font-m); font-size:1.1rem; cursor: none !important; text-align:left; }
+    .btn-rust {
+      font-family:var(--font-m); font-size:.8rem; padding:1rem 2.2rem; background:var(--rust);
+      color:var(--bg); border:none; text-transform:uppercase; font-weight:bold; letter-spacing:.15em;
+      border-radius:2px;
+      /* FIX: minimum tap target */
+      min-height:44px;
+    }
+    .social-item {
+      display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0;
+      border-bottom:1px solid var(--border); width:100%; background:none;
+      border-top:none; border-left:none; border-right:none; color:var(--sand-dim);
+      font-family:var(--font-m); font-size:1.1rem; text-align:left;
+      /* FIX: minimum tap target */
+      min-height:56px;
+    }
     .social-item:first-child { border-top:1px solid var(--border); }
     .social-item:hover { color:var(--sand); }
+    /* FIX: active state for touch */
+    .social-item:active { color:var(--sand); }
 
-    footer { border-top:1px solid var(--border); padding:3rem 5rem; display:flex; justify-content:space-between; }
+    /* FIX: footer — was hardcoded 5rem horizontal padding, breaking on mobile */
+    footer {
+      border-top:1px solid var(--border);
+      padding:3rem clamp(2rem,5vw,5rem);
+      display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+    }
     footer p { font-size:.8rem; color:var(--sand-dim); }
 
     .reveal { opacity:0; transform:translateY(30px); transition:all .8s cubic-bezier(.16,1,.3,1); }
     .reveal.in { opacity:1; transform:none; }
     @keyframes up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
 
+    /* ── MOBILE BREAKPOINT ── */
     @media (max-width:900px) {
-      .wrap { padding:0 2rem; }
+      .wrap { padding:0 1.5rem; }
       .about-grid,.cv-cols,.contact-inner { grid-template-columns:1fr; gap:4rem; }
       .hero-inner { flex-direction:column-reverse; text-align:center; }
+      /* FIX: tighten eyebrow letter-spacing so it fits without overflow */
+      .hero-eyebrow { letter-spacing: 0.12em; font-size: 0.68rem; }
+      /* FIX: centre the eyebrow text when hero is column-reversed */
+      .hero-eyebrow { text-align:center; }
       .hero-photo-wrap { width:clamp(200px,60vw,350px); }
       .bubbles { grid-template-columns:1fr; }
       .bubbles.odd-count .bubble:first-child { grid-column:1; }
-      .proj-modal-body { padding:2rem 1.5rem; }
+      /* FIX: reduce bubble padding on small screens */
+      .bubble { padding:1.5rem; }
+      .proj-modal-body { padding:1.5rem 1.25rem 2.5rem; }
       .proj-modal-content .pm-img-row { grid-template-columns:1fr; }
       .proj-nav { display:none; }
+      /* FIX: tl-item date column was overflowing at narrow widths */
+      .tl-item { grid-template-columns:80px 1fr; gap:1rem; }
+      /* FIX: ensure s-head doesn't overflow */
+      .s-head { flex-wrap:wrap; gap:.75rem; margin-bottom:3rem; }
+      /* FIX: contact section bottom padding was too large on small screens */
+      #contact { padding:4rem 0 6rem; }
+    }
+
+    /* FIX: extra small screens */
+    @media (max-width:380px) {
+      .tl-item { grid-template-columns:1fr; gap:.5rem; }
+      .tl-date { font-size:.7rem; }
+      .hero-name { font-size:clamp(3rem,18vw,4.5rem); }
     }
   </style>
 </head>
 <body>
 
+<!-- FIX: cursor only injected when pointer:fine (mouse) detected via JS -->
 <div id="cursor"></div>
 
 <!-- PROJECT MODAL -->
@@ -317,7 +422,7 @@
   <div class="wrap">
     <div class="hero-inner">
       <div class="hero-main">
-        <p class="hero-eyebrow">Data Scientist&nbsp;·&nbsp;Astrophysicist&nbsp;·&nbsp;Statistical Modelling&nbsp;·&nbsp;Algorithm Optimization&nbsp;·&nbsp;Data Engineering</p>
+        <p class="hero-eyebrow">Data Scientist · Astrophysicist · Statistical Modelling · Algorithm Optimization · Data Engineering</p>
         <h1 class="hero-name">Nicolò <span>Dalmasso</span></h1>
       </div>
       <div class="hero-photo-wrap">
@@ -440,18 +545,23 @@
 <footer><p>© 2025 Nicolò Dalmasso</p></footer>
 
 <script>
-/* ── CURSOR ── */
+/* ── CURSOR — only activate on non-touch (pointer:fine) devices ── */
+const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 const cur = document.getElementById('cursor');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px';
-  cur.style.top  = e.clientY + 'px';
-});
 
-/* ── CURSOR HOVER ── */
-document.querySelectorAll('a, button, .bubble, .social-item, .btn-cv, .btn-rust').forEach(el => {
-  el.addEventListener('mouseenter', () => cur.classList.add('cursor-hover'));
-  el.addEventListener('mouseleave', () => cur.classList.remove('cursor-hover'));
-});
+if (!isTouchDevice) {
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px';
+    cur.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .bubble, .social-item, .btn-cv, .btn-rust').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('cursor-hover'));
+  });
+} else {
+  /* Hide cursor element entirely on touch devices */
+  cur.style.display = 'none';
+}
 
 /* ── REVEAL ── */
 const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: .1 });
@@ -478,13 +588,6 @@ function openLink(e, k)  { e.stopPropagation(); window.open(links[k], '_blank');
 
 /* ═══════════════════════════════════════════════════════
    PROJECT DATA
-   Each entry has:
-     tag      — displayed in grid card + modal header
-     title    — displayed in grid card + modal header
-     year     — displayed in grid card + modal header (subtitle line)
-     thumb    — image shown in the grid card thumbnail
-     visible  — set to true to show in grid, false to hide
-     content  — full HTML for the modal body
    ═══════════════════════════════════════════════════════ */
 const projects = [
 
@@ -790,9 +893,7 @@ const projects = [
 
 ];
 
-/* ── BUILD BUBBLES FROM DATA ──
-   To show/hide a project on the grid, just toggle its visible: true/false above.
-   Order in the grid follows the order of the array.                              */
+/* ── BUILD BUBBLES ── */
 const bubblesEl = document.getElementById('bubblesGrid');
 const visibleProjects = projects.map((p, i) => ({ ...p, idx: i })).filter(p => p.visible);
 
@@ -802,7 +903,11 @@ visibleProjects.forEach(p => {
     : `<div class="b-thumb-ph"></div>`;
   const div = document.createElement('div');
   div.className = 'bubble';
+  div.setAttribute('role', 'button');
+  div.setAttribute('tabindex', '0');
   div.onclick = () => openProj(p.idx);
+  /* FIX: also handle keyboard Enter/Space for accessibility */
+  div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') openProj(p.idx); };
   div.innerHTML = `
     ${thumbHtml}
     <div class="b-tag">${p.tag}</div>
@@ -872,4 +977,3 @@ async function handleSubmit(e) {
 </script>
 </body>
 </html>
-
