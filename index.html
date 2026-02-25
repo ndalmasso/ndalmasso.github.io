@@ -786,63 +786,6 @@ const projects = [
           <a href="#" onclick="openLink(event,'spectra_fit_code')">Spectra fitting code →</a>
       </div>
     `
-  },
-
-  /* NIRISS Catalog */
-  {
-    tag:     'Spectroscopy · Catalog · JWST · 2025',
-    title:   'NIRISS Spectroscopic Catalog',
-    year:    'A&A',
-    thumb:   null,
-    visible: false,
-    content: `
-      <p>As part of the <strong>GLASS-JWST Early Release Science</strong> program, I contributed to building the deepest NIRISS slitless spectroscopic catalog to date, covering redshifts 0.2 &lt; z &lt; 9 with hundreds of confirmed emission-line galaxies across the ABELL 2744 field.</p>
-      <div class="pm-img placeholder">Figure 1 — Redshift distribution of the NIRISS catalog</div>
-      <p class="pm-caption">Spectroscopic redshift distribution of GLASS-JWST NIRISS sources, compared to photometric redshift predictions from HST imaging.</p>
-      <h3>Data Reduction Pipeline</h3>
-      <p>NIRISS produces spectra for <em>every</em> source in the field simultaneously without target pre-selection, but contamination from overlapping spectra is a major challenge. I worked on improving <strong>contamination modelling</strong> and automated emission-line detection, increasing the reliable redshift yield by ~15% compared to earlier reduction strategies.</p>
-      <div class="pm-links">
-        <a href="#" onclick="openLink(event,'p5')">Read the paper →</a>
-      </div>
-    `
-  },
-
-  /* Mergers */
-  {
-    tag:     'Galaxy Evolution · Morphology · JWST · 2024',
-    title:   'Galaxy Merger Rate from NIRCam',
-    year:    'MNRAS',
-    thumb:   null,
-    visible: false,
-    content: `
-      <p>Galaxy mergers are one of the primary drivers of mass growth and morphological transformation across cosmic time. Using ultra-deep JWST/NIRCam imaging from the GLASS-ERS program, I measured the <strong>galaxy major merger fraction</strong> up to 13.3 billion years of lookback time (z~7).</p>
-      <div class="pm-img placeholder">Figure 1 — Merger fraction vs redshift</div>
-      <p class="pm-caption">Galaxy major merger fraction as a function of redshift for stellar-mass-selected samples.</p>
-      <h3>Morphological Classification</h3>
-      <p>I combined <strong>non-parametric morphology statistics</strong> with an ensemble of machine-learning classifiers trained on visually classified subsamples. This hybrid approach reduced classification uncertainty by ~15% relative to purely statistical cuts.</p>
-      <div class="pm-links">
-        <a href="#" onclick="openLink(event,'p4')">Read the paper →</a>
-      </div>
-    `
-  },
-
-  /* Interacting Galaxy */
-  {
-    tag:     'Galaxy Evolution · JWST · 2024',
-    title:   'Massive Interacting Galaxy System',
-    year:    'Nature Astronomy',
-    thumb:   null,
-    visible: false,
-    content: `
-      <p>As part of the GLASS-JWST ERS team, I contributed to the discovery of a <strong>massive, interacting galaxy system at z~8.8</strong>, just 510 million years after the Big Bang, one of the earliest such systems ever confirmed spectroscopically.</p>
-      <div class="pm-img placeholder">Figure 1 — JWST NIRCam composite</div>
-      <p class="pm-caption">JWST NIRCam three-colour composite of the interacting system.</p>
-      <h3>Why It Matters</h3>
-      <p>Finding a merging system this massive this early challenges standard galaxy formation models. The combined stellar mass exceeds <strong>10¹⁰ M☉</strong>, implying extremely efficient star formation in both progenitors.</p>
-      <div class="pm-links">
-        <a href="#" onclick="openLink(event,'p2')">Read the paper →</a>
-      </div>
-    `
   }
 
 ];
@@ -929,3 +872,4 @@ async function handleSubmit(e) {
 </script>
 </body>
 </html>
+
