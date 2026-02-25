@@ -36,13 +36,9 @@
       cursor: none;
     }
 
-    html, body {
-      cursor: none;
-    }
+    html, body { cursor: none; }
 
-    a, button, [role="button"], input, textarea {
-      cursor: none !important;
-    }
+    a, button, [role="button"], input, textarea { cursor: none !important; }
 
     .hero-eyebrow, .s-num, .about-label, .cv-group-title, .b-tag,
     .tl-date, .social-item span, .about-stat-label, .b-link {
@@ -54,7 +50,6 @@
     }
 
     /* CURSOR */
-
     #cursor {
       position: fixed;
       width: 18px;
@@ -66,19 +61,15 @@
       transform: translate(-50%, -50%);
       transition: transform .15s ease-out, background .2s ease;
     }
-
     #cursor.cursor-hover {
       transform: translate(-50%, -50%) scale(1.8);
       background: var(--rust-dim);
     }
-
     #cursor::after {
       content: "";
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 4px;
-      height: 4px;
+      top: 50%; left: 50%;
+      width: 4px; height: 4px;
       background: var(--rust);
       border-radius: 50%;
       transform: translate(-50%, -50%);
@@ -103,7 +94,7 @@
     .hero-photo { width:100%; border:1px solid var(--border); border-radius:3px; overflow:hidden; }
     .hero-photo img { width:100%; height:auto; display:block; }
 
-    /* ══ PROJECT MODAL ══ */
+    /* PROJECT MODAL */
     .proj-overlay {
       position:fixed; inset:0;
       background:rgba(22,18,14,.92);
@@ -115,7 +106,6 @@
     }
     .proj-overlay.active { opacity:1; pointer-events:all; }
 
-    /* Arrow buttons outside the modal box */
     .proj-nav {
       position:absolute; top:50%; transform:translateY(-50%);
       width:48px; height:48px;
@@ -139,7 +129,6 @@
     }
     .proj-overlay.active .proj-modal { transform:none; }
 
-    /* Sticky header row inside modal */
     .proj-modal-header {
       position:sticky; top:0; z-index:20;
       display:flex; justify-content:space-between; align-items:center;
@@ -156,14 +145,12 @@
     }
     .proj-modal-close:hover { background:var(--rust); border-color:var(--rust); color:#fff; }
 
-    /* Blog-style body */
     .proj-modal-body { padding:2.8rem 3rem 3.5rem; }
 
     .proj-modal-tag { color:var(--rust); font-weight:700; text-transform:uppercase; letter-spacing:.25em; font-size:.7rem; margin-bottom:1rem; }
     .proj-modal-title { font-family:var(--font-s); font-size:clamp(1.6rem,3vw,2.4rem); color:var(--sand); line-height:1.15; margin-bottom:.5rem; }
     .proj-modal-year { font-size:.82rem; color:var(--sand-dim); margin-bottom:2.5rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
 
-    /* Rich content */
     .proj-modal-content p { font-size:1rem; color:var(--sand-dim); line-height:1.95; margin-bottom:1.5em; }
     .proj-modal-content p strong { color:var(--sand); font-weight:400; }
     .proj-modal-content h3 { font-family:var(--font-s); font-size:1.25rem; color:var(--sand); font-weight:400; margin:2.5rem 0 .8rem; }
@@ -227,7 +214,7 @@
     .tag { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; padding:.4rem .9rem; border:1px solid var(--border); color:var(--sand-dim); transition:all .3s; cursor: none !important; }
     .tag:hover { border-color:var(--rust); color:var(--rust); }
 
-    /* PROJECTS GRID — exactly 2 cols, first item spans full width when count is odd */
+    /* PROJECTS GRID */
     #projects { padding:6rem 0; }
     .bubbles { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); }
     .bubbles.odd-count .bubble:first-child { grid-column:1 / -1; }
@@ -237,15 +224,12 @@
     .bubble::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--rust); transform:scaleX(0); transition:transform .4s cubic-bezier(.16,1,.3,1); }
     .bubble:hover::after { transform:scaleX(1); }
 
-    /* FIX: no dashed border on thumbnails */
-    .b-thumb { width:100%; aspect-ratio:16/7; margin-bottom:1.5rem; object-fit:cover; display:block; border-radius:2px; }
     .b-thumb-ph { width:100%; background:var(--charcoal); margin-bottom:1.5rem; display:flex; align-items:center; justify-content:center; font-size:.7rem; color:var(--sand-dim); text-transform:uppercase; letter-spacing:.1em; border-radius:2px; overflow:hidden; }
     .b-thumb-ph:not(:has(img)) { aspect-ratio:16/7; }
     .b-thumb-ph img { width:100%; height:auto; display:block; }
 
     .b-title { font-family:var(--font-s); font-size:1.4rem; color:var(--sand); margin-bottom:.4rem; }
     .b-year { font-size:.8rem; color:var(--sand-dim); }
-    /* FIX: b-toggle removed entirely */
 
     /* EXPERIENCE */
     #cv { padding:6rem 0; }
@@ -294,8 +278,7 @@
 <!-- PROJECT MODAL -->
 <div class="proj-overlay" id="projOverlay" onclick="overlayClick(event)">
   <button class="proj-nav prev" id="projPrev" onclick="navProj(-1)" aria-label="Previous">&#8592;</button>
-  <button class="proj-nav next" id="projNext" onclick="navProj(+1)"  aria-label="Next">&#8594;</button>
-
+  <button class="proj-nav next" id="projNext" onclick="navProj(+1)" aria-label="Next">&#8594;</button>
   <div class="proj-modal" id="projModal">
     <div class="proj-modal-header">
       <span class="proj-counter" id="projCounter"></span>
@@ -356,9 +339,9 @@
         <div class="about-stat"><span class="about-stat-num">4+</span><span class="about-stat-label">Quantitative research</span></div>
       </div>
       <div class="about-right reveal">
-        <p>Astrophysicist with expertise in <strong>galaxy clustering</strong> and <strong>large-scale data analysis</strong>, now applying my analytical background to the AI space. After completing my PhD on the connection between massive galaxies and dark matter halos, I transitioned out of academia to take on more applied, high-impact challenges.</p>
-        <p>Currently working on improving <strong>next-generation AI models</strong> by contributing to higher-quality training data, rigorous evaluation practices, and robust analytical workflows.</p>
-        <p>Actual <strong>cool stuff</strong>: cooking, aquascaping, travelling, hiking, camping, and MTG.</p>
+        <p>Astrophysicist turned data scientist, with a background in <strong>galaxy clustering</strong> and <strong>large-scale statistical modelling</strong>. I spent my PhD mapping the connection between massive galaxies and dark matter halos, then decided the Universe could wait and brought those skills somewhere with a shorter feedback loop.</p>
+        <p>Now working on <strong>next-generation AI models</strong>, contributing to training data quality, evaluation frameworks, and the kind of analytical work that actually makes models less wrong.</p>
+        <p>Outside of that: I cook obsessively, keep aquariums that are definitely too ambitious, lose sleep over <strong>Magic: The Gathering</strong>, and will drop everything for a <strong>remote trail, a long flight, or a campsite with no signal</strong>. If any of that sounds like your kind of person, get in touch.</p>
         <div class="tags">
           <span class="tag">Python</span><span class="tag">Bayesian Inference</span><span class="tag">MCMC</span><span class="tag">NumPy · Pandas</span><span class="tag">SQL</span><span class="tag">Docker</span><span class="tag">Git</span><span class="tag">ML</span><span class="tag">LLM Evaluation</span><span class="tag">ETL Pipelines</span><span class="tag">Data Visualization</span>
         </div>
@@ -367,48 +350,12 @@
   </div>
 </section>
 
-<!-- PROJECTS -->
+<!-- PROJECTS — grid is built from the projects array in the script below -->
 <section id="projects">
   <div class="wrap">
     <div class="s-head reveal"><span class="s-num">02</span><h2 class="s-title">Projects</h2></div>
-    <div class="bubbles reveal">
-
-      <div class="bubble" onclick="openProj(0)">
-        <div class="b-thumb-ph"><img src="images/ACF_HOD.png"></div>
-        <div class="b-tag">Galaxy Clustering · HST · JWST · 2022–2025</div>
-        <div class="b-title">From HST to JWST: Pushing Galaxy Clustering to the Edge of the Observable</div>
-        <div class="b-year">3 papers · MNRAS</div>
-      </div>
-
-      <!-- <div class="bubble" onclick="openProj(1)">
-        <div class="b-thumb-ph">Cover image</div>
-        <div class="b-tag">Spectroscopy · Spectrographs · JWST · 2025</div>
-        <div class="b-title">Slit Loss Corrections in Spectroscopy</div>
-        <div class="b-year">MNRAS</div>
-      </div>
-
-      <div class="bubble" onclick="openProj(2)">
-        <div class="b-thumb-ph">Cover image</div>
-        <div class="b-tag">Spectroscopy · Catalog · JWST · 2025</div>
-        <div class="b-title">NIRISS Spectroscopic Catalog</div>
-        <div class="b-year">A&amp;A</div>
-      </div>
-
-      <div class="bubble" onclick="openProj(3)">
-        <div class="b-thumb-ph">Cover image</div>
-        <div class="b-tag">Galaxy Evolution · Morphology · JWST · 2024</div>
-        <div class="b-title">Galaxy Merger Rate from NIRCam</div>
-        <div class="b-year">MNRAS</div>
-      </div>
-
-      <div class="bubble" onclick="openProj(4)">
-        <div class="b-thumb-ph">Cover image</div>
-        <div class="b-tag">Galaxy Evolution · JWST · 2024</div>
-        <div class="b-title">Massive Interacting Galaxy System</div>
-        <div class="b-year">Nature Astronomy</div>
-      </div> -->
-
-    </div>
+    <p class="about-location">This is where I keep things. Research, side projects, work in progress. Updated as I go.</p>
+    <div class="bubbles reveal" id="bubblesGrid"></div>
   </div>
 </section>
 
@@ -495,254 +442,403 @@
 <script>
 /* ── CURSOR ── */
 const cur = document.getElementById('cursor');
-document.addEventListener('mousemove', e=>{
-  cur.style.left=e.clientX+'px';
-  cur.style.top=e.clientY+'px';
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top  = e.clientY + 'px';
 });
 
-/* ── CURSOR HOVER EFFECT ── */
-const hoverables = document.querySelectorAll(
-  'a, button, .bubble, .social-item, .btn-cv, .btn-rust'
-);
-
-hoverables.forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cur.classList.add('cursor-hover');
-  });
-  el.addEventListener('mouseleave', () => {
-    cur.classList.remove('cursor-hover');
-  });
+/* ── CURSOR HOVER ── */
+document.querySelectorAll('a, button, .bubble, .social-item, .btn-cv, .btn-rust').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('cursor-hover'));
 });
 
 /* ── REVEAL ── */
-const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 /* ── LINKS ── */
-const links={
-  gh:atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzbw=='),
-  li:atob('aHR0cHM6Ly93d3cubGlua2VkaW4uY29tL2luL25pY29sby1kYWxtYXNzby8='),
-  gs:atob('aHR0cHM6Ly9zY2hvbGFyLmdvb2dsZS5jb20vY2l0YXRpb25zP3VzZXI9Tjl3clJuUUFBQUomaGw9ZW4='),
-  acf_code:atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9hY2YtZ2FsYXh5LWNsdXN0ZXJpbmc='),
-  p1:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTI4LzEvODk4Lzc0ODAyNTg='),
-  p2:atob('aHR0cHM6Ly93d3cubmF0dXJlLmNvbS9hcnRpY2xlcy9zNDE1NTAtMDI0LTAyMjE4LTc='),
-  p3:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTMzLzIvMjM5MS83NzM4Mzkw'),
-  p4:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTMzLzQvNDQ3Mi83NzQ4NzU2'),
-  p5:atob('aHR0cHM6Ly93d3cuYWFuZGEub3JnL2FydGljbGVzL2FhL2Ficy8yMDI1LzA3L2FhNTQ5NTQtMjUvYWE1NDk1NC0yNS5odG1s'),
-  p6:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ2LzIvc3RhZzAwMS84NDE0MDUy'),
-  p7:atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ0LzIvMTkxNS84MzAwODA4')
+const links = {
+  gh:               atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzbw=='),
+  li:               atob('aHR0cHM6Ly93d3cubGlua2VkaW4uY29tL2luL25pY29sby1kYWxtYXNzby8='),
+  gs:               atob('aHR0cHM6Ly9zY2hvbGFyLmdvb2dsZS5jb20vY2l0YXRpb25zP3VzZXI9Tjl3clJuUUFBQUomaGw9ZW4='),
+  acf_code:         atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9hY2YtZ2FsYXh5LWNsdXN0ZXJpbmc='),
+  spectra_fit_code: atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9zcGVjdHJhLWZpdHRpbmc='),
+  aria_code:        atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9BUklBX0FkYXB0aXZlX1J1bm5pbmdfSW50ZWxsaWdlbnRfQXNzaXN0YW50'),
+  p1: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTI4LzEvODk4Lzc0ODAyNTg='),
+  p2: atob('aHR0cHM6Ly93d3cubmF0dXJlLmNvbS9hcnRpY2xlcy9zNDE1NTAtMDI0LTAyMjE4LTc='),
+  p3: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTMzLzIvMjM5MS83NzM4Mzkw'),
+  p4: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTMzLzQvNDQ3Mi83NzQ4NzU2'),
+  p5: atob('aHR0cHM6Ly93d3cuYWFuZGEub3JnL2FydGljbGVzL2FhL2Ficy8yMDI1LzA3L2FhNTQ5NTQtMjUvYWE1NDk1NC0yNS5odG1s'),
+  p6: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ2LzIvc3RhZzAwMS84NDE0MDUy'),
+  p7: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ0LzIvMTkxNS84MzAwODA4')
 };
-function goLink(k){ window.open(links[k],'_blank'); }
-function openLink(e,k){ e.stopPropagation(); window.open(links[k],'_blank'); }
+function goLink(k)       { window.open(links[k], '_blank'); }
+function openLink(e, k)  { e.stopPropagation(); window.open(links[k], '_blank'); }
 
-/* ═══════════════════════════════════════════════
-   PROJECT DATA  — blog-style content per project
-   ═══════════════════════════════════════════════
-   Each project's `content` is full HTML using:
-     <p>                            paragraph
-     <h3>                           sub-heading
-     <div class="pm-img placeholder"> placeholder block
-     <div class="pm-img"><img src="…"> real image
-     <p class="pm-caption">         caption
-     <div class="pm-img-row">       side-by-side pair
-     <div class="pm-links"><a>      paper buttons
-
-   To add real images: replace the placeholder divs with:
-     <div class="pm-img"><img src="images/your-file.jpg" alt="…"></div>
-*/
+/* ═══════════════════════════════════════════════════════
+   PROJECT DATA
+   Each entry has:
+     tag      — displayed in grid card + modal header
+     title    — displayed in grid card + modal header
+     year     — displayed in grid card + modal header (subtitle line)
+     thumb    — image shown in the grid card thumbnail
+     visible  — set to true to show in grid, false to hide
+     content  — full HTML for the modal body
+   ═══════════════════════════════════════════════════════ */
 const projects = [
 
-  /* 0 — Galaxy Clustering */
-  { tag:'Galaxy Clustering · HST · JWST · 2022–2025',
-    title:'From HST to JWST: Pushing Galaxy Clustering to the Edge of the Observable',
-    year:'3 papers · MNRAS',
-    content:`
+  /* Galaxy Clustering */
+  {
+    tag:     'Galaxy Clustering · HST · JWST · 2022–2025',
+    title:   'From HST to JWST: Pushing Galaxy Clustering to the Edge of the Observable',
+    year:    'What Galaxy Clustering Really Tells Us About Dark Matter.',
+    thumb:   'images/ACF_HOD.png',
+    visible: true,
+    content: `
       <p>
-          How far can we really push clustering measurements at high redshift?<br>
-          How deep can we go before the signal becomes uncertain?<br>
-          Can we meaningfully probe the faint end of the luminosity function?<br><br>
+          · How far can we really push clustering measurements at high redshift?<br>
+          · How deep can we go before the signal becomes uncertain?<br>
+          · Can we meaningfully probe the faint end of the luminosity function?<br><br>
 
-          This figure is the result of more than three years working on galaxy clustering in the early Universe. 
-          It brings together survey design, modelling, calibration and validation, moving from the depth of the 
-          Hubble Space Telescope (HST) to what the James Webb Space Telescope (JWST) now makes possible through a 
-          Halo Occupation Distribution (HOD) model.
+          This figure is the result of more than three years working on galaxy clustering in the early Universe.
+          It brings together survey design, modelling, calibration and validation, moving from the depth of the
+          <strong>Hubble Space Telescope (HST)</strong> to what the <strong>James Webb Space Telescope (JWST)</strong> now makes possible through a
+          <strong>Halo Occupation Distribution (HOD)</strong> model.
       </p>
 
-      <div class="pm-img">
-          <img src="images/ACF_HOD.png">
-      </div>
+      <div class="pm-img"><img src="images/ACF_HOD.png"></div>
       <p class="pm-caption">
-          Measured ACFs in the GOODS-S field at six mean redshifts. 
-          The blue line shows the HOD best fit, with one-halo and two-halo contributions separated. 
+          Measured ACFs in the GOODS-S field at six mean redshifts.
+          The blue line shows the HOD best fit, with one-halo and two-halo contributions separated.
           Magnitude thresholds and mean redshifts are indicated in each panel.
       </p>
 
-      <h3>Galaxy Clustering?</h3>
-
+      <h3>Galaxy Clustering!?</h3>
       <p>
-          The starting point was understanding how depth and completeness shape clustering measurements.
-
-          Using HST data from the heterogeneous GOODS North and South fields, we developed a method to account for spatial variations when recovering high redshift candidates. 
-          This enabled consistent clustering measurements across non uniform data, with particular attention to the faint end of the luminosity function.
+          Imagine you walk into a pub and notice your group of friends has naturally gathered at one end of the bar,
+          while another group has settled at the other. You are not randomly scattered around the room, you are <strong>clustered</strong>.
+          Now zoom out to the scale of the Universe, swap people for galaxies, and swap the pub for hundreds of millions
+          of light years of space. <strong>Galaxy clustering</strong> measures exactly that tendency: how strongly galaxies clump together
+          beyond what pure chance would predict. The stronger the clustering signal, the more massive the <strong>dark matter halos</strong>
+          those galaxies tend to live in, and the more we can infer about the <strong>cosmic scaffolding</strong> that pulled them together
+          in the first place.
+      </p>
+      <p>
+          The starting point was understanding how <strong>depth and completeness</strong> shape clustering measurements.
+          Using HST data from the heterogeneous <strong>GOODS North and South</strong> fields, we developed a method to account
+          for spatial variations when recovering <strong>high redshift candidates</strong>. This enabled consistent clustering
+          measurements across non-uniform data, with particular attention to the <strong>faint end of the luminosity function</strong>.
       </p>
 
       <div style="text-align:center; margin: 2rem 0;">
           <img src="images/GOODSN_rms.png" style="width:60%; height:auto;">
-          <p style="margin-top:0.5rem; font-size:0.9rem; color:#555;">
-              Depth variations across the GOODS-North field.
-          </p>
+          <p style="margin-top:0.5rem; font-size:0.9rem; color:#555;">Depth variations across the GOODS-North field.</p>
       </div>
 
       <p>
-          With the arrival of JWST, the question evolved. 
-          The same framework could now be pushed to fainter magnitudes and earlier cosmic times.
-
-          The result was a clustering analysis capable of measuring galaxy bias beyond redshift 10, offering a direct view of structure formation when the Universe was less than a billion years old.
+          With the arrival of JWST, the question evolved. The same framework could now be pushed to <strong>fainter
+          magnitudes and earlier cosmic times</strong>. The result was a clustering analysis capable of measuring <strong>galaxy
+          bias beyond redshift z = 10</strong>, offering a direct view of structure formation when the Universe was less than
+          <strong>a billion years old</strong>.
       </p>
 
-      <div class="pm-img">
-          <img src="images/ACF_ALL_app_mag_cut.png">
-      </div>
-      <p class="pm-caption">
-          Angular correlation functions measured across six redshift bins with power law fits.
-      </p>
+      <div class="pm-img"><img src="images/ACF_ALL_app_mag_cut.png"></div>
+      <p class="pm-caption">Angular correlation functions measured across six redshift bins with power law fits.</p>
 
       <h3>Key Results</h3>
-
       <p>
-          The final step was a physical interpretation through an HOD model fitted to the latest JWST data.
-
-          The clustering signal implies dark matter halo masses of 10¹¹ to 10¹² solar masses at redshift z = 7-11. 
-          Even at these early times, massive galaxies already appear to reside in substantial dark matter halos.
+          The final step was a physical interpretation through an <strong>HOD model</strong> fitted to the latest JWST data.
+          The clustering signal implies <strong>dark matter halo masses of 10¹¹ to 10¹² solar masses</strong> at redshift z = 7–11.
+          Even at these early times, massive galaxies already appear to reside in <strong>substantial dark matter halos</strong>.
       </p>
 
-      <div class="pm-img">
-          <img src="images/fsat_beff_Mh_vs_z.png">
-      </div>
-      <p class="pm-caption">
-          Evolution of satellite fraction, effective galaxy bias and characteristic halo mass with redshift.
-      </p>
+      <div class="pm-img"><img src="images/fsat_beff_Mh_vs_z.png"></div>
+      <p class="pm-caption">Evolution of satellite fraction, effective galaxy bias and characteristic halo mass with redshift.</p>
 
-      <p>
-          An example implementation of the ACF estimator used in this work is available in a dedicated GitHub repository. 
-          Links to the related papers and to the code can be found below.
+      <p> 
+        The ACF estimator used in this work is openly available on GitHub. Papers and code linked below.
       </p>
 
       <div class="pm-links">
           <a href="#" onclick="openLink(event,'p1')">HST Clustering paper →</a>
           <a href="#" onclick="openLink(event,'p3')">JWST Clustering paper →</a>
           <a href="#" onclick="openLink(event,'p6')">HOD Modelling paper →</a>
-      </div>
-
-      <div class="pm-links" style="margin-top:1rem;">
           <a href="#" onclick="openLink(event,'acf_code')">ACF Clustering code →</a>
       </div>
     `
   },
 
-  /* 1 — Slit Loss */
-  { tag:'Spectroscopy · Spectrographs · JWST · 2025',
-    title:'Slit Loss Corrections in JWST Spectroscopy',
-    year:'MNRAS',
-    content:`
-      <p>JWST carries two complementary spectrographs — NIRISS (slitless) and NIRSpec (multi-object slit) — that often observe the same targets. When comparing their flux measurements, I found <strong>systematic offsets up to ~30%</strong>, a problem that propagates directly into derived physical quantities like star-formation rates and stellar masses.</p>
 
-      <div class="pm-img placeholder">Figure 1 — Flux comparison NIRISS vs NIRSpec · replace with your image</div>
-      <p class="pm-caption">Median flux ratio NIRISS/NIRSpec as a function of source half-light radius, colour-coded by redshift.</p>
+  /* ARIA */
+  {
+    tag:     'ARIA · AI · ML · 2025',
+    title:   'ARIA - Adaptive Running Intelligent Assistant',
+    year:    "Your playlist doesn't know you're dying at kilometre three. ARIA does.",
+    thumb:   'images/aria_recap.png',
+    visible: true,
+    content: `
+      <p>
+          Can a running app actually listen to you?<br>
+          Spoiler: they can't. ARIA can.<br><br>
 
-      <h3>The Slit-Loss Problem</h3>
-      <p>NIRSpec's micro-shutter assembly (MSA) collects flux only from a small rectangular aperture. Extended or off-centre sources lose a fraction of their light at the slit edges — an effect that depends on source morphology, dithering, and position within the shutter. This <strong>slit loss</strong> is wavelength-dependent and non-trivial to model analytically.</p>
+          <strong>ARIA (Adaptive Running Intelligent Assistant)</strong> started as a question I kept asking while grinding through
+          the same static playlist with a training plan that had absolutely no idea I was running on four hours of sleep.
+          It turned into a small <strong>Python project</strong> to see if a coaching system could genuinely respond to you in real time,
+          not just log your splits and move on.
+      </p>
 
-      <div class="pm-img-row">
-        <div class="pm-img placeholder">MSA geometry diagram</div>
-        <div class="pm-img placeholder">Correction factor map</div>
-      </div>
-      <p class="pm-caption">Left: Micro-shutter geometry illustrating off-centre source truncation. Right: Derived correction factor as a function of position and source half-light radius.</p>
+      <h3>The Problem with Running Apps</h3>
+      <p>
+          Despite the explosion of running apps and wearables, the core experience has barely changed. You are
+          treated like a <strong>set of statistics</strong>. Playlists are fixed before you leave the door, training plans are built
+          around <strong>population averages</strong> and have no idea how you feel at kilometre four, and when a session falls apart
+          or goes better than expected there is no way for any of that to <strong>feed back</strong> into what happens next. Every run
+          starts from the same baseline, regardless of what the last ten told you.
+      </p>
+      <p>
+          Music is the piece that always felt the most wasted. There is solid evidence linking <strong>tempo, energy and BPM</strong>
+          to <strong>perceived exertion and performance output</strong>, and yet every app treats it as background noise. A well-timed
+          track at the right BPM can carry you through a hard interval better than any notification telling you to
+          push harder. ARIA takes that seriously.
+      </p>
 
-      <h3>Statistical Framework</h3>
-      <p>I developed a <strong>forward-modelling framework</strong> that simultaneously fits source morphology and slit-loss correction factor from photometric priors, validated against high-S/N sources with independent flux calibration. Applied to the full GLASS-JWST sample, the corrections reduce systematic scatter by a factor of ~2.</p>
+      <h3>How ARIA Works</h3>
+      <p>
+          The idea is to build a coach that knows where you are <strong>right now</strong>, not where a plan assumed you would be.
+          You start with a <strong>personal profile</strong>: basic stats feed into personalised <strong>heart rate zones</strong> and optimal <strong>BPM
+          ranges</strong> for each training zone, so the system is grounded in your physiology from the start. From there,
+          a <strong>music engine</strong> selects and swaps tracks based on BPM and energy level, matching your current zone and
+          nudging intensity up or down as needed. The whole thing is held together by a <strong>real-time feedback loop</strong>:
+          inputs signal whether you are pushing hard, struggling or comfortable, and ARIA adjusts both
+          the training prescription and the music on the spot.
+      </p>
+
+      <div class="pm-img"><img src="images/aria_config.png"></div>
+      <p class="pm-caption">
+          Setup and pre-run planning. ARIA takes your runner profile and builds a personalised session,
+          mapping training zones to musical BPM ranges that will guide workout intensity from the first step.
+      </p>
+
+      <p>
+          The demo runs as an interactive notebook. After configuring your profile and generating your zones,
+          a simulated run lets you feed in live state signals: <strong>UP</strong> if you are feeling strong and ready for more,
+          <strong>DOWN</strong> if you need to ease off, <strong>OK</strong> if the current pace is right. ARIA reacts immediately, shifting the
+          training zone and pulling in music that matches where you actually are.
+      </p>
+
+      <div class="pm-img"><img src="images/aria_example_run.png"></div>
+      <p class="pm-caption">
+          Live adaptation in action. Real-time feedback triggers immediate adjustments to both training zone
+          and music selection, responding to your actual state rather than a predetermined schedule.
+      </p>
+
+      <p>
+          The post-run step closes the loop. Feedback from the session gets <strong>logged against your profile</strong>,
+          so future runs start from a more informed place and the system gradually builds a picture of your
+          <strong>patterns, preferences</strong> and how you respond to different intensities and sounds.
+      </p>
+
+      <div class="pm-img"><img src="images/aria_recap.png"></div>
+      <p class="pm-caption">
+          Post-run feedback helps ARIA refine its understanding of your patterns and preferences,
+          so each session informs the next.
+      </p>
+
+      <p>
+          ARIA is a <strong>proof of concept</strong>, not a finished product. The kind of small project that exists to test
+          whether an idea holds together. The answer is that it mostly does. <strong>BPM-matched music</strong> combined with
+          <strong>real-time zone adaptation</strong> makes for a genuinely different feel compared to a fixed playlist and a
+          rigid plan. The open question that sticks with me is how much of that comes from the science,
+          and how much comes from simply <strong>feeling like something is paying attention</strong>.
+      </p>
+
+      <p>
+          The full demo and code are on GitHub, linked below       
+      </p>
 
       <div class="pm-links">
-        <a href="#" onclick="openLink(event,'p7')">Read the paper →</a>
+          <a href="#" onclick="openLink(event,'aria_code')">ARIA demo and code →</a>
       </div>
     `
   },
 
-  /* 2 — NIRISS Catalog */
-  { tag:'Spectroscopy · Catalog · JWST · 2025',
-    title:'NIRISS Spectroscopic Catalog',
-    year:'A&A',
-    content:`
-      <p>As part of the <strong>GLASS-JWST Early Release Science</strong> program, I contributed to building the deepest NIRISS slitless spectroscopic catalog to date, covering redshifts 0.2 &lt; z &lt; 9 with hundreds of confirmed emission-line galaxies across the ABELL 2744 field.</p>
+  /* Slit Loss */
+  {
+    tag:     'Spectroscopy · Spectrographs · JWST · 2025',
+    title:   'Slit Loss Corrections in JWST Spectroscopy',
+    year:    'NIRISS vs NIRSpec a JWST showdown.',
+    thumb:   'images/spectra_niriss.png',
+    visible: true,
+    content: `
+      <p>
+          · Can one use both spectroscopic data from NIRISS and from NIRSpec?<br>
+          · Are they the same even if the instruments are different?<br><br>
 
-      <div class="pm-img placeholder">Figure 1 — Redshift distribution of the NIRISS catalog · replace with your image</div>
-      <p class="pm-caption">Spectroscopic redshift distribution of GLASS-JWST NIRISS sources, compared to photometric redshift predictions from HST imaging.</p>
+          These are two questions that arose while working with the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong>
+          collaboration during my visit as a research student at UCLA (University of California, Los Angeles).
+          We were in the process of creating the <strong>first spectroscopic NIRISS catalogue</strong>, and these questions came up naturally.
+          It was the perfect occasion to delve into them with a dedicated project, led by me.
+      </p>
 
-      <h3>Data Reduction Pipeline</h3>
-      <p>NIRISS produces spectra for <em>every</em> source in the field simultaneously without target pre-selection — but contamination from overlapping spectra is a major challenge. I worked on improving <strong>contamination modelling</strong> and automated emission-line detection, increasing the reliable redshift yield by ~15% compared to earlier reduction strategies.</p>
+      <div class="pm-img"><img src="images/all_cutouts.png"></div>
+      <p class="pm-caption">
+          NIRISS imaging cutouts of the 12 galaxies in our sample. White contours show the segmentation maps,
+          magenta and white rectangles mark the NIRSpec slits, and the "A" parameter in each panel indicates
+          the fraction of the segmentation map covered by the slit. Objects span redshifts z = 1.27–3.38 and are
+          classified as compact or extended based on their flux distribution relative to the slit geometry.
+      </p>
 
-      <div class="pm-img-row">
-        <div class="pm-img placeholder">2D spectrum example</div>
-        <div class="pm-img placeholder">Line detection example</div>
+      <h3>NIRISS and NIRSpec</h3>
+      <p>
+          <strong>JWST (James Webb Space Telescope)</strong> offers two complementary spectroscopic modes for studying distant galaxies.
+          <strong>NIRISS WFSS (Near Infrared Imager and Slitless Spectrograph Wide Field Slitless Spectroscopy)</strong> disperses
+          light across the entire field of view without spatial constraints, capturing the integrated emission from each
+          galaxy's full morphological extent as defined by its segmentation map. <strong>NIRSpec MSA (Near Infrared Spectrograph
+          Micro-Shutter Assembly)</strong> instead isolates individual targets through a micro-shutter array, with each slit
+          measuring just <strong>0.2 × 0.46 arcsec</strong>, enabling simultaneous multi-object spectroscopy with minimised sky background
+          and high spectral resolution.
+      </p>
+      <p>
+          Both instruments are exceptional, but they work in <strong>fundamentally different ways</strong> and that difference matters.
+          A slit can miss light. A slitless instrument cannot. The question is: how much does this actually affect the science?
+          To find out, we selected <strong>12 spectroscopically confirmed galaxies</strong> from the <strong>Abell 2744</strong> cluster field, observed across
+          three JWST programs: GLASS-JWST-ERS (PID 1324), JWST-DDT (PID 2756), and UNCOVER-JWST (PID 2561).
+          These galaxies span <strong>redshifts z = 1.27–3.38</strong> and cover a range of morphologies, from compact point-like sources
+          to large extended objects. For each, we measured strong emission lines — [O II] λ3727, Hβ λ4861,
+          [O III] λ4959, [O III] λ5007, and Hα λ6563 — independently with both instruments and compared the results.
+      </p>
+
+      <h3>The Problem with Slits</h3>
+      <p>
+          When a narrow slit is placed over a galaxy, it only captures the light that falls within its footprint.
+          For compact objects, this is rarely a problem. But for <strong>extended sources</strong>, a significant fraction of
+          the emission lands outside the slit and is simply lost. These are called <strong>slit losses</strong>, and while the effect
+          is well known in spectroscopy, its quantitative impact when combining JWST's slitless and slit-based
+          modes <strong>had not been systematically characterised before this work</strong>.
+      </p>
+      <p>
+          The <strong>morphology of a galaxy</strong> therefore becomes a critical variable. Two instruments observing the same
+          object can return genuinely different flux measurements, not because of noise or calibration failures,
+          but because of a <strong>real, physical difference in how much light each one collected</strong>. To quantify this, we fitted
+          emission lines through <strong>χ² minimisation</strong> on 1D spectra from both instruments, using <strong>Monte Carlo (MC) sampling</strong>
+          of the continuum regions around each line to obtain robust uncertainty estimates. We also made use of
+          NIRISS emission line maps to simulate how much flux a randomly positioned NIRSpec slit would recover
+          across <strong>10⁴ slit placements</strong> for each extended galaxy.
+      </p>
+
+      <div class="pm-img"><img src="images/spectra_niriss.png"></div>
+      <p class="pm-caption">
+          Example analysis for galaxy NIRISS ID 2744 at z = 1.86. Top right: the NIRISS spectrum (blue),
+          original NIRSpec spectrum (gray), and NIRSpec convolved to match NIRISS resolution (red), with identified
+          emission lines marked. Bottom panels: detailed MC emission line fits for each matched line, with shaded
+          regions showing an example continuum estimation window from a single MC iteration.
+      </p>
+
+      <h3>Key Results</h3>
+      <p>
+          The analysis revealed a clear <strong>morphology-dependent dichotomy</strong>. Compact sources showed consistent flux
+          measurements between instruments, with NIRSpec integrated fluxes comparable to or slightly exceeding NIRISS,
+          all agreeing within <strong>1σ uncertainties</strong>. Extended sources behaved very differently: NIRISS systematically
+          measured higher integrated fluxes, with NIRSpec consistently falling below, a direct signature of <strong>slit losses</strong>
+          that was visible across all emission lines and all three observing programs.
+      </p>
+      <p>
+          Using the emission line maps, we could quantify this effect directly. When the NIRSpec slit covered more
+          than <strong>15% of the galaxy's segmentation map area</strong>, or when the effective radius was <strong>R<sub>e</sub> &lt; 1 kpc</strong>,
+          NIRSpec recovered <strong>at least 63% of the NIRISS flux</strong>. For lower coverage fractions or more extended sources,
+          that recovery dropped to anywhere between <strong>24% and 63%</strong>, a factor of four difference in the most extreme cases.
+      </p>
+      <p>
+          <strong>Equivalent width (EW)</strong> measurements told a different story. Unlike flux ratios, which showed a stark
+          compact/extended dichotomy, EW ratios were more scattered around zero for both morphological classes,
+          with no persistent systematic offset for extended sources. Because EWs are defined relative to the <strong>local
+          continuum</strong>, aperture-dependent losses in both the line and the continuum partially cancel out, making
+          <strong>EW-based analyses more robust</strong> when combining data from different instruments.
+      </p>
+      <p>
+          The most consequential finding concerns <strong>emission line ratios</strong>. We measured the <strong>Hα λ6563/[O III] λ5007</strong>
+          ratio for four extended galaxies using multiple methods and found it varied by up to <strong>~0.3 dex</strong> across
+          instruments and measurement approaches. That is large enough to shift derived <strong>metallicities and star
+          formation rates</strong> meaningfully, particularly given that SFR estimates scale directly with Hα luminosity
+          and that emission lines experience stronger <strong>dust attenuation</strong> than the continuum.
+      </p>
+
+      <div class="pm-img"><img src="images/flux_ratio_vs_restwave.png"><img src="images/flux_ratio_vs_area.png"></div>
+      <p class="pm-caption">
+          NIRSpec-to-NIRISS flux ratio as a function of rest-frame wavelength (top) and slit coverage fraction (bottom),
+          with compact sources in blue and extended in red. Compact sources cluster near unity across all wavelengths,
+          while extended sources with lower slit coverage show the strongest flux losses.
+      </p>
+
+      <p>
+          As JWST datasets grow and <strong>multi-instrument catalogues</strong> become standard, establishing <strong>clear protocols</strong> for how
+          to combine slitless and slit-based spectroscopy is becoming increasingly important. This project offers an
+          <strong>empirical reference</strong> for exactly that, showing where the two instruments agree, where they diverge, and why.
+      </p>
+
+      <p>
+          The emission line fitting pipeline behind this analysis is openly available on GitHub. Papers and code linked below.
+      </p>
+
+      <div class="pm-links">
+          <a href="#" onclick="openLink(event,'p7')">Slit losses paper →</a>
+          <a href="#" onclick="openLink(event,'spectra_fit_code')">Spectra fitting code →</a>
       </div>
-      <p class="pm-caption">Left: 2D NIRISS grism spectrum of a z~3 galaxy. Right: Automated emission-line detection with contamination mask overlaid.</p>
+    `
+  },
 
+  /* NIRISS Catalog */
+  {
+    tag:     'Spectroscopy · Catalog · JWST · 2025',
+    title:   'NIRISS Spectroscopic Catalog',
+    year:    'A&A',
+    thumb:   null,
+    visible: false,
+    content: `
+      <p>As part of the <strong>GLASS-JWST Early Release Science</strong> program, I contributed to building the deepest NIRISS slitless spectroscopic catalog to date, covering redshifts 0.2 &lt; z &lt; 9 with hundreds of confirmed emission-line galaxies across the ABELL 2744 field.</p>
+      <div class="pm-img placeholder">Figure 1 — Redshift distribution of the NIRISS catalog</div>
+      <p class="pm-caption">Spectroscopic redshift distribution of GLASS-JWST NIRISS sources, compared to photometric redshift predictions from HST imaging.</p>
+      <h3>Data Reduction Pipeline</h3>
+      <p>NIRISS produces spectra for <em>every</em> source in the field simultaneously without target pre-selection, but contamination from overlapping spectra is a major challenge. I worked on improving <strong>contamination modelling</strong> and automated emission-line detection, increasing the reliable redshift yield by ~15% compared to earlier reduction strategies.</p>
       <div class="pm-links">
         <a href="#" onclick="openLink(event,'p5')">Read the paper →</a>
       </div>
     `
   },
 
-  /* 3 — Mergers */
-  { tag:'Galaxy Evolution · Morphology · JWST · 2024',
-    title:'Galaxy Merger Rate from NIRCam',
-    year:'MNRAS',
-    content:`
+  /* Mergers */
+  {
+    tag:     'Galaxy Evolution · Morphology · JWST · 2024',
+    title:   'Galaxy Merger Rate from NIRCam',
+    year:    'MNRAS',
+    thumb:   null,
+    visible: false,
+    content: `
       <p>Galaxy mergers are one of the primary drivers of mass growth and morphological transformation across cosmic time. Using ultra-deep JWST/NIRCam imaging from the GLASS-ERS program, I measured the <strong>galaxy major merger fraction</strong> up to 13.3 billion years of lookback time (z~7).</p>
-
-      <div class="pm-img placeholder">Figure 1 — Merger fraction vs redshift · replace with your image</div>
-      <p class="pm-caption">Galaxy major merger fraction as a function of redshift for stellar-mass-selected samples, compared to literature measurements and semi-analytic model predictions.</p>
-
+      <div class="pm-img placeholder">Figure 1 — Merger fraction vs redshift</div>
+      <p class="pm-caption">Galaxy major merger fraction as a function of redshift for stellar-mass-selected samples.</p>
       <h3>Morphological Classification</h3>
-      <p>I combined <strong>non-parametric morphology statistics</strong> — Gini coefficient, M20 moment of light, asymmetry index — with an ensemble of machine-learning classifiers (Random Forest + Gradient Boosting) trained on visually classified subsamples. This hybrid approach reduced classification uncertainty by <strong>~15% relative to purely statistical cuts</strong> and improved completeness at high redshift where galaxy angular sizes are small.</p>
-
-      <div class="pm-img-row">
-        <div class="pm-img placeholder">Gini–M20 diagnostic plane</div>
-        <div class="pm-img placeholder">Merger postage stamps</div>
-      </div>
-      <p class="pm-caption">Left: Gini–M20 morphological plane with the merger selection boundary and colour-coded redshift bins. Right: NIRCam postage stamps of representative merging pairs at z~2–5.</p>
-
-      <h3>Results</h3>
-      <p>The merger fraction rises steeply from z~0 to z~3, then flattens at higher redshift — consistent with a picture in which mergers are a significant but not dominant growth channel in the first billion years, with <strong>cold gas accretion</strong> likely playing a larger role at early times.</p>
-
+      <p>I combined <strong>non-parametric morphology statistics</strong> with an ensemble of machine-learning classifiers trained on visually classified subsamples. This hybrid approach reduced classification uncertainty by ~15% relative to purely statistical cuts.</p>
       <div class="pm-links">
         <a href="#" onclick="openLink(event,'p4')">Read the paper →</a>
       </div>
     `
   },
 
-  /* 4 — Interacting Galaxy */
-  { tag:'Galaxy Evolution · JWST · 2024',
-    title:'Massive Interacting Galaxy System',
-    year:'Nature Astronomy',
-    content:`
-      <p>JWST has opened a window onto the first half-billion years of cosmic history with unprecedented clarity. As part of the GLASS-JWST ERS team, I contributed to the discovery of a <strong>massive, interacting galaxy system at z~8.8</strong> — just 510 million years after the Big Bang — one of the earliest such systems ever confirmed spectroscopically.</p>
-
-      <div class="pm-img placeholder">Figure 1 — JWST NIRCam composite · replace with your image</div>
-      <p class="pm-caption">JWST NIRCam three-colour composite (F115W / F200W / F356W) of the interacting system. The two components are separated by ~2 kpc in projection and show distinct rest-UV morphologies.</p>
-
+  /* Interacting Galaxy */
+  {
+    tag:     'Galaxy Evolution · JWST · 2024',
+    title:   'Massive Interacting Galaxy System',
+    year:    'Nature Astronomy',
+    thumb:   null,
+    visible: false,
+    content: `
+      <p>As part of the GLASS-JWST ERS team, I contributed to the discovery of a <strong>massive, interacting galaxy system at z~8.8</strong>, just 510 million years after the Big Bang, one of the earliest such systems ever confirmed spectroscopically.</p>
+      <div class="pm-img placeholder">Figure 1 — JWST NIRCam composite</div>
+      <p class="pm-caption">JWST NIRCam three-colour composite of the interacting system.</p>
       <h3>Why It Matters</h3>
-      <p>Finding a merging system this massive this early challenges standard galaxy formation models. The combined stellar mass exceeds <strong>10¹⁰ M☉</strong>, implying extremely efficient star formation in both progenitors — in tension with the expected suppression of baryonic collapse at high redshift predicted by many simulations.</p>
-
-      <div class="pm-img-row">
-        <div class="pm-img placeholder">Spectral energy distribution</div>
-        <div class="pm-img placeholder">NIRSpec prism spectrum</div>
-      </div>
-      <p class="pm-caption">Left: Spectral energy distribution with best-fit stellar population model (log M★ ~ 10.1 M☉, young burst). Right: JWST NIRSpec prism spectrum confirming z = 8.76 via [OIII] and Hβ emission lines.</p>
-
-      <h3>My Contribution</h3>
-      <p>I led the <strong>photometric redshift analysis</strong> and cross-matched the system against existing HST catalogues to confirm its high-z nature prior to spectroscopic follow-up. I also contributed to the angular clustering context — placing this system within the broader landscape of early massive galaxy overdensities.</p>
-
+      <p>Finding a merging system this massive this early challenges standard galaxy formation models. The combined stellar mass exceeds <strong>10¹⁰ M☉</strong>, implying extremely efficient star formation in both progenitors.</p>
       <div class="pm-links">
         <a href="#" onclick="openLink(event,'p2')">Read the paper →</a>
       </div>
@@ -751,36 +847,56 @@ const projects = [
 
 ];
 
-/* ── ODD/EVEN GRID ── */
-const bubblesEl = document.querySelector('.bubbles');
-if (projects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
+/* ── BUILD BUBBLES FROM DATA ──
+   To show/hide a project on the grid, just toggle its visible: true/false above.
+   Order in the grid follows the order of the array.                              */
+const bubblesEl = document.getElementById('bubblesGrid');
+const visibleProjects = projects.map((p, i) => ({ ...p, idx: i })).filter(p => p.visible);
+
+visibleProjects.forEach(p => {
+  const thumbHtml = p.thumb
+    ? `<div class="b-thumb-ph"><img src="${p.thumb}"></div>`
+    : `<div class="b-thumb-ph"></div>`;
+  const div = document.createElement('div');
+  div.className = 'bubble';
+  div.onclick = () => openProj(p.idx);
+  div.innerHTML = `
+    ${thumbHtml}
+    <div class="b-tag">${p.tag}</div>
+    <div class="b-title">${p.title}</div>
+    ${p.year ? `<div class="b-year">${p.year}</div>` : ''}
+  `;
+  bubblesEl.appendChild(div);
+});
+
+if (visibleProjects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
 
 /* ── MODAL LOGIC ── */
-let currentProj = 0;
+let currentVisibleIdx = 0;
 
 function openProj(idx) {
-  currentProj = idx;
+  currentVisibleIdx = visibleProjects.findIndex(p => p.idx === idx);
   renderProj();
   document.getElementById('projOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function renderProj() {
-  const p = projects[currentProj];
-  document.getElementById('projCounter').textContent     = `${currentProj + 1} / ${projects.length}`;
-  document.getElementById('projModalTag').textContent    = p.tag;
-  document.getElementById('projModalTitle').textContent  = p.title;
-  document.getElementById('projModalYear').textContent   = p.year;
-  document.getElementById('projModalContent').innerHTML  = p.content;
-  document.getElementById('projPrev').disabled = (currentProj === 0);
-  document.getElementById('projNext').disabled = (currentProj === projects.length - 1);
+  const p = visibleProjects[currentVisibleIdx];
+  document.getElementById('projCounter').textContent    = `${currentVisibleIdx + 1} / ${visibleProjects.length}`;
+  document.getElementById('projModalTag').textContent   = p.tag;
+  document.getElementById('projModalTitle').textContent = p.title;
+  document.getElementById('projModalYear').textContent  = p.year;
+  document.getElementById('projModalContent').innerHTML = p.content;
+  document.getElementById('projPrev').disabled = (currentVisibleIdx === 0);
+  document.getElementById('projNext').disabled = (currentVisibleIdx === visibleProjects.length - 1);
   document.getElementById('projModal').scrollTop = 0;
 }
 
 function navProj(dir) {
-  const n = currentProj + dir;
-  if (n < 0 || n >= projects.length) return;
-  currentProj = n;
+  const n = currentVisibleIdx + dir;
+  if (n < 0 || n >= visibleProjects.length) return;
+  currentVisibleIdx = n;
   renderProj();
 }
 
@@ -800,14 +916,14 @@ document.addEventListener('keydown', e => {
 });
 
 /* ── CONTACT MODAL ── */
-function openModal()  { document.getElementById('contactModal').classList.add('active');    document.body.style.overflow='hidden'; }
-function closeModal() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow=''; }
+function openModal()  { document.getElementById('contactModal').classList.add('active');    document.body.style.overflow = 'hidden'; }
+function closeModal() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = ''; }
 
 async function handleSubmit(e) {
   e.preventDefault();
   try {
-    const res = await fetch(e.target.action, { method:'POST', body:new FormData(e.target), headers:{'Accept':'application/json'} });
-    if (res.ok) { e.target.style.display='none'; document.getElementById('formSuccess').style.display='block'; }
+    const res = await fetch(e.target.action, { method: 'POST', body: new FormData(e.target), headers: { 'Accept': 'application/json' } });
+    if (res.ok) { e.target.style.display = 'none'; document.getElementById('formSuccess').style.display = 'block'; }
   } catch { alert('Error sending message.'); }
 }
 </script>
