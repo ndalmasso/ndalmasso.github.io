@@ -36,6 +36,10 @@
       cursor: none;
     }
 
+    button, a {
+      cursor: none;
+    }
+
     .hero-eyebrow, .s-num, .about-label, .cv-group-title, .b-tag,
     .tl-date, .social-item span, .about-stat-label, .b-link {
       color: var(--rust);
@@ -56,6 +60,12 @@
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
+      transition: transform .15s ease-out, background .2s ease;
+    }
+
+    #cursor.cursor-hover {
+      transform: translate(-50%, -50%) scale(1.8);
+      background: var(--rust-dim);
     }
 
     #cursor::after {
@@ -481,7 +491,24 @@
 <script>
 /* ── CURSOR ── */
 const cur = document.getElementById('cursor');
-document.addEventListener('mousemove', e=>{ cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px'; });
+document.addEventListener('mousemove', e=>{
+  cur.style.left=e.clientX+'px';
+  cur.style.top=e.clientY+'px';
+});
+
+/* ── CURSOR HOVER EFFECT ── */
+const hoverables = document.querySelectorAll(
+  'a, button, .bubble, .social-item, .btn-cv, .btn-rust'
+);
+
+hoverables.forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cur.classList.add('cursor-hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    cur.classList.remove('cursor-hover');
+  });
+});
 
 /* ── REVEAL ── */
 const obs = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.1});
