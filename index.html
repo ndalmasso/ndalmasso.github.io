@@ -318,13 +318,13 @@
     #contact { padding:6rem 0 10rem; }
     .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:end; }
     .contact-left p { font-size:1.1rem; color:var(--sand-dim); margin-bottom:2.5rem; }
-    .btn-rust {
-      font-family:var(--font-m); font-size:.8rem; padding:1rem 2.2rem; background:var(--rust);
-      color:var(--bg); border:none; text-transform:uppercase; font-weight:bold; letter-spacing:.15em;
-      border-radius:2px;
-      /* FIX: minimum tap target */
-      min-height:44px;
-    }
+  .btn-rust {
+    display:inline-flex; align-items:center; gap:.8rem; font-size:.8rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--sand); font-family:var(--font-m);
+    border:1px solid var(--border); padding:1rem 2rem; transition:all .3s;
+    min-height:44px; background:none; border-radius:0;
+  }
+  .btn-rust:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
     .social-item {
       display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0;
       border-bottom:1px solid var(--border); width:100%; background:none;
@@ -563,10 +563,12 @@ if (!isTouchDevice) {
     cur.style.left = e.clientX + 'px';
     cur.style.top  = e.clientY + 'px';
   });
-  document.querySelectorAll('a, button, .bubble, .social-item, .btn-cv, .btn-rust').forEach(el => {
-    el.addEventListener('mouseenter', () => cur.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => cur.classList.remove('cursor-hover'));
-  });
+  function attachCursorListeners() {
+    document.querySelectorAll('a, button, .bubble, .social-item, .btn-cv, .btn-rust').forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('cursor-hover'));
+    });
+  }
 } else {
   /* Hide cursor element entirely on touch devices */
   cur.style.display = 'none';
@@ -779,7 +781,7 @@ const projects = [
   {
     tag:     'Spectroscopy · Spectrographs · JWST · 2025',
     title:   'Slit Loss Corrections in JWST Spectroscopy',
-    year:    'NIRISS vs NIRSpec a JWST showdown.',
+    year:    'NIRISS vs NIRSpec: A JWST Showdown.',
     thumb:   'images/spectra_niriss.png',
     visible: true,
     content: `
@@ -898,6 +900,100 @@ const projects = [
           <a href="#" onclick="openLink(event,'spectra_fit_code')">Spectra fitting code →</a>
       </div>
     `
+  },
+
+    /* NIRISS Catalog */
+  {
+    tag:     'Spectroscopy · Catalog · JWST · 2025',
+    title:   'NIRISS Spectroscopic Catalog',
+    year:    'The first NIRISS spectroscopic catalogue. 488 redshifts. One cluster. The whole early Universe in a single field.',
+    thumb:   'images/niriss_beams_example_rev1.png',
+    visible: true,
+    content: `
+      <p>
+          · What does it take to build a spectroscopic catalogue from scratch?<br>
+          · How do you extract reliable redshifts from a crowded, contaminated field?<br><br>
+
+          These questions sat at the heart of this project, led by <a href="https://orcid.org/0000-0003-3108-0624" target="_blank" style="color:var(--rust);">Peter J. Watson</a>
+          and carried out within the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong> collaboration,
+          of which I am a member.<br>
+          The goal: build the <strong>first ever NIRISS (Near Infrared Imager and Slitless Spectrograph) spectroscopic redshift catalogue</strong>
+          for the Abell 2744 cluster field, using data from the
+          <strong><a href="https://archive.stsci.edu/hlsp/glass-jwst" target="_blank" style="color:var(--rust);">GLASS-JWST Early Release Science (ERS)</a></strong> programme.
+      </p>
+
+      <div class="pm-img"><img src="images/pointings_rev1.png"></div>
+      <p class="pm-caption">
+          All JWST (James Webb Space Telescope) spectroscopic observations covering the Abell 2744 field, with the NIRISS footprint shown as a solid line.
+      </p>
+
+      <h3>Pandora's Cluster</h3>
+      <p>
+          <strong>Abell 2744</strong>, nicknamed Pandora's Cluster, is one of the most studied patches of sky in existence.
+          It is a massive gravitational lens, bending and magnifying the light of galaxies billions of light years behind it,
+          effectively giving us a natural telescope pointed at the early Universe.
+          JWST stared at it with NIRISS in <strong>WFSS (Wide Field Slitless Spectroscopy)</strong> mode, an instrument configuration that disperses the light of
+          every single object in the field at once, no target selection, no slits, just everything, simultaneously.
+      </p>
+      <p>
+          The catch is that every spectrum overlaps with every other. In a field this crowded,
+          separating signal from contamination is genuinely hard. It required careful
+          <strong>contamination modelling</strong>, custom <strong>source detection</strong> designed around
+          the diffuse <strong>ICL (Intracluster Light)</strong> of the cluster itself, and a multi-stage <strong>visual inspection</strong>
+          where every extracted spectrum was reviewed by multiple team members.
+          I contributed to the analysis and validation of the spectra and redshifts throughout this pipeline.
+      </p>
+
+      <div class="pm-img"><img src="images/niriss_beams_example_rev1.png"></div>
+      <p class="pm-caption">
+          A galaxy at z = 1.891, dispersed in two orthogonal directions. The asymmetric shape of the galaxy
+          produces a noticeably different spectrum at each orientation, with contamination from nearby sources visible throughout.
+      </p>
+
+      <h3>The Catalogue</h3>
+      <p>
+          The result is <strong>488 spectroscopic redshifts</strong>, 354 of them secure, spanning
+          <strong>z = 0.1 to z = 8.2</strong>. The upper end of that range is light that left its galaxy
+          when the Universe was less than a billion years old. Of those, <strong>245 are entirely new</strong>,
+          never measured before. The catalogue also includes the first spectroscopic confirmation of a
+          <strong>triply imaged galaxy at z = 2.653</strong>, and the identification of four
+          <strong>background overdensities</strong> at z = 1.10, 1.34, 1.87, and 2.65,
+          real concentrations of galaxies sitting behind the cluster, now mapped for the first time with NIRISS.
+      </p>
+      <p>
+          Secure redshifts agree with previous measurements to within <strong>σz = 3.4 × 10⁻³</strong>.
+          A small but persistent systematic offset points to residual errors in the NIRISS wavelength calibration,
+          something the community is actively working to improve.
+      </p>
+
+      <div class="pm-img"><img src="images/od_source_plane_subplots_rev1.png"></div>
+      <p class="pm-caption">
+          The four overdensities reconstructed in the source plane, showing where these galaxy groups
+          actually sit once the lensing distortion of the cluster is accounted for.
+      </p>
+
+      <h3>Tools Released to the Community</h3>
+      <p>
+          Two open-source tools came out of this work. <strong>pygcg</strong> is an interactive <strong>GUI (Graphical User Interface)</strong> for
+          browsing and classifying grism spectra, built to make reviewing hundreds of objects across a large team
+          actually manageable. <strong>pygrife</strong> allows re-extraction of any region in pre-processed grism data
+          without rebuilding the contamination model from scratch. Both are already being used beyond this project.
+      </p>
+      <p>
+          A catalogue is never just a table of numbers. It is the foundation everything else is built on:
+          <strong>cluster mass models</strong>, <strong>lensing reconstructions</strong>, studies of how
+          galaxies form and evolve across <strong>cosmic noon</strong>. This one opens the door for all of that,
+          with NIRISS, for the first time.
+      </p>
+
+      <p>
+          Paper linked below.
+      </p>
+
+      <div class="pm-links">
+          <a href="#" onclick="openLink(event,'p5')">NIRISS catalogue paper →</a>
+      </div>  
+    `
   }
 
 ];
@@ -927,6 +1023,9 @@ visibleProjects.forEach(p => {
 });
 
 if (visibleProjects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
+
+if (visibleProjects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
+if (!isTouchDevice) attachCursorListeners();
 
 /* ── MODAL LOGIC ── */
 let currentVisibleIdx = 0;
