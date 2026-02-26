@@ -23,7 +23,7 @@
       --font-m:      'Inconsolata', monospace;
     }
 
-    html { scroll-behavior: smooth; font-size: 110%; }
+    html { scroll-behavior: smooth; font-size: 110%; overflow-x: hidden; }
 
     body {
       background: var(--bg);
@@ -32,20 +32,15 @@
       font-size: 1rem;
       font-weight: 300;
       line-height: 1.8;
-      /* FIX: overflow-x hidden on body breaks iOS scroll; apply to html instead */
       overflow-x: hidden;
     }
 
-    html { overflow-x: hidden; }
-
-    /* FIX: Only hide cursor and apply custom cursor on non-touch devices */
     @media (pointer: fine) {
       body { cursor: none; }
       html, body { cursor: none; }
       a, button, [role="button"], input, textarea { cursor: none !important; }
     }
 
-    /* FIX: On touch devices, restore normal cursor behaviour */
     @media (pointer: coarse) {
       body { cursor: auto; }
       a, button, [role="button"] { cursor: pointer; }
@@ -62,11 +57,9 @@
       font-size: 0.75rem;
     }
 
-    /* CURSOR — only rendered on pointer:fine via JS anyway, but keep styles */
     #cursor {
       position: fixed;
-      width: 18px;
-      height: 18px;
+      width: 18px; height: 18px;
       border: 2px solid var(--rust);
       border-radius: 50%;
       pointer-events: none;
@@ -100,7 +93,7 @@
     #hero { padding:clamp(6rem,15vh,12rem) 0 6rem; }
     .hero-inner { display:flex; align-items:center; justify-content:space-between; gap:4rem; }
     .hero-main { flex:1 1 0; min-width:0; }
-    .hero-eyebrow { margin-bottom:2.5rem; opacity:0; animation:up .9s .2s cubic-bezier(.16,1,.3,1) forwards; word-break: break-word; overflow-wrap: break-word; }
+    .hero-eyebrow { margin-bottom:2.5rem; opacity:0; animation:up .9s .2s cubic-bezier(.16,1,.3,1) forwards; word-break:break-word; overflow-wrap:break-word; }
     .hero-name { font-family:var(--font-s); font-size:clamp(4rem,10vw,9.5rem); font-weight:400; line-height:.85; color:var(--sand); opacity:0; animation:up .9s .35s cubic-bezier(.16,1,.3,1) forwards; }
     .hero-name span { display:block; font-style:italic; color:rgba(232,220,200,.55); font-size:.72em; }
     .hero-photo-wrap { flex:0 0 clamp(220px,32vw,450px); opacity:0; animation:up .9s .5s cubic-bezier(.16,1,.3,1) forwards; }
@@ -113,13 +106,9 @@
       background:rgba(22,18,14,.92);
       z-index:800;
       display:flex; align-items:center; justify-content:center;
-      /* FIX: add padding for safe area on notched phones */
-      padding:env(safe-area-inset-top, 1rem) env(safe-area-inset-right, 1rem) env(safe-area-inset-bottom, 1rem) env(safe-area-inset-left, 1rem);
       padding: max(env(safe-area-inset-top), 1rem) max(env(safe-area-inset-right), 1rem) max(env(safe-area-inset-bottom), 1rem) max(env(safe-area-inset-left), 1rem);
       opacity:0; pointer-events:none;
       transition:opacity .35s;
-      /* FIX: prevent scroll bleed-through on iOS */
-      -webkit-overflow-scrolling: touch;
     }
     .proj-overlay.active { opacity:1; pointer-events:all; }
 
@@ -139,14 +128,11 @@
     .proj-modal {
       background:var(--bg2); border:1px solid var(--border); border-radius:4px;
       width:90%; max-width:780px;
-      /* FIX: use dvh (dynamic viewport height) which accounts for browser chrome on mobile */
-      max-height:85vh;
-      max-height:85dvh;
+      max-height:85vh; max-height:85dvh;
       overflow-y:auto; position:relative;
       transform:translateY(24px) scale(.98);
       transition:transform .4s cubic-bezier(.16,1,.3,1);
       scrollbar-width:thin; scrollbar-color:var(--charcoal) transparent;
-      /* FIX: enable momentum scrolling inside modal on iOS */
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
     }
@@ -159,13 +145,12 @@
       background:var(--bg2); border-bottom:1px solid var(--border);
     }
     .proj-swipe-hint {
-      display: none;
-      font-size: .62rem; color: var(--sand-dim); letter-spacing: .15em;
-      text-transform: uppercase; opacity: .6;
+      display:none;
+      font-size:.62rem; color:var(--sand-dim); letter-spacing:.15em;
+      text-transform:uppercase; opacity:.6;
     }
-    @media (pointer: coarse) {
-      .proj-swipe-hint { display: block; }
-    }
+    @media (pointer: coarse) { .proj-swipe-hint { display:block; } }
+
     .proj-counter { font-size:.68rem; color:var(--rust); font-weight:700; letter-spacing:.22em; text-transform:uppercase; }
     .proj-modal-close {
       width:36px; height:36px; border-radius:50%;
@@ -173,13 +158,11 @@
       font-size:1rem; color:var(--sand-dim);
       display:flex; align-items:center; justify-content:center;
       transition:all .2s;
-      /* FIX: ensure tap target is large enough on mobile (44×44px minimum) */
       min-width:44px; min-height:44px;
     }
     .proj-modal-close:hover { background:var(--rust); border-color:var(--rust); color:#fff; }
 
     .proj-modal-body { padding:2.8rem 3rem 3.5rem; }
-
     .proj-modal-tag { color:var(--rust); font-weight:700; text-transform:uppercase; letter-spacing:.25em; font-size:.7rem; margin-bottom:1rem; }
     .proj-modal-title { font-family:var(--font-s); font-size:clamp(1.6rem,3vw,2.4rem); color:var(--sand); line-height:1.15; margin-bottom:.5rem; }
     .proj-modal-year { font-size:.82rem; color:var(--sand-dim); margin-bottom:2.5rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
@@ -187,75 +170,31 @@
     .proj-modal-content p { font-size:1rem; color:var(--sand-dim); line-height:1.95; margin-bottom:1.5em; }
     .proj-modal-content p strong { color:var(--sand); font-weight:400; }
     .proj-modal-content h3 { font-family:var(--font-s); font-size:1.25rem; color:var(--sand); font-weight:400; margin:2.5rem 0 .8rem; }
-
-    .proj-modal-content .pm-img {
-      width:100%; display:block;
-      border:1px solid var(--border); border-radius:3px;
-      margin:2rem 0; background:var(--charcoal);
-    }
+    .proj-modal-content .pm-img { width:100%; display:block; border:1px solid var(--border); border-radius:3px; margin:2rem 0; background:var(--charcoal); }
     .proj-modal-content .pm-img img { width:100%; display:block; border-radius:2px; }
-    .proj-modal-content .pm-img.placeholder {
-      aspect-ratio:16/7;
-      display:flex; align-items:center; justify-content:center;
-      font-size:.68rem; color:var(--sand-dim);
-      text-transform:uppercase; letter-spacing:.12em;
-    }
-    .proj-modal-content .pm-caption {
-      font-size:.75rem; color:var(--sand-dim);
-      text-align:center; margin-top:-1.5rem; margin-bottom:2rem;
-      font-style:italic; letter-spacing:.03em;
-    }
+    .proj-modal-content .pm-img.placeholder { aspect-ratio:16/7; display:flex; align-items:center; justify-content:center; font-size:.68rem; color:var(--sand-dim); text-transform:uppercase; letter-spacing:.12em; }
+    .proj-modal-content .pm-caption { font-size:.75rem; color:var(--sand-dim); text-align:center; margin-top:-1.5rem; margin-bottom:2rem; font-style:italic; letter-spacing:.03em; }
     .proj-modal-content .pm-img-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:2rem 0 .5rem; }
     .proj-modal-content .pm-img-row .pm-img { margin:0; }
-
-    .proj-modal-content .pm-links {
-      display:flex; flex-wrap:wrap; gap:.8rem;
-      margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--border);
-    }
+    .proj-modal-content .pm-links { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--border); }
     .proj-modal-content .pm-links a {
       color:var(--rust); font-weight:700; text-transform:uppercase;
       letter-spacing:.2em; font-size:.72rem; text-decoration:none;
       border:1px solid var(--rust-dim); padding:.5rem 1.2rem; border-radius:2px;
-      transition:all .25s;
-      /* FIX: minimum tap target */
-      min-height:44px; display:inline-flex; align-items:center;
+      transition:all .25s; min-height:44px; display:inline-flex; align-items:center;
     }
     .proj-modal-content .pm-links a:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
 
     /* CONTACT MODAL */
     .modal-overlay { position:fixed; inset:0; background:rgba(22,18,14,.85); z-index:810; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s; }
     .modal-overlay.active { opacity:1; pointer-events:all; }
-    .modal {
-      background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2.8rem;
-      width:90%; max-width:480px;
-      /* FIX: allow modal to scroll if viewport is short (e.g. landscape mobile) */
-      max-height:90vh; max-height:90dvh; overflow-y:auto;
-      -webkit-overflow-scrolling: touch;
-      position:relative;
-      transform:translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1);
-    }
+    .modal { background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:2.8rem; width:90%; max-width:480px; max-height:90vh; max-height:90dvh; overflow-y:auto; -webkit-overflow-scrolling:touch; position:relative; transform:translateY(20px); transition:transform .35s cubic-bezier(.16,1,.3,1); }
     .modal-overlay.active .modal { transform:none; }
-    .modal-close {
-      position:absolute; top:1.2rem; right:1.5rem; font-size:1.5rem; color:var(--sand-dim);
-      background:none; border:none;
-      /* FIX: tap target */
-      min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center;
-    }
+    .modal-close { position:absolute; top:1.2rem; right:1.5rem; font-size:1.5rem; color:var(--sand-dim); background:none; border:none; min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center; }
     .modal h3 { font-family:var(--font-s); font-size:1.8rem; color:var(--sand); margin-bottom:.5rem; }
     .form-row { display:flex; flex-direction:column; gap:1rem; margin-bottom:1.2rem; }
-    .form-row input, .form-row textarea {
-      background:var(--charcoal); border:1px solid var(--border); padding:.8rem; color:var(--sand);
-      font-family:var(--font-m); outline:none; border-radius:2px;
-      /* FIX: font-size 16px prevents iOS Safari from auto-zooming on focus */
-      font-size:16px;
-    }
-    .form-submit {
-      width:100%; padding:1rem; background:var(--rust); color:#fff; border:none;
-      font-family:var(--font-m); text-transform:uppercase; letter-spacing:.2em; border-radius:2px;
-      font-size:16px;
-      /* FIX: minimum tap target height */
-      min-height:44px;
-    }
+    .form-row input, .form-row textarea { background:var(--charcoal); border:1px solid var(--border); padding:.8rem; color:var(--sand); font-family:var(--font-m); outline:none; border-radius:2px; font-size:16px; }
+    .form-submit { width:100%; padding:1rem; background:var(--rust); color:#fff; border:none; font-family:var(--font-m); text-transform:uppercase; letter-spacing:.2em; border-radius:2px; font-size:16px; min-height:44px; }
 
     /* SECTIONS */
     .s-head { display:flex; align-items:baseline; gap:1.5rem; margin-bottom:5rem; }
@@ -270,130 +209,75 @@
     .about-right p { font-size:1.05rem; color:var(--sand-dim); line-height:1.9; margin-bottom:1.5em; }
     .about-right p strong { color:var(--sand); }
     .tags { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:2.5rem; }
-    .tag {
-      font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; padding:.4rem .9rem;
-      border:1px solid var(--border); color:var(--sand-dim); transition:all .3s;
-      /* FIX: minimum tap target */
-      min-height:36px; display:inline-flex; align-items:center;
-    }
+    .tag { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; padding:.4rem .9rem; border:1px solid var(--border); color:var(--sand-dim); transition:all .3s; min-height:36px; display:inline-flex; align-items:center; }
     .tag:hover { border-color:var(--rust); color:var(--rust); }
 
     /* PROJECTS GRID */
     #projects { padding:6rem 0; }
     .bubbles { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); }
     .bubbles.odd-count .bubble:first-child { grid-column:1 / -1; }
-
     .bubble { background:var(--bg); padding:2.5rem; transition:background .3s; position:relative; overflow:hidden; }
-    .bubble:hover { background:var(--bg2); }
-    /* FIX: active state for touch feedback */
-    .bubble:active { background:var(--bg2); }
+    .bubble:hover, .bubble:active { background:var(--bg2); }
     .bubble::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--rust); transform:scaleX(0); transition:transform .4s cubic-bezier(.16,1,.3,1); }
     .bubble:hover::after { transform:scaleX(1); }
-
     .b-thumb-ph { width:100%; background:var(--charcoal); margin-bottom:1.5rem; display:flex; align-items:center; justify-content:center; font-size:.7rem; color:var(--sand-dim); text-transform:uppercase; letter-spacing:.1em; border-radius:2px; overflow:hidden; }
     .b-thumb-ph:not(:has(img)) { aspect-ratio:16/7; }
     .b-thumb-ph img { width:100%; height:auto; display:block; }
-
     .b-title { font-family:var(--font-s); font-size:1.4rem; color:var(--sand); margin-bottom:.4rem; }
     .b-year { font-size:.8rem; color:var(--sand-dim); }
 
     /* EXPERIENCE */
     #cv { padding:6rem 0; }
     .cv-cols { display:grid; grid-template-columns:1fr 1fr; gap:5rem; }
-    .cv-group-title { margin-bottom:0rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+    .cv-group-title { margin-bottom:0; padding-bottom:1rem; border-bottom:1px solid var(--border); }
     .tl-item { display:grid; grid-template-columns:110px 1fr; gap:2rem; padding:2rem 0; border-bottom:1px solid var(--border); }
     .tl-title { font-family:var(--font-s); font-size:1.25rem; color:var(--sand); margin-bottom:.4rem; line-height:1.3; }
     .tl-org { font-size:.95rem; color:var(--sand-dim); font-style:italic; margin-bottom:.5rem; }
     .tl-note { font-size:.95rem; color:var(--sand-dim); line-height:1.7; }
+
     .btn-rust, .btn-cv {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center; /* Centers the text horizontally */
-      gap: .8rem;
-      font-size: .8rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--sand);
-      font-family: var(--font-m);
-      border: 1px solid var(--border);
-      background: none;
-      border-radius: 0;
-      transition: all .3s;
-      
-      /* The "Magic" numbers for visual balance */
-      min-width: 260px;  /* Forces them to be the same width regardless of text */
-      min-height: 52px;  /* A bit taller for a more premium, clickable feel */
-      padding: 0 2rem;
-      cursor: pointer;
-      text-decoration: none;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:.8rem; font-size:.8rem; letter-spacing:.2em; text-transform:uppercase;
+      color:var(--sand); font-family:var(--font-m);
+      border:1px solid var(--border); background:none; border-radius:0;
+      transition:all .3s; min-width:260px; min-height:52px;
+      padding:0 2rem; cursor:pointer; text-decoration:none;
     }
+    .btn-rust:hover, .btn-cv:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
+    .btn-cv { margin-top:2rem; }
 
-    .btn-rust:hover, .btn-cv:hover {
-      background: var(--rust);
-      color: #fff;
-      border-color: var(--rust);
-    }
-
-    /* Specific positioning only */
-    .btn-cv {
-      margin-top: 2rem;
-    }
-    
     /* CONTACT */
     #contact { padding:6rem 0 10rem; }
     .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:end; }
     .contact-left p { font-size:1.1rem; color:var(--sand-dim); margin-bottom:2.5rem; }
-    .social-item {
-      display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0;
-      border-bottom:1px solid var(--border); width:100%; background:none;
-      border-top:none; border-left:none; border-right:none; color:var(--sand-dim);
-      font-family:var(--font-m); font-size:1.1rem; text-align:left;
-      /* FIX: minimum tap target */
-      min-height:56px;
-    }
+    .social-item { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 0; border-bottom:1px solid var(--border); width:100%; background:none; border-top:none; border-left:none; border-right:none; color:var(--sand-dim); font-family:var(--font-m); font-size:1.1rem; text-align:left; min-height:56px; }
     .social-item:first-child { border-top:1px solid var(--border); }
-    .social-item:hover { color:var(--sand); }
-    /* FIX: active state for touch */
-    .social-item:active { color:var(--sand); }
+    .social-item:hover, .social-item:active { color:var(--sand); }
 
-    /* FIX: footer — was hardcoded 5rem horizontal padding, breaking on mobile */
-    footer {
-      border-top:1px solid var(--border);
-      padding:3rem clamp(2rem,5vw,5rem);
-      display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem;
-    }
+    footer { border-top:1px solid var(--border); padding:3rem clamp(2rem,5vw,5rem); display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
     footer p { font-size:.8rem; color:var(--sand-dim); }
 
     .reveal { opacity:0; transform:translateY(30px); transition:all .8s cubic-bezier(.16,1,.3,1); }
     .reveal.in { opacity:1; transform:none; }
     @keyframes up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
 
-    /* ── MOBILE BREAKPOINT ── */
+    /* MOBILE */
     @media (max-width:900px) {
       .wrap { padding:0 1.5rem; }
-      .about-grid,.cv-cols,.contact-inner { grid-template-columns:1fr; gap:4rem; }
+      .about-grid, .cv-cols, .contact-inner { grid-template-columns:1fr; gap:4rem; }
       .hero-inner { flex-direction:column-reverse; text-align:center; }
-      /* FIX: tighten eyebrow letter-spacing so it fits without overflow */
-      .hero-eyebrow { letter-spacing: 0.12em; font-size: 0.68rem; }
-      /* FIX: centre the eyebrow text when hero is column-reversed */
-      .hero-eyebrow { text-align:center; }
+      .hero-eyebrow { letter-spacing:0.12em; font-size:0.68rem; text-align:center; }
       .hero-photo-wrap { width:clamp(200px,60vw,350px); }
       .bubbles { grid-template-columns:1fr; }
       .bubbles.odd-count .bubble:first-child { grid-column:1; }
-      /* FIX: reduce bubble padding on small screens */
       .bubble { padding:1.5rem; }
       .proj-modal-body { padding:1.5rem 1.25rem 2.5rem; }
       .proj-modal-content .pm-img-row { grid-template-columns:1fr; }
       .proj-nav { display:none; }
-      /* FIX: tl-item date column was overflowing at narrow widths */
       .tl-item { grid-template-columns:80px 1fr; gap:1rem; }
-      /* FIX: ensure s-head doesn't overflow */
       .s-head { flex-wrap:wrap; gap:.75rem; margin-bottom:3rem; }
-      /* FIX: contact section bottom padding was too large on small screens */
       #contact { padding:4rem 0 6rem; }
     }
-
-    /* FIX: extra small screens */
     @media (max-width:380px) {
       .tl-item { grid-template-columns:1fr; gap:.5rem; }
       .tl-date { font-size:.7rem; }
@@ -403,7 +287,6 @@
 </head>
 <body>
 
-<!-- FIX: cursor only injected when pointer:fine (mouse) detected via JS -->
 <div id="cursor"></div>
 
 <!-- PROJECT MODAL -->
@@ -482,7 +365,6 @@
   </div>
 </section>
 
-<!-- PROJECTS — grid is built from the projects array in the script below -->
 <section id="projects">
   <div class="wrap">
     <div class="s-head reveal"><span class="s-num">02</span><h2 class="s-title">Projects</h2></div>
@@ -547,7 +429,8 @@
       </div>
     </div>
     <div class="reveal">
-      <a href="files/Nicolo_Dalmasso_CV.pdf" download class="btn-cv">Download Full CV</a>
+      <!-- FIX: JS-forced download prevents browser saving as .htm -->
+      <a href="files/Nicolo_Dalmasso_CV.pdf" class="btn-cv" onclick="downloadCV(event)">Download Full CV</a>
     </div>
   </div>
 </section>
@@ -572,23 +455,23 @@
 <footer><p>© 2025 Nicolò Dalmasso</p></footer>
 
 <script>
-/* ── CURSOR — only activate on non-touch (pointer:fine) devices ── */
+/* ── CURSOR ── */
 const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 const cur = document.getElementById('cursor');
+
+function attachCursorListeners() {
+  document.querySelectorAll('a, button, .bubble, .social-item, .btn-cv, .btn-rust').forEach(el => {
+    el.addEventListener('mouseenter', () => cur.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => cur.classList.remove('cursor-hover'));
+  });
+}
 
 if (!isTouchDevice) {
   document.addEventListener('mousemove', e => {
     cur.style.left = e.clientX + 'px';
     cur.style.top  = e.clientY + 'px';
   });
-  function attachCursorListeners() {
-    document.querySelectorAll('a, button, .bubble, .social-item, .btn-cv, .btn-rust').forEach(el => {
-      el.addEventListener('mouseenter', () => cur.classList.add('cursor-hover'));
-      el.addEventListener('mouseleave', () => cur.classList.remove('cursor-hover'));
-    });
-  }
 } else {
-  /* Hide cursor element entirely on touch devices */
   cur.style.display = 'none';
 }
 
@@ -612,15 +495,33 @@ const links = {
   p6: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ2LzIvc3RhZzAwMS84NDE0MDUy'),
   p7: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTQ0LzIvMTkxNS84MzAwODA4')
 };
-function goLink(k)       { window.open(links[k], '_blank'); }
-function openLink(e, k)  { e.stopPropagation(); window.open(links[k], '_blank'); }
+function goLink(k)      { window.open(links[k], '_blank'); }
+function openLink(e, k) { e.stopPropagation(); window.open(links[k], '_blank'); }
+
+/* ── CV DOWNLOAD — fetch as blob so browser saves as .pdf not .htm ── */
+function downloadCV(e) {
+  e.preventDefault();
+  const url = 'files/Nicolo_Dalmasso_CV.pdf';
+  fetch(url)
+    .then(res => { if (!res.ok) throw new Error(); return res.blob(); })
+    .then(blob => {
+      const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(pdfBlob);
+      a.download = 'Nicolo_Dalmasso_CV.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    })
+    .catch(() => window.open(url, '_blank'));
+}
 
 /* ═══════════════════════════════════════════════════════
    PROJECT DATA
    ═══════════════════════════════════════════════════════ */
 const projects = [
 
-  /* Galaxy Clustering */
   {
     tag:     'Galaxy Clustering · HST · JWST · 2022–2025',
     title:   'From HST to JWST: Pushing Galaxy Clustering to the Edge of the Observable',
@@ -628,81 +529,29 @@ const projects = [
     thumb:   'images/ACF_HOD.png',
     visible: true,
     content: `
-      <p>
-          · How far can we really push clustering measurements at high redshift?<br>
-          · How deep can we go before the signal becomes uncertain?<br>
-          · Can we meaningfully probe the faint end of the luminosity function?<br><br>
-
-          This figure is the result of more than three years working on galaxy clustering in the early Universe.
-          It brings together survey design, modelling, calibration and validation, moving from the depth of the
-          <strong>Hubble Space Telescope (HST)</strong> to what the <strong>James Webb Space Telescope (JWST)</strong> now makes possible through a
-          <strong>Halo Occupation Distribution (HOD)</strong> model.
-      </p>
-
+      <p>· How far can we really push clustering measurements at high redshift?<br>· How deep can we go before the signal becomes uncertain?<br>· Can we meaningfully probe the faint end of the luminosity function?<br><br>This figure is the result of more than three years working on galaxy clustering in the early Universe. It brings together survey design, modelling, calibration and validation, moving from the depth of the <strong>Hubble Space Telescope (HST)</strong> to what the <strong>James Webb Space Telescope (JWST)</strong> now makes possible through a <strong>Halo Occupation Distribution (HOD)</strong> model.</p>
       <div class="pm-img"><img src="images/ACF_HOD.png"></div>
-      <p class="pm-caption">
-          Measured ACFs in the GOODS-S field at six mean redshifts.
-          The blue line shows the HOD best fit, with one-halo and two-halo contributions separated.
-          Magnitude thresholds and mean redshifts are indicated in each panel.
-      </p>
-
+      <p class="pm-caption">Measured ACFs in the GOODS-S field at six mean redshifts. The blue line shows the HOD best fit, with one-halo and two-halo contributions separated. Magnitude thresholds and mean redshifts are indicated in each panel.</p>
       <h3>Galaxy Clustering!?</h3>
-      <p>
-          Imagine you walk into a pub and notice your group of friends has naturally gathered at one end of the bar,
-          while another group has settled at the other. You are not randomly scattered around the room, you are <strong>clustered</strong>.
-          Now zoom out to the scale of the Universe, swap people for galaxies, and swap the pub for hundreds of millions
-          of light years of space. <strong>Galaxy clustering</strong> measures exactly that tendency: how strongly galaxies clump together
-          beyond what pure chance would predict. The stronger the clustering signal, the more massive the <strong>dark matter halos</strong>
-          those galaxies tend to live in, and the more we can infer about the <strong>cosmic scaffolding</strong> that pulled them together
-          in the first place.
-      </p>
-      <p>
-          The starting point was understanding how <strong>depth and completeness</strong> shape clustering measurements.
-          Using HST data from the heterogeneous <strong>GOODS North and South</strong> fields, we developed a method to account
-          for spatial variations when recovering <strong>high redshift candidates</strong>. This enabled consistent clustering
-          measurements across non-uniform data, with particular attention to the <strong>faint end of the luminosity function</strong>.
-      </p>
-
-      <div style="text-align:center; margin: 2rem 0;">
-          <img src="images/GOODSN_rms.png" style="width:60%; height:auto;">
-          <p style="margin-top:0.5rem; font-size:0.9rem; color:#555;">Depth variations across the GOODS-North field.</p>
-      </div>
-
-      <p>
-          With the arrival of JWST, the question evolved. The same framework could now be pushed to <strong>fainter
-          magnitudes and earlier cosmic times</strong>. The result was a clustering analysis capable of measuring <strong>galaxy
-          bias beyond redshift z = 10</strong>, offering a direct view of structure formation when the Universe was less than
-          <strong>a billion years old</strong>.
-      </p>
-
+      <p>Imagine you walk into a pub and notice your group of friends has naturally gathered at one end of the bar, while another group has settled at the other. You are not randomly scattered around the room, you are <strong>clustered</strong>. Now zoom out to the scale of the Universe, swap people for galaxies, and swap the pub for hundreds of millions of light years of space. <strong>Galaxy clustering</strong> measures exactly that tendency: how strongly galaxies clump together beyond what pure chance would predict. The stronger the clustering signal, the more massive the <strong>dark matter halos</strong> those galaxies tend to live in, and the more we can infer about the <strong>cosmic scaffolding</strong> that pulled them together in the first place.</p>
+      <p>The starting point was understanding how <strong>depth and completeness</strong> shape clustering measurements. Using HST data from the heterogeneous <strong>GOODS North and South</strong> fields, we developed a method to account for spatial variations when recovering <strong>high redshift candidates</strong>. This enabled consistent clustering measurements across non-uniform data, with particular attention to the <strong>faint end of the luminosity function</strong>.</p>
+      <div style="text-align:center; margin: 2rem 0;"><img src="images/GOODSN_rms.png" style="width:60%; height:auto;"><p style="margin-top:0.5rem; font-size:0.9rem; color:#555;">Depth variations across the GOODS-North field.</p></div>
+      <p>With the arrival of JWST, the question evolved. The same framework could now be pushed to <strong>fainter magnitudes and earlier cosmic times</strong>. The result was a clustering analysis capable of measuring <strong>galaxy bias beyond redshift z = 10</strong>, offering a direct view of structure formation when the Universe was less than <strong>a billion years old</strong>.</p>
       <div class="pm-img"><img src="images/ACF_ALL_app_mag_cut.png"></div>
       <p class="pm-caption">Angular correlation functions measured across six redshift bins with power law fits.</p>
-
       <h3>Key Results</h3>
-      <p>
-          The final step was a physical interpretation through an <strong>HOD model</strong> fitted to the latest JWST data.
-          The clustering signal implies <strong>dark matter halo masses of 10¹¹ to 10¹² solar masses</strong> at redshift z = 7–11.
-          Even at these early times, massive galaxies already appear to reside in <strong>substantial dark matter halos</strong>.
-      </p>
-
+      <p>The final step was a physical interpretation through an <strong>HOD model</strong> fitted to the latest JWST data. The clustering signal implies <strong>dark matter halo masses of 10¹¹ to 10¹² solar masses</strong> at redshift z = 7–11. Even at these early times, massive galaxies already appear to reside in <strong>substantial dark matter halos</strong>.</p>
       <div class="pm-img"><img src="images/fsat_beff_Mh_vs_z.png"></div>
       <p class="pm-caption">Evolution of satellite fraction, effective galaxy bias and characteristic halo mass with redshift.</p>
-
-      <p> 
-        The ACF estimator used in this work is openly available on GitHub. Papers and code linked below.
-      </p>
-
+      <p>The ACF estimator used in this work is openly available on GitHub. Papers and code linked below.</p>
       <div class="pm-links">
-          <a href="#" onclick="openLink(event,'p1')">HST Clustering paper →</a>
-          <a href="#" onclick="openLink(event,'p3')">JWST Clustering paper →</a>
-          <a href="#" onclick="openLink(event,'p6')">HOD Modelling paper →</a>
-          <a href="#" onclick="openLink(event,'acf_code')">ACF Clustering code →</a>
-      </div>
-    `
+        <a href="#" onclick="openLink(event,'p1')">HST Clustering paper →</a>
+        <a href="#" onclick="openLink(event,'p3')">JWST Clustering paper →</a>
+        <a href="#" onclick="openLink(event,'p6')">HOD Modelling paper →</a>
+        <a href="#" onclick="openLink(event,'acf_code')">ACF Clustering code →</a>
+      </div>`
   },
 
-
-  /* ARIA */
   {
     tag:     'ARIA · AI · ML · 2025',
     title:   'ARIA - Adaptive Running Intelligent Assistant',
@@ -710,92 +559,23 @@ const projects = [
     thumb:   'images/aria_recap.png',
     visible: true,
     content: `
-      <p>
-          Can a running app actually listen to you?<br>
-          Spoiler: they can't. ARIA can.<br><br>
-
-          <strong>ARIA (Adaptive Running Intelligent Assistant)</strong> started as a question I kept asking while grinding through
-          the same static playlist with a training plan that had absolutely no idea I was running on four hours of sleep.
-          It turned into a small <strong>Python project</strong> to see if a coaching system could genuinely respond to you in real time,
-          not just log your splits and move on.
-      </p>
-
+      <p>Can a running app actually listen to you?<br>Spoiler: they can't. ARIA can.<br><br><strong>ARIA (Adaptive Running Intelligent Assistant)</strong> started as a question I kept asking while grinding through the same static playlist with a training plan that had absolutely no idea I was running on four hours of sleep. It turned into a small <strong>Python project</strong> to see if a coaching system could genuinely respond to you in real time, not just log your splits and move on.</p>
       <h3>The Problem with Running Apps</h3>
-      <p>
-          Despite the explosion of running apps and wearables, the core experience has barely changed. You are
-          treated like a <strong>set of statistics</strong>. Playlists are fixed before you leave the door, training plans are built
-          around <strong>population averages</strong> and have no idea how you feel at kilometre four, and when a session falls apart
-          or goes better than expected there is no way for any of that to <strong>feed back</strong> into what happens next. Every run
-          starts from the same baseline, regardless of what the last ten told you.
-      </p>
-      <p>
-          Music is the piece that always felt the most wasted. There is solid evidence linking <strong>tempo, energy and BPM</strong>
-          to <strong>perceived exertion and performance output</strong>, and yet every app treats it as background noise. A well-timed
-          track at the right BPM can carry you through a hard interval better than any notification telling you to
-          push harder. ARIA takes that seriously.
-      </p>
-
+      <p>Despite the explosion of running apps and wearables, the core experience has barely changed. You are treated like a <strong>set of statistics</strong>. Playlists are fixed before you leave the door, training plans are built around <strong>population averages</strong> and have no idea how you feel at kilometre four, and when a session falls apart or goes better than expected there is no way for any of that to <strong>feed back</strong> into what happens next. Every run starts from the same baseline, regardless of what the last ten told you.</p>
+      <p>Music is the piece that always felt the most wasted. There is solid evidence linking <strong>tempo, energy and BPM</strong> to <strong>perceived exertion and performance output</strong>, and yet every app treats it as background noise. A well-timed track at the right BPM can carry you through a hard interval better than any notification telling you to push harder. ARIA takes that seriously.</p>
       <h3>How ARIA Works</h3>
-      <p>
-          The idea is to build a coach that knows where you are <strong>right now</strong>, not where a plan assumed you would be.
-          You start with a <strong>personal profile</strong>: basic stats feed into personalised <strong>heart rate zones</strong> and optimal <strong>BPM
-          ranges</strong> for each training zone, so the system is grounded in your physiology from the start. From there,
-          a <strong>music engine</strong> selects and swaps tracks based on BPM and energy level, matching your current zone and
-          nudging intensity up or down as needed. The whole thing is held together by a <strong>real-time feedback loop</strong>:
-          inputs signal whether you are pushing hard, struggling or comfortable, and ARIA adjusts both
-          the training prescription and the music on the spot.
-      </p>
-
+      <p>The idea is to build a coach that knows where you are <strong>right now</strong>, not where a plan assumed you would be. You start with a <strong>personal profile</strong>: basic stats feed into personalised <strong>heart rate zones</strong> and optimal <strong>BPM ranges</strong> for each training zone, so the system is grounded in your physiology from the start. From there, a <strong>music engine</strong> selects and swaps tracks based on BPM and energy level, matching your current zone and nudging intensity up or down as needed. The whole thing is held together by a <strong>real-time feedback loop</strong>: inputs signal whether you are pushing hard, struggling or comfortable, and ARIA adjusts both the training prescription and the music on the spot.</p>
       <div class="pm-img"><img src="images/aria_config.png"></div>
-      <p class="pm-caption">
-          Setup and pre-run planning. ARIA takes your runner profile and builds a personalised session,
-          mapping training zones to musical BPM ranges that will guide workout intensity from the first step.
-      </p>
-
-      <p>
-          The demo runs as an interactive notebook. After configuring your profile and generating your zones,
-          a simulated run lets you feed in live state signals: <strong>UP</strong> if you are feeling strong and ready for more,
-          <strong>DOWN</strong> if you need to ease off, <strong>OK</strong> if the current pace is right. ARIA reacts immediately, shifting the
-          training zone and pulling in music that matches where you actually are.
-      </p>
-
+      <p class="pm-caption">Setup and pre-run planning. ARIA takes your runner profile and builds a personalised session, mapping training zones to musical BPM ranges that will guide workout intensity from the first step.</p>
       <div class="pm-img"><img src="images/aria_example_run.png"></div>
-      <p class="pm-caption">
-          Live adaptation in action. Real-time feedback triggers immediate adjustments to both training zone
-          and music selection, responding to your actual state rather than a predetermined schedule.
-      </p>
-
-      <p>
-          The post-run step closes the loop. Feedback from the session gets <strong>logged against your profile</strong>,
-          so future runs start from a more informed place and the system gradually builds a picture of your
-          <strong>patterns, preferences</strong> and how you respond to different intensities and sounds.
-      </p>
-
+      <p class="pm-caption">Live adaptation in action. Real-time feedback triggers immediate adjustments to both training zone and music selection, responding to your actual state rather than a predetermined schedule.</p>
       <div class="pm-img"><img src="images/aria_recap.png"></div>
-      <p class="pm-caption">
-          Post-run feedback helps ARIA refine its understanding of your patterns and preferences,
-          so each session informs the next.
-      </p>
-
-      <p>
-          ARIA is a <strong>proof of concept</strong>, not a finished product. The kind of small project that exists to test
-          whether an idea holds together. The answer is that it mostly does. <strong>BPM-matched music</strong> combined with
-          <strong>real-time zone adaptation</strong> makes for a genuinely different feel compared to a fixed playlist and a
-          rigid plan. The open question that sticks with me is how much of that comes from the science,
-          and how much comes from simply <strong>feeling like something is paying attention</strong>.
-      </p>
-
-      <p>
-          The full demo and code are on GitHub, linked below       
-      </p>
-
-      <div class="pm-links">
-          <a href="#" onclick="openLink(event,'aria_code')">ARIA demo and code →</a>
-      </div>
-    `
+      <p class="pm-caption">Post-run feedback helps ARIA refine its understanding of your patterns and preferences, so each session informs the next.</p>
+      <p>ARIA is a <strong>proof of concept</strong>, not a finished product. The kind of small project that exists to test whether an idea holds together. The answer is that it mostly does. <strong>BPM-matched music</strong> combined with <strong>real-time zone adaptation</strong> makes for a genuinely different feel compared to a fixed playlist and a rigid plan. The open question that sticks with me is how much of that comes from the science, and how much comes from simply <strong>feeling like something is paying attention</strong>.</p>
+      <p>The full demo and code are on GitHub, linked below.</p>
+      <div class="pm-links"><a href="#" onclick="openLink(event,'aria_code')">ARIA demo and code →</a></div>`
   },
 
-  /* Slit Loss */
   {
     tag:     'Spectroscopy · Spectrographs · JWST · 2025',
     title:   'Slit Loss Corrections in JWST Spectroscopy',
@@ -803,124 +583,28 @@ const projects = [
     thumb:   'images/spectra_niriss.png',
     visible: true,
     content: `
-      <p>
-          · Can one use both spectroscopic data from NIRISS and from NIRSpec?<br>
-          · Are they the same even if the instruments are different?<br><br>
-
-          These are two questions that arose while working with the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong>
-          collaboration during my visit as a research student at UCLA (University of California, Los Angeles).
-          We were in the process of creating the <strong>first spectroscopic NIRISS catalogue</strong>, and these questions came up naturally.
-          It was the perfect occasion to delve into them with a dedicated project, led by me.
-      </p>
-
+      <p>· Can one use both spectroscopic data from NIRISS and from NIRSpec?<br>· Are they the same even if the instruments are different?<br><br>These are two questions that arose while working with the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong> collaboration during my visit as a research student at UCLA (University of California, Los Angeles). We were in the process of creating the <strong>first spectroscopic NIRISS catalogue</strong>, and these questions came up naturally. It was the perfect occasion to delve into them with a dedicated project, led by me.</p>
       <div class="pm-img"><img src="images/all_cutouts.png"></div>
-      <p class="pm-caption">
-          NIRISS imaging cutouts of the 12 galaxies in our sample. White contours show the segmentation maps,
-          magenta and white rectangles mark the NIRSpec slits, and the "A" parameter in each panel indicates
-          the fraction of the segmentation map covered by the slit. Objects span redshifts z = 1.27–3.38 and are
-          classified as compact or extended based on their flux distribution relative to the slit geometry.
-      </p>
-
+      <p class="pm-caption">NIRISS imaging cutouts of the 12 galaxies in our sample. White contours show the segmentation maps, magenta and white rectangles mark the NIRSpec slits, and the "A" parameter in each panel indicates the fraction of the segmentation map covered by the slit. Objects span redshifts z = 1.27–3.38 and are classified as compact or extended based on their flux distribution relative to the slit geometry.</p>
       <h3>NIRISS and NIRSpec</h3>
-      <p>
-          <strong>JWST (James Webb Space Telescope)</strong> offers two complementary spectroscopic modes for studying distant galaxies.
-          <strong>NIRISS WFSS (Near Infrared Imager and Slitless Spectrograph Wide Field Slitless Spectroscopy)</strong> disperses
-          light across the entire field of view without spatial constraints, capturing the integrated emission from each
-          galaxy's full morphological extent as defined by its segmentation map. <strong>NIRSpec MSA (Near Infrared Spectrograph
-          Micro-Shutter Assembly)</strong> instead isolates individual targets through a micro-shutter array, with each slit
-          measuring just <strong>0.2 × 0.46 arcsec</strong>, enabling simultaneous multi-object spectroscopy with minimised sky background
-          and high spectral resolution.
-      </p>
-      <p>
-          Both instruments are exceptional, but they work in <strong>fundamentally different ways</strong> and that difference matters.
-          A slit can miss light. A slitless instrument cannot. The question is: how much does this actually affect the science?
-          To find out, we selected <strong>12 spectroscopically confirmed galaxies</strong> from the <strong>Abell 2744</strong> cluster field, observed across
-          three JWST programs: GLASS-JWST-ERS (PID 1324), JWST-DDT (PID 2756), and UNCOVER-JWST (PID 2561).
-          These galaxies span <strong>redshifts z = 1.27–3.38</strong> and cover a range of morphologies, from compact point-like sources
-          to large extended objects. For each, we measured strong emission lines — [O II] λ3727, Hβ λ4861,
-          [O III] λ4959, [O III] λ5007, and Hα λ6563 — independently with both instruments and compared the results.
-      </p>
-
+      <p><strong>JWST (James Webb Space Telescope)</strong> offers two complementary spectroscopic modes for studying distant galaxies. <strong>NIRISS WFSS</strong> disperses light across the entire field of view without spatial constraints, capturing the integrated emission from each galaxy's full morphological extent. <strong>NIRSpec MSA</strong> instead isolates individual targets through a micro-shutter array, with each slit measuring just <strong>0.2 × 0.46 arcsec</strong>, enabling simultaneous multi-object spectroscopy with minimised sky background and high spectral resolution.</p>
+      <p>Both instruments are exceptional, but they work in <strong>fundamentally different ways</strong> and that difference matters. A slit can miss light. A slitless instrument cannot. To find out how much, we selected <strong>12 spectroscopically confirmed galaxies</strong> from the <strong>Abell 2744</strong> cluster field spanning <strong>redshifts z = 1.27–3.38</strong> and measured strong emission lines independently with both instruments.</p>
       <h3>The Problem with Slits</h3>
-      <p>
-          When a narrow slit is placed over a galaxy, it only captures the light that falls within its footprint.
-          For compact objects, this is rarely a problem. But for <strong>extended sources</strong>, a significant fraction of
-          the emission lands outside the slit and is simply lost. These are called <strong>slit losses</strong>, and while the effect
-          is well known in spectroscopy, its quantitative impact when combining JWST's slitless and slit-based
-          modes <strong>had not been systematically characterised before this work</strong>.
-      </p>
-      <p>
-          The <strong>morphology of a galaxy</strong> therefore becomes a critical variable. Two instruments observing the same
-          object can return genuinely different flux measurements, not because of noise or calibration failures,
-          but because of a <strong>real, physical difference in how much light each one collected</strong>. To quantify this, we fitted
-          emission lines through <strong>χ² minimisation</strong> on 1D spectra from both instruments, using <strong>Monte Carlo (MC) sampling</strong>
-          of the continuum regions around each line to obtain robust uncertainty estimates. We also made use of
-          NIRISS emission line maps to simulate how much flux a randomly positioned NIRSpec slit would recover
-          across <strong>10⁴ slit placements</strong> for each extended galaxy.
-      </p>
-
+      <p>When a narrow slit is placed over a galaxy, it only captures the light that falls within its footprint. For <strong>extended sources</strong>, a significant fraction of the emission lands outside the slit and is simply lost. These are called <strong>slit losses</strong>, and their quantitative impact when combining JWST's slitless and slit-based modes <strong>had not been systematically characterised before this work</strong>.</p>
       <div class="pm-img"><img src="images/spectra_niriss.png"></div>
-      <p class="pm-caption">
-          Example analysis for galaxy NIRISS ID 2744 at z = 1.86. Top right: the NIRISS spectrum (blue),
-          original NIRSpec spectrum (gray), and NIRSpec convolved to match NIRISS resolution (red), with identified
-          emission lines marked. Bottom panels: detailed MC emission line fits for each matched line, with shaded
-          regions showing an example continuum estimation window from a single MC iteration.
-      </p>
-
+      <p class="pm-caption">Example analysis for galaxy NIRISS ID 2744 at z = 1.86. Top right: the NIRISS spectrum (blue), original NIRSpec spectrum (gray), and NIRSpec convolved to match NIRISS resolution (red), with identified emission lines marked.</p>
       <h3>Key Results</h3>
-      <p>
-          The analysis revealed a clear <strong>morphology-dependent dichotomy</strong>. Compact sources showed consistent flux
-          measurements between instruments, with NIRSpec integrated fluxes comparable to or slightly exceeding NIRISS,
-          all agreeing within <strong>1σ uncertainties</strong>. Extended sources behaved very differently: NIRISS systematically
-          measured higher integrated fluxes, with NIRSpec consistently falling below, a direct signature of <strong>slit losses</strong>
-          that was visible across all emission lines and all three observing programs.
-      </p>
-      <p>
-          Using the emission line maps, we could quantify this effect directly. When the NIRSpec slit covered more
-          than <strong>15% of the galaxy's segmentation map area</strong>, or when the effective radius was <strong>R<sub>e</sub> &lt; 1 kpc</strong>,
-          NIRSpec recovered <strong>at least 63% of the NIRISS flux</strong>. For lower coverage fractions or more extended sources,
-          that recovery dropped to anywhere between <strong>24% and 63%</strong>, a factor of four difference in the most extreme cases.
-      </p>
-      <p>
-          <strong>Equivalent width (EW)</strong> measurements told a different story. Unlike flux ratios, which showed a stark
-          compact/extended dichotomy, EW ratios were more scattered around zero for both morphological classes,
-          with no persistent systematic offset for extended sources. Because EWs are defined relative to the <strong>local
-          continuum</strong>, aperture-dependent losses in both the line and the continuum partially cancel out, making
-          <strong>EW-based analyses more robust</strong> when combining data from different instruments.
-      </p>
-      <p>
-          The most consequential finding concerns <strong>emission line ratios</strong>. We measured the <strong>Hα λ6563/[O III] λ5007</strong>
-          ratio for four extended galaxies using multiple methods and found it varied by up to <strong>~0.3 dex</strong> across
-          instruments and measurement approaches. That is large enough to shift derived <strong>metallicities and star
-          formation rates</strong> meaningfully, particularly given that SFR estimates scale directly with Hα luminosity
-          and that emission lines experience stronger <strong>dust attenuation</strong> than the continuum.
-      </p>
-
+      <p>The analysis revealed a clear <strong>morphology-dependent dichotomy</strong>. Compact sources showed consistent flux measurements between instruments, agreeing within <strong>1σ uncertainties</strong>. Extended sources behaved very differently: NIRISS systematically measured higher integrated fluxes, a direct signature of <strong>slit losses</strong> visible across all emission lines and all three observing programs.</p>
+      <p>When the NIRSpec slit covered more than <strong>15% of the galaxy's segmentation map area</strong>, NIRSpec recovered <strong>at least 63% of the NIRISS flux</strong>. For lower coverage fractions, that recovery dropped to anywhere between <strong>24% and 63%</strong> — a factor of four difference in the most extreme cases.</p>
       <div class="pm-img"><img src="images/flux_ratio_vs_restwave.png"><img src="images/flux_ratio_vs_area.png"></div>
-      <p class="pm-caption">
-          NIRSpec-to-NIRISS flux ratio as a function of rest-frame wavelength (top) and slit coverage fraction (bottom),
-          with compact sources in blue and extended in red. Compact sources cluster near unity across all wavelengths,
-          while extended sources with lower slit coverage show the strongest flux losses.
-      </p>
-
-      <p>
-          As JWST datasets grow and <strong>multi-instrument catalogues</strong> become standard, establishing <strong>clear protocols</strong> for how
-          to combine slitless and slit-based spectroscopy is becoming increasingly important. This project offers an
-          <strong>empirical reference</strong> for exactly that, showing where the two instruments agree, where they diverge, and why.
-      </p>
-
-      <p>
-          The emission line fitting pipeline behind this analysis is openly available on GitHub. Papers and code linked below.
-      </p>
-
+      <p class="pm-caption">NIRSpec-to-NIRISS flux ratio as a function of rest-frame wavelength (top) and slit coverage fraction (bottom), with compact sources in blue and extended in red.</p>
+      <p>The emission line fitting pipeline behind this analysis is openly available on GitHub. Papers and code linked below.</p>
       <div class="pm-links">
-          <a href="#" onclick="openLink(event,'p7')">Slit losses paper →</a>
-          <a href="#" onclick="openLink(event,'spectra_fit_code')">Spectra fitting code →</a>
-      </div>
-    `
+        <a href="#" onclick="openLink(event,'p7')">Slit losses paper →</a>
+        <a href="#" onclick="openLink(event,'spectra_fit_code')">Spectra fitting code →</a>
+      </div>`
   },
 
-    /* NIRISS Catalog */
   {
     tag:     'Spectroscopy · Catalog · JWST · 2025',
     title:   'NIRISS Spectroscopic Catalog',
@@ -928,90 +612,22 @@ const projects = [
     thumb:   'images/niriss_beams_example_rev1.png',
     visible: true,
     content: `
-      <p>
-          · What does it take to build a spectroscopic catalogue from scratch?<br>
-          · How do you extract reliable redshifts from a crowded, contaminated field?<br><br>
-
-          These questions sat at the heart of this project, led by <a href="https://orcid.org/0000-0003-3108-0624" target="_blank" style="color:var(--rust);">Peter J. Watson</a>
-          and carried out within the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong> collaboration,
-          of which I am a member.<br>
-          The goal: build the <strong>first ever NIRISS (Near Infrared Imager and Slitless Spectrograph) spectroscopic redshift catalogue</strong>
-          for the Abell 2744 cluster field, using data from the
-          <strong><a href="https://archive.stsci.edu/hlsp/glass-jwst" target="_blank" style="color:var(--rust);">GLASS-JWST Early Release Science (ERS)</a></strong> programme.
-      </p>
-
+      <p>· What does it take to build a spectroscopic catalogue from scratch?<br>· How do you extract reliable redshifts from a crowded, contaminated field?<br><br>These questions sat at the heart of this project, led by <a href="https://orcid.org/0000-0003-3108-0624" target="_blank" style="color:var(--rust);">Peter J. Watson</a> and carried out within the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong> collaboration, of which I am a member.<br>The goal: build the <strong>first ever NIRISS spectroscopic redshift catalogue</strong> for the Abell 2744 cluster field, using data from the <strong><a href="https://archive.stsci.edu/hlsp/glass-jwst" target="_blank" style="color:var(--rust);">GLASS-JWST Early Release Science (ERS)</a></strong> programme.</p>
       <div class="pm-img"><img src="images/pointings_rev1.png"></div>
-      <p class="pm-caption">
-          All JWST (James Webb Space Telescope) spectroscopic observations covering the Abell 2744 field, with the NIRISS footprint shown as a solid line.
-      </p>
-
+      <p class="pm-caption">All JWST spectroscopic observations covering the Abell 2744 field, with the NIRISS footprint shown as a solid line.</p>
       <h3>Pandora's Cluster</h3>
-      <p>
-          <strong>Abell 2744</strong>, nicknamed Pandora's Cluster, is one of the most studied patches of sky in existence.
-          It is a massive gravitational lens, bending and magnifying the light of galaxies billions of light years behind it,
-          effectively giving us a natural telescope pointed at the early Universe.
-          JWST stared at it with NIRISS in <strong>WFSS (Wide Field Slitless Spectroscopy)</strong> mode, an instrument configuration that disperses the light of
-          every single object in the field at once, no target selection, no slits, just everything, simultaneously.
-      </p>
-      <p>
-          The catch is that every spectrum overlaps with every other. In a field this crowded,
-          separating signal from contamination is genuinely hard. It required careful
-          <strong>contamination modelling</strong>, custom <strong>source detection</strong> designed around
-          the diffuse <strong>ICL (Intracluster Light)</strong> of the cluster itself, and a multi-stage <strong>visual inspection</strong>
-          where every extracted spectrum was reviewed by multiple team members.
-          I contributed to the analysis and validation of the spectra and redshifts throughout this pipeline.
-      </p>
-
+      <p><strong>Abell 2744</strong>, nicknamed Pandora's Cluster, is one of the most studied patches of sky in existence. It is a massive gravitational lens, bending and magnifying the light of galaxies billions of light years behind it, effectively giving us a natural telescope pointed at the early Universe. JWST stared at it with NIRISS in <strong>WFSS</strong> mode — an instrument configuration that disperses the light of every single object in the field at once, no target selection, no slits, just everything, simultaneously.</p>
+      <p>The catch is that every spectrum overlaps with every other. In a field this crowded, separating signal from contamination is genuinely hard. It required careful <strong>contamination modelling</strong>, custom <strong>source detection</strong> designed around the diffuse <strong>ICL (Intracluster Light)</strong> of the cluster itself, and a multi-stage <strong>visual inspection</strong> where every extracted spectrum was reviewed by multiple team members. I contributed to the analysis and validation of the spectra and redshifts throughout this pipeline.</p>
       <div class="pm-img"><img src="images/niriss_beams_example_rev1.png"></div>
-      <p class="pm-caption">
-          A galaxy at z = 1.891, dispersed in two orthogonal directions. The asymmetric shape of the galaxy
-          produces a noticeably different spectrum at each orientation, with contamination from nearby sources visible throughout.
-      </p>
-
+      <p class="pm-caption">A galaxy at z = 1.891, dispersed in two orthogonal directions. The asymmetric shape of the galaxy produces a noticeably different spectrum at each orientation, with contamination from nearby sources visible throughout.</p>
       <h3>The Catalogue</h3>
-      <p>
-          The result is <strong>488 spectroscopic redshifts</strong>, 354 of them secure, spanning
-          <strong>z = 0.1 to z = 8.2</strong>. The upper end of that range is light that left its galaxy
-          when the Universe was less than a billion years old. Of those, <strong>245 are entirely new</strong>,
-          never measured before. The catalogue also includes the first spectroscopic confirmation of a
-          <strong>triply imaged galaxy at z = 2.653</strong>, and the identification of four
-          <strong>background overdensities</strong> at z = 1.10, 1.34, 1.87, and 2.65,
-          real concentrations of galaxies sitting behind the cluster, now mapped for the first time with NIRISS.
-      </p>
-      <p>
-          Secure redshifts agree with previous measurements to within <strong>σz = 3.4 × 10⁻³</strong>.
-          A small but persistent systematic offset points to residual errors in the NIRISS wavelength calibration,
-          something the community is actively working to improve.
-      </p>
-
+      <p>The result is <strong>488 spectroscopic redshifts</strong>, 354 of them secure, spanning <strong>z = 0.1 to z = 8.2</strong>. Of those, <strong>245 are entirely new</strong>, never measured before. The catalogue also includes the first spectroscopic confirmation of a <strong>triply imaged galaxy at z = 2.653</strong>, and the identification of four <strong>background overdensities</strong> at z = 1.10, 1.34, 1.87, and 2.65.</p>
       <div class="pm-img"><img src="images/od_source_plane_subplots_rev1.png"></div>
-      <p class="pm-caption">
-          The four overdensities reconstructed in the source plane, showing where these galaxy groups
-          actually sit once the lensing distortion of the cluster is accounted for.
-      </p>
-
+      <p class="pm-caption">The four overdensities reconstructed in the source plane, showing where these galaxy groups actually sit once the lensing distortion of the cluster is accounted for.</p>
       <h3>Tools Released to the Community</h3>
-      <p>
-          Two open-source tools came out of this work. <strong>pygcg</strong> is an interactive <strong>GUI (Graphical User Interface)</strong> for
-          browsing and classifying grism spectra, built to make reviewing hundreds of objects across a large team
-          actually manageable. <strong>pygrife</strong> allows re-extraction of any region in pre-processed grism data
-          without rebuilding the contamination model from scratch. Both are already being used beyond this project.
-      </p>
-      <p>
-          A catalogue is never just a table of numbers. It is the foundation everything else is built on:
-          <strong>cluster mass models</strong>, <strong>lensing reconstructions</strong>, studies of how
-          galaxies form and evolve across <strong>cosmic noon</strong>. This one opens the door for all of that,
-          with NIRISS, for the first time.
-      </p>
-
-      <p>
-          Paper linked below.
-      </p>
-
-      <div class="pm-links">
-          <a href="#" onclick="openLink(event,'p5')">NIRISS catalogue paper →</a>
-      </div>  
-    `
+      <p>Two open-source tools came out of this work. <strong>pygcg</strong> is an interactive GUI for browsing and classifying grism spectra. <strong>pygrife</strong> allows re-extraction of any region in pre-processed grism data without rebuilding the contamination model from scratch. Both are already being used beyond this project.</p>
+      <p>Paper linked below.</p>
+      <div class="pm-links"><a href="#" onclick="openLink(event,'p5')">NIRISS catalogue paper →</a></div>`
   }
 
 ];
@@ -1029,20 +645,14 @@ visibleProjects.forEach(p => {
   div.setAttribute('role', 'button');
   div.setAttribute('tabindex', '0');
   div.onclick = () => openProj(p.idx);
-  /* FIX: also handle keyboard Enter/Space for accessibility */
   div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') openProj(p.idx); };
-  div.innerHTML = `
-    ${thumbHtml}
-    <div class="b-tag">${p.tag}</div>
-    <div class="b-title">${p.title}</div>
-    ${p.year ? `<div class="b-year">${p.year}</div>` : ''}
-  `;
+  div.innerHTML = `${thumbHtml}<div class="b-tag">${p.tag}</div><div class="b-title">${p.title}</div>${p.year ? `<div class="b-year">${p.year}</div>` : ''}`;
   bubblesEl.appendChild(div);
 });
 
 if (visibleProjects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
 
-if (visibleProjects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
+/* Attach cursor listeners after bubbles are built */
 if (!isTouchDevice) attachCursorListeners();
 
 /* ── MODAL LOGIC ── */
@@ -1093,7 +703,7 @@ document.addEventListener('keydown', e => {
 let touchStartX = 0;
 let touchStartY = 0;
 let swipeHandled = false;
-let swipeLocked  = false;   /* true once we've determined swipe direction */
+let swipeLocked  = false;
 
 const projModal = document.getElementById('projModal');
 
@@ -1108,16 +718,13 @@ projModal.addEventListener('touchmove', e => {
   if (swipeLocked) return;
   const dx = e.touches[0].clientX - touchStartX;
   const dy = e.touches[0].clientY - touchStartY;
-
-  /* Once we have enough movement to judge direction, lock in */
   if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
     swipeLocked = true;
     if (Math.abs(dx) > Math.abs(dy) * 1.2) {
-      /* Horizontal swipe — prevent browser back/forward navigation */
-      e.preventDefault();
+      e.preventDefault(); /* block browser back/forward gesture */
     }
   }
-}, { passive: false });   /* passive:false required to call preventDefault */
+}, { passive: false });
 
 projModal.addEventListener('touchend', e => {
   if (swipeHandled) return;
@@ -1125,8 +732,8 @@ projModal.addEventListener('touchend', e => {
   const dy = e.changedTouches[0].clientY - touchStartY;
   if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
     swipeHandled = true;
-    if (dx < 0) navProj(+1);  /* swipe left  → next */
-    else        navProj(-1);  /* swipe right → prev */
+    if (dx < 0) navProj(+1);
+    else        navProj(-1);
   }
 }, { passive: true });
 
