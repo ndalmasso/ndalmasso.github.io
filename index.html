@@ -628,6 +628,98 @@ const projects = [
       <p>Two open-source tools came out of this work. <strong>pygcg</strong> is an interactive GUI for browsing and classifying grism spectra. <strong>pygrife</strong> allows re-extraction of any region in pre-processed grism data without rebuilding the contamination model from scratch. Both are already being used beyond this project.</p>
       <p>Paper linked below.</p>
       <div class="pm-links"><a href="#" onclick="openLink(event,'p5')">NIRISS catalogue paper →</a></div>`
+  },
+
+  {
+    tag:     'Galaxy Mergers · NIRCam · JWST · 2024',
+    title:   'Galaxy Mergers Across 13 Billion Years of Cosmic History',
+    year:    'One in ten galaxies is colliding right now. That number has not changed since the dawn of time.',
+    thumb:   'images/merger_vs_nonmerger_hres_mu2.0_v2.png',
+    visible: true,
+    content: `
+      <p>
+          · Do galaxies collide?<br>
+          · How often does it happen, and does it change over cosmic time?<br><br>
+
+          These are some of the oldest questions in extragalactic astronomy, and answering them requires
+          being able to actually see what a <strong>merging galaxy</strong> looks like across billions of years of cosmic history.
+          This is a first-author project where I used <strong>JWST NIRCam (Near Infrared Camera)</strong> imaging to study
+          galaxy mergers from redshift z = 4 all the way to z = 9, pushing the analysis deep into
+          the <strong>epoch of reionization</strong>, when the Universe was less than 1.5 billion years old.
+      </p>
+
+      <div class="pm-img"><img src="images/merger_vs_nonmerger_hres_mu2.0_v2.png"></div>
+      <p class="pm-caption">
+          Mergers versus non-mergers across five redshift bins. Each stamp is 2.2 arcsec on a side.
+          Upper row: isolated galaxies. Lower row: merger candidates, identified from their morphological parameters.
+      </p>
+
+      <h3>How Do You Spot a Merger?</h3>
+      <p>
+          When two galaxies collide, they do not pass through each other cleanly. They distort, stretch, and
+          asymmetrically redistribute their light in ways that leave measurable signatures in the image.
+          We quantified this using three <strong>morphological parameters</strong>: the <strong>Gini coefficient (G)</strong>,
+          which measures how unevenly light is distributed across a galaxy; the <strong>second-order moment of
+          brightness (M₂₀)</strong>, which tracks how concentrated the brightest regions are; and the
+          <strong>asymmetry (A)</strong>, which captures how different a galaxy looks when you rotate it 180 degrees.
+          Together these three numbers can tell you, with reasonable confidence, whether what you are
+          looking at is a galaxy mid-collision or just going about its business undisturbed.
+      </p>
+      <p>
+          We applied this to a parent sample of <strong>675 galaxies</strong> in the low-magnification outskirts of
+          <strong>Abell 2744</strong>, drawn from three JWST programs: <strong>GLASS-ERS (PID 1324)</strong>,
+          <strong>UNCOVER (PID 2561)</strong>, and <strong>DDT-2756</strong>. To avoid measuring shapes distorted by
+          gravitational lensing from the foreground cluster, we excluded any region with magnification
+          <strong>μ ≥ 2.0</strong>. What remained was a clean, high-resolution view of real galaxy morphologies
+          across five billion years of cosmic time.
+      </p>
+
+      <div class="pm-img"><img src="images/fm_GS_G_vs_z_magnitude_and_mass_cut_hres_mu2.0.png"></div>
+      <p class="pm-caption">
+          Merger fraction as a function of redshift for the Silver (left) and Gold (right) samples,
+          split by luminosity (top) and stellar mass (bottom). The Gold sample sits stable around f_m = 0.11 across the full redshift range.
+      </p>
+
+      <h3>Key Results</h3>
+      <p>
+          From our stricter <strong>Gold sample</strong>, requiring both a disturbed light distribution and
+          significant asymmetry, we identified <strong>64 merger candidates</strong> and measured a
+          <strong>merger fraction of f_m = 0.11 ± 0.04</strong>. That number does not change with redshift.
+          Not at z = 4, not at z = 9. The merger fraction is <strong>flat across the entire epoch of reionization</strong>,
+          extending a trend previously seen only out to z ≈ 6 and now pushed back to when the Universe
+          was just half a billion years old.
+      </p>
+      <p>
+          Why would it be flat? The merger rate itself actually increases with redshift, galaxies were
+          colliding more frequently in the early Universe. But at the same time, those early galaxies were
+          smaller and denser, so mergers completed faster. The two effects cancel out almost perfectly,
+          leaving the <strong>observed fraction roughly constant</strong> at around 10% across cosmic time.
+          We also checked whether merging galaxies form stars faster than isolated ones. The answer,
+          perhaps surprisingly, is no, at least not in any statistically significant way,
+          suggesting that in the early Universe, <strong>smooth gas accretion</strong> dominates star formation
+          rather than merger-driven bursts.
+      </p>
+
+      <div class="pm-img"><img src="images/fm_vs_z_comparison_noncolorblind.png"></div>
+      <p class="pm-caption">
+          Our Gold sample result (red star) compared against merger fraction measurements from the literature
+          spanning z = 0 to z = 9. Our result is consistent with the flat trend seen at lower redshifts,
+          now extended deep into the epoch of reionization.
+      </p>
+
+      <p>
+          One in ten galaxies, at any point in the history of the Universe, appears to be in the middle
+          of a collision. That turns out to be a remarkably stable number.
+      </p>
+
+      <p>
+          Paper linked below.
+      </p>
+
+      <div class="pm-links">
+          <a href="#" onclick="openLink(event,'p4')">Galaxy mergers paper →</a>
+      </div>
+      `
   }
 
 ];
