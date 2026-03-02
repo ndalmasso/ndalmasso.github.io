@@ -135,7 +135,6 @@
       transform: scale(1.1);
     }
 
-    /* Sun icon (shown in dark mode to switch to light) */
     #themeToggle .icon-sun,
     #themeToggle .icon-moon {
       position: absolute;
@@ -249,6 +248,23 @@
     }
     .proj-modal-content .pm-links a:hover { background:var(--rust); color:#fff; border-color:var(--rust); }
 
+    /* blockquote styling */
+    .proj-modal-content blockquote {
+      border-left: 3px solid var(--rust);
+      margin: 1.5rem 0;
+      padding: 0.8rem 1.2rem;
+      background: var(--sand-faint);
+      border-radius: 0 3px 3px 0;
+    }
+    .proj-modal-content blockquote em { color: var(--sand); }
+
+    /* skills table */
+    .proj-modal-content .skills-table { width:100%; border-collapse:collapse; margin: 1rem 0; }
+    .proj-modal-content .skills-table td { padding: 0.7rem 0; vertical-align:top; border-bottom: 1px solid var(--border); }
+    .proj-modal-content .skills-table .skill-name { width:30%; padding-right:1rem; font-weight:bold; color:var(--sand); }
+    .proj-modal-content .skills-table .skill-desc { color:var(--sand-dim); }
+    .proj-modal-content .skills-table tr:last-child td { border-bottom: none; }
+
     /* CONTACT MODAL */
     .modal-overlay { position:fixed; inset:0; background:rgba(22,18,14,.85); z-index:810; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s; }
     [data-theme="light"] .modal-overlay { background: rgba(200,190,175,.85); }
@@ -357,7 +373,6 @@
 
 <!-- THEME TOGGLE -->
 <button id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle theme">
-  <!-- Sun icon (switch to light) -->
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--rust)">
     <circle cx="12" cy="12" r="4"/>
     <line x1="12" y1="2" x2="12" y2="5"/>
@@ -369,7 +384,6 @@
     <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
     <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
   </svg>
-  <!-- Moon icon (switch to dark) -->
   <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--rust)">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
   </svg>
@@ -542,8 +556,6 @@
 <script>
 /* ── THEME TOGGLE ── */
 const html = document.documentElement;
-
-// Load saved preference, default to dark
 const savedTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
 
@@ -586,6 +598,7 @@ const links = {
   acf_code:         atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9hY2YtZ2FsYXh5LWNsdXN0ZXJpbmc='),
   spectra_fit_code: atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9zcGVjdHJhLWZpdHRpbmc='),
   aria_code:        atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9BUklBX0FkYXB0aXZlX1J1bm5pbmdfSW50ZWxsaWdlbnRfQXNzaXN0YW50'),
+  deck_confidant:   atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzby9kZWNrLWNvbmZpZGFudA=='),
   p1: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTI4LzEvODk4Lzc0ODAyNTg='),
   p2: atob('aHR0cHM6Ly93d3cubmF0dXJlLmNvbS9hcnRpY2xlcy9zNDE1NTAtMDI0LTAyMjE4LTc='),
   p3: atob('aHR0cHM6Ly9hY2FkZW1pYy5vdXAuY29tL21ucmFzL2FydGljbGUvNTMzLzIvMjM5MS83NzM4Mzkw'),
@@ -620,6 +633,63 @@ function downloadCV(e) {
    PROJECT DATA
    ═══════════════════════════════════════════════════════ */
 const projects = [
+
+  {
+    tag:     'Databricks · dbt · Python · NLP · 2025',
+    title:   'Deck Confidant: A Smarter Way to Build Your MTG Deck',
+    year:    'What if you could just describe how you want to play and get a deck back?',
+    thumb:   'images/WIP.jpg',
+    visible: false,
+    content: `
+      <p>You sit down to build a Modern deck. You know a few things about yourself: you have a $400 budget, you like to be proactive and set the pace of the game, you prefer straightforward strategies over complex ones, and there is one card you have always loved. You open a browser. You are immediately confronted with tier lists, meta snapshots, matchup percentages, budget guides, sideboard options, and countless different versions of the same archetype. An hour later you have twenty tabs open and still no deck.</p>
+
+      <p>What if instead you could just type:</p>
+
+      <blockquote><em>"I like MTG, I want to play Modern and I have $400 of a budget. I am usually proactive and like to set the pace of the game. I tend to prefer straightforward and clear strategies. I do not like to think too much or worry about the meta or what other players play. There is one card I particularly love and I would like to play, and it is Dark Confidant."</em></blockquote>
+
+      <p>And get back a competitive, fully constructed 75-card deck built around exactly that? This is the problem <strong>Deck Confidant</strong> is trying to solve.</p>
+
+      <h3>The Problem With Existing Tools</h3>
+      <p>Current MTG deck tools fall into two categories. The first shows you a list and says "here is what the pros play", useful if you want to copy exactly, less useful when you are working with half the budget or have a specific card you want to build around. The second lets you search and filter cards manually, which requires you to already know what you are looking for. Neither understands your preferences. Neither knows that you hate complicated game plans, or that you find discard-heavy matchups frustrating, or that you have a soft spot for a particular card and want to build around it.</p>
+      <p>Deck building is not a search problem. It is a <strong>personalisation problem</strong>, and that is what makes it interesting to solve with machine learning.</p>
+
+      <h3>How It Works</h3>
+      <p>Deck Confidant is built on a production-grade data pipeline that ingests every Modern-legal card from the <strong>Scryfall API</strong> and real tournament decklists scraped from <strong>MTGTop8</strong>, all stored in <strong>Databricks Delta Lake</strong> and transformed through a <strong>dbt pipeline</strong> with automated data quality tests at every layer.</p>
+      <p>The machine learning side has three components. The first is <strong>unsupervised archetype discovery</strong>: rather than hardcoding a list of archetypes, a clustering model learns which cards appear together across tournament results and surfaces the meta structure automatically. Burn, Death and Taxes, Amulet Titan emerge as patterns in the data, not from a predefined list. The second is <strong>play style matching via NLP</strong>: your description is embedded using a sentence-transformer model and matched against archetype embeddings built from card oracle texts, finding the closest fit without a single hardcoded rule. The third is a <strong>card swap cascade engine</strong>: when you ask for Dark Confidant in the 75, the system checks whether it fits the archetype, validates the mana curve impact across the full 60 mainboard and 15 sideboard, recomputes synergy scores, and adjusts the rest of the list, explaining every change it makes.</p>
+      <p>The result is a deck that is not just legal and within budget, but coherent, competitive, and built around how you actually want to play.</p>
+
+      <h3>Skills</h3>
+      <table class="skills-table">
+        <tr><td class="skill-name">Databricks</td><td class="skill-desc">Cloud data infrastructure. Used to store and query card and tournament data in Delta Lake tables, run ingestion notebooks, and track ML experiments with MLflow.</td></tr>
+        <tr><td class="skill-name">dbt</td><td class="skill-desc">Data transformation and testing. Used to build the full staging, intermediate, and mart model pipeline with automated quality tests and auto-generated documentation.</td></tr>
+        <tr><td class="skill-name">Python</td><td class="skill-desc">Primary language across the project. Used for API ingestion, web scraping, data processing, and all ML and NLP model code.</td></tr>
+        <tr><td class="skill-name">scikit-learn</td><td class="skill-desc">Machine learning. Used for k-means clustering to discover archetypes from tournament data and for similarity scoring in the recommender.</td></tr>
+        <tr><td class="skill-name">sentence-transformers</td><td class="skill-desc">NLP embeddings. Used to encode play style descriptions and card oracle texts into vector space, enabling semantic matching without keyword rules.</td></tr>
+        <tr><td class="skill-name">Streamlit</td><td class="skill-desc">Frontend application. The final interface where a player describes their preferences and receives a fully constructed deck in return.</td></tr>
+        <tr><td class="skill-name">SQL</td><td class="skill-desc">Used throughout the dbt models for data cleaning, feature engineering, and building the analytical tables that power the recommender.</td></tr>
+      </table>
+
+      <h3>Roadmap</h3>
+      <ul style="list-style:none; padding-left:0; line-height:2.2;">
+        <li>&#x2611; Data ingestion pipeline from Scryfall and MTGTop8</li>
+        <li>&#x2611; Databricks Delta Lake setup for cards and tournament decklists</li>
+        <li>&#x2611; Full dbt transformation pipeline</li>
+        <li>&#x2611; Automated data quality tests across all models</li>
+        <li>&#x2611; dbt documentation and lineage graph</li>
+      </ul>
+      <ul style="list-style:none; padding-left:0; line-height:2.2;">
+        <li>&#x2610; K-means clustering model for archetype discovery</li>
+        <li>&#x2610; NLP play style embeddings using sentence-transformers</li>
+        <li>&#x2610; Archetype to deck list mapping with budget filtering</li>
+        <li>&#x2610; Card swap cascade engine with synergy scoring</li>
+        <li>&#x2610; Matchup matrix from tournament results</li>
+        <li>&#x2610; Streamlit application deployable as deckconfidant.io</li>
+      </ul>
+
+      <div class="pm-links">
+        <a href="#" onclick="openLink(event,'deck_confidant')">GitHub Repository &#x2192;</a>
+      </div>`
+  },
 
   {
     tag:     'Galaxy Clustering · HST · JWST · 2022–2025',
@@ -736,79 +806,128 @@ const projects = [
     thumb:   'images/merger_vs_nonmerger_hres_mu2.0_v2.png',
     visible: true,
     content: `
-      <p>
-          · Do galaxies collide?<br>
-          · How often does it happen, and does it change over cosmic time?<br><br>
-
-          These are some of the oldest questions in extragalactic astronomy, and answering them requires
-          being able to actually see what a <strong>merging galaxy</strong> looks like across billions of years of cosmic history.
-          This is a first-author project where I used <strong>JWST NIRCam (Near Infrared Camera)</strong> imaging to study
-          galaxy mergers from redshift z = 4 all the way to z = 9, pushing the analysis deep into
-          the <strong>epoch of reionization</strong>, when the Universe was less than 1.5 billion years old.
-      </p>
-
+      <p>· Do galaxies collide?<br>· How often does it happen, and does it change over cosmic time?<br><br>These are some of the oldest questions in extragalactic astronomy, and answering them requires being able to actually see what a <strong>merging galaxy</strong> looks like across billions of years of cosmic history. This is a first-author project where I used <strong>JWST NIRCam (Near Infrared Camera)</strong> imaging to study galaxy mergers from redshift z = 4 all the way to z = 9, pushing the analysis deep into the <strong>epoch of reionization</strong>, when the Universe was less than 1.5 billion years old.</p>
       <div class="pm-img"><img src="images/merger_vs_nonmerger_hres_mu2.0_v2.png"></div>
-      <p class="pm-caption">
-          Mergers versus non-mergers across five redshift bins. Each stamp is 2.2 arcsec on a side.
-          Upper row: isolated galaxies. Lower row: merger candidates, identified from their morphological parameters.
-      </p>
-
+      <p class="pm-caption">Mergers versus non-mergers across five redshift bins. Each stamp is 2.2 arcsec on a side. Upper row: isolated galaxies. Lower row: merger candidates, identified from their morphological parameters.</p>
       <h3>How Do You Spot a Merger?</h3>
-      <p>
-          When two galaxies collide, they do not pass through each other cleanly. They distort, stretch, and
-          asymmetrically redistribute their light in ways that leave measurable signatures in the image.
-          We quantified this using three <strong>morphological parameters</strong>: the <strong>Gini coefficient (G)</strong>,
-          which measures how unevenly light is distributed across a galaxy; the <strong>second-order moment of
-          brightness (M₂₀)</strong>, which tracks how concentrated the brightest regions are; and the
-          <strong>asymmetry (A)</strong>, which captures how different a galaxy looks when you rotate it 180 degrees.
-          Together these three numbers can tell you, with reasonable confidence, whether what you are
-          looking at is a galaxy mid-collision or just going about its business undisturbed.
-      </p>
-      <p>
-          We applied this to a parent sample of <strong>675 galaxies</strong> in the low-magnification outskirts of
-          <strong>Abell 2744</strong>, drawn from three JWST programs: <strong>GLASS-ERS (PID 1324)</strong>,
-          <strong>UNCOVER (PID 2561)</strong>, and <strong>DDT-2756</strong>. To avoid measuring shapes distorted by
-          gravitational lensing from the foreground cluster, we excluded any region with magnification
-          <strong>μ ≥ 2.0</strong>. What remained was a clean, high-resolution view of real galaxy morphologies
-          across five billion years of cosmic time.
-      </p>
-
+      <p>When two galaxies collide, they do not pass through each other cleanly. They distort, stretch, and asymmetrically redistribute their light in ways that leave measurable signatures in the image. We quantified this using three <strong>morphological parameters</strong>: the <strong>Gini coefficient (G)</strong>, which measures how unevenly light is distributed across a galaxy; the <strong>second-order moment of brightness (M₂₀)</strong>, which tracks how concentrated the brightest regions are; and the <strong>asymmetry (A)</strong>, which captures how different a galaxy looks when you rotate it 180 degrees. Together these three numbers can tell you, with reasonable confidence, whether what you are looking at is a galaxy mid-collision or just going about its business undisturbed.</p>
+      <p>We applied this to a parent sample of <strong>675 galaxies</strong> in the low-magnification outskirts of <strong>Abell 2744</strong>, drawn from three JWST programs: <strong>GLASS-ERS (PID 1324)</strong>, <strong>UNCOVER (PID 2561)</strong>, and <strong>DDT-2756</strong>. To avoid measuring shapes distorted by gravitational lensing from the foreground cluster, we excluded any region with magnification <strong>μ ≥ 2.0</strong>. What remained was a clean, high-resolution view of real galaxy morphologies across five billion years of cosmic time.</p>
       <div class="pm-img"><img src="images/fm_GS_G_vs_z_magnitude_and_mass_cut_hres_mu2.0.png"></div>
-      <p class="pm-caption">
-          Merger fraction as a function of redshift for the Silver (left) and Gold (right) samples,
-          split by luminosity (top) and stellar mass (bottom). The Gold sample sits stable around f_m = 0.11 across the full redshift range.
-      </p>
-
+      <p class="pm-caption">Merger fraction as a function of redshift for the Silver (left) and Gold (right) samples, split by luminosity (top) and stellar mass (bottom). The Gold sample sits stable around f_m = 0.11 across the full redshift range.</p>
       <h3>Key Results</h3>
-      <p>
-          From our stricter <strong>Gold sample</strong>, requiring both a disturbed light distribution and
-          significant asymmetry, we identified <strong>64 merger candidates</strong> and measured a
-          <strong>merger fraction of f_m = 0.11 ± 0.04</strong>. That number does not change with redshift.
-          Not at z = 4, not at z = 9. The merger fraction is <strong>flat across the entire epoch of reionization</strong>,
-          extending a trend previously seen only out to z ≈ 6 and now pushed back to when the Universe
-          was just half a billion years old.
-      </p>
-      <p>
-          Why would it be flat? The merger rate itself actually increases with redshift, galaxies were
-          colliding more frequently in the early Universe. But at the same time, those early galaxies were
-          smaller and denser, so mergers completed faster. The two effects cancel out almost perfectly,
-          leaving the <strong>observed fraction roughly constant</strong> at around 10% across cosmic time.
-          We also checked whether merging galaxies form stars faster than isolated ones. The answer,
-          perhaps surprisingly, is no, at least not in any statistically significant way,
-          suggesting that in the early Universe, <strong>smooth gas accretion</strong> dominates star formation
-          rather than merger-driven bursts.
-      </p>
-
+      <p>From our stricter <strong>Gold sample</strong>, requiring both a disturbed light distribution and significant asymmetry, we identified <strong>64 merger candidates</strong> and measured a <strong>merger fraction of f_m = 0.11 ± 0.04</strong>. That number does not change with redshift. Not at z = 4, not at z = 9. The merger fraction is <strong>flat across the entire epoch of reionization</strong>, extending a trend previously seen only out to z ≈ 6 and now pushed back to when the Universe was just half a billion years old.</p>
+      <p>Why would it be flat? The merger rate itself actually increases with redshift, galaxies were colliding more frequently in the early Universe. But at the same time, those early galaxies were smaller and denser, so mergers completed faster. The two effects cancel out almost perfectly, leaving the <strong>observed fraction roughly constant</strong> at around 10% across cosmic time. We also checked whether merging galaxies form stars faster than isolated ones. The answer, perhaps surprisingly, is no, at least not in any statistically significant way, suggesting that in the early Universe, <strong>smooth gas accretion</strong> dominates star formation rather than merger-driven bursts.</p>
       <div class="pm-img"><img src="images/fm_vs_z_comparison_noncolorblind.png"></div>
+      <p class="pm-caption">Our Gold sample result (red star) compared against merger fraction measurements from the literature spanning z = 0 to z = 9. Our result is consistent with the flat trend seen at lower redshifts, now extended deep into the epoch of reionization.</p>
+      <p>One in ten galaxies, at any point in the history of the Universe, appears to be in the middle of a collision. That turns out to be a remarkably stable number.</p>
+      <p>Paper linked below.</p>
+      <div class="pm-links">
+        <a href="#" onclick="openLink(event,'p4')">Galaxy Mergers paper →</a>
+      </div>`
+  },
+
+  {
+    tag:     'Spectroscopy · JWST · High-z · 2024',
+    title:   'A Massive Interacting Galaxy 525 Million Years After the Big Bang',
+    year:    'Published in Nature Astronomy. The Vogue of astronomy. A massive, merging galaxy half a billion years after the Big Bang.',
+    thumb:   'images/Figure_1_270223.png',
+    visible: true,
+    content: `
+      <p>
+          · How do you confirm a galaxy at the edge of the observable Universe?<br>
+          · What does light from half a billion years after the Big Bang even look like?<br><br>
+
+          This is a co-author project led by the brilliant <a href="https://www.linkedin.com/in/kit-boyett-80b424198/" target="_blank" style="color:var(--rust);">Dr. Kit Boyett</a>,
+          carried out within the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong> collaboration,
+          and published in <strong>Nature Astronomy</strong>, the most prestigious journal in the field.
+          The target: a rare, massive, interacting galaxy at <strong>z = 9.3127</strong>,
+          just <strong>525 million years after the Big Bang</strong>, observed with
+          <strong>JWST (James Webb Space Telescope)</strong>.
+          My contribution was the modelling of the <strong>Lyman break</strong> to independently
+          confirm the spectroscopic redshift from the galaxy's spectral continuum.
+      </p>
+
+      <div class="pm-img"><img src="images/Figure_1_270223.png"></div>
       <p class="pm-caption">
-          Our Gold sample result (red star) compared against merger fraction measurements from the literature
-          spanning z = 0 to z = 9. Our result is consistent with the flat trend seen at lower redshifts,
-          now extended deep into the epoch of reionization.
+          JWST NIRCam imaging and NIRSpec spectrum of Gz9p3 across six broadband filters,
+          with emission lines and the Lyman break marked. The system shows a clear double-core morphology
+          and an extended tidal tail consistent with an ongoing merger.
+      </p>
+
+      <h3>The Galaxy</h3>
+      <p>
+          The object, nicknamed <strong>Gz9p3</strong>, is one of the <strong>brightest and most massive galaxies</strong>
+          spectroscopically confirmed in the epoch of reionization. With a stellar mass of
+          roughly <strong>2.5 × 10⁹ solar masses</strong> and a star formation rate of
+          <strong>25 solar masses per year</strong>, it should not really exist as massive as it does
+          so early in cosmic history. Finding it is a bit like discovering a fully grown tree
+          in a forest that was only planted six months ago.
+      </p>
+      <p>
+          The <strong>NIRSpec (Near Infrared Spectrograph)</strong> high-resolution spectrum revealed
+          oxygen, neon and hydrogen emission lines, a metal-poor
+          <strong>ISM (Interstellar Medium)</strong> at roughly one tenth of solar metallicity,
+          and an electron density higher than what is typically seen in galaxies at lower redshifts.
+          All of this paints a picture of a young, intensely star-forming system caught in the act
+          of rapid assembly.
+      </p>
+
+      <h3>The Lyman Break and My Contribution</h3>
+      <p>
+          Every galaxy at high redshift carries a characteristic fingerprint in its spectrum:
+          the <strong>Lyman break</strong>, a sharp drop in flux at a rest-frame wavelength of 1216 Å
+          caused by neutral hydrogen absorbing virtually all light blueward of that point.
+          Because this feature shifts to longer wavelengths as the Universe expands,
+          its observed position tells you directly how far back in time you are looking.
+      </p>
+      <p>
+          My role was to model this break in the NIRSpec continuum independently of the emission lines,
+          fitting it as a step function and using <strong>Monte Carlo (MC) sampling</strong>
+          to place robust constraints on its location. The best fit redshift was
+          <strong>z = 9.35</strong>, with a <strong>95% confidence interval of z = 9.30–9.36</strong>,
+          consistent with the emission line redshift of <strong>z = 9.3127 ± 0.0002</strong>.
+          Two completely independent methods, same answer. That agreement is what makes a
+          redshift confirmation robust.
+          The spectrum also showed a flux deficit just redward of the break, evidence of
+          <strong>Lyα damping</strong> from the surrounding neutral gas, which we interpreted as a sign
+          that this galaxy may not sit within a large ionized bubble in the
+          <strong>IGM (Intergalactic Medium)</strong>.
+      </p>
+
+      <div class="pm-img"><img src="images/lyman_break_9.3_200223.png"></div>
+      <p class="pm-caption">
+          NIRSpec constraints on the Lyman break, with a best fit redshift of z = 9.35, independently
+          consistent with the emission line solution. This is the analysis I led for the paper.
+      </p>
+
+      <div class="pm-img"><img src="images/spec_phot_SED_210223_convert_format.png"></div>
+      <p class="pm-caption">
+          Best fit spectral energy distribution model overlaid on the NIRSpec spectrum and broadband
+          photometry for the main component of Gz9p3, corrected for slit losses and gravitational lensing.
+      </p>
+
+      <h3>A Merger 525 Million Years After the Big Bang</h3>
+      <p>
+          Gz9p3 is not just massive. It is also clearly <strong>interacting</strong>.
+          The combined NIRCam imaging reveals a <strong>double core</strong> and an elongated
+          <strong>clumpy tidal tail</strong>, the hallmark signature of two galaxies in the middle
+          of a collision. Morphological parameters confirm this unambiguously:
+          the system satisfies every standard criterion for merger classification.
+      </p>
+
+      <div class="pm-img"><img src="images/Clump_figure_220223.png"></div>
+      <p class="pm-caption">
+          Combined F150W+F200W imaging of Gz9p3 at 20 mas/pixel, showing the double core and
+          four tidal tail clumps. Clumpiness parameter c = 0.56 confirms this is no ordinary galaxy.
       </p>
 
       <p>
-          One in ten galaxies, at any point in the history of the Universe, appears to be in the middle
-          of a collision. That turns out to be a remarkably stable number.
+          The leading interpretation is that Gz9p3 is building its mass rapidly through mergers,
+          a process that our current models of galaxy formation struggle to reproduce at this
+          early a time. It is either hosted in an exceptionally rare dark matter halo,
+          or our understanding of <strong>star formation efficiency</strong> in the first
+          billion years needs to be revised upward. Either way, it is exactly the kind of
+          object JWST was built to find.
       </p>
 
       <p>
@@ -816,7 +935,7 @@ const projects = [
       </p>
 
       <div class="pm-links">
-          <a href="#" onclick="openLink(event,'p4')">Galaxy mergers paper →</a>
+          <a href="#" onclick="openLink(event,'p2')">Gz9p3 paper →</a>
       </div>
       `
   }
@@ -843,7 +962,6 @@ visibleProjects.forEach(p => {
 
 if (visibleProjects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
 
-/* Attach cursor listeners after bubbles are built */
 if (!isTouchDevice) attachCursorListeners();
 
 /* ── MODAL LOGIC ── */
@@ -890,7 +1008,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') navProj(+1);
 });
 
-/* ── SWIPE TO NAVIGATE PROJECTS (mobile) ── */
+/* ── SWIPE ── */
 let touchStartX = 0;
 let touchStartY = 0;
 let swipeHandled = false;
@@ -911,9 +1029,7 @@ projModal.addEventListener('touchmove', e => {
   const dy = e.touches[0].clientY - touchStartY;
   if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
     swipeLocked = true;
-    if (Math.abs(dx) > Math.abs(dy) * 1.2) {
-      e.preventDefault();
-    }
+    if (Math.abs(dx) > Math.abs(dy) * 1.2) e.preventDefault();
   }
 }, { passive: false });
 
