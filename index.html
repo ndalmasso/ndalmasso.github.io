@@ -649,90 +649,6 @@ function downloadCV(e) {
    PROJECT DATA
    ═══════════════════════════════════════════════════════ */
 const projects = [
-
-  {
-    slug:    'deck-confidant',
-    tag:     'Databricks · dbt · Python · NLP · 2025',
-    title:   'Deck Confidant: A Smarter Way to Build Your MTG Deck',
-    year:    'What if you could just describe how you want to play and get a deck back?',
-    thumb:   'images/WIP.jpg',
-    visible: true,
-    content: `
-      <p>You sit down to build a Modern deck. You know a few things about yourself: you have a $400 budget, you like to be proactive and set the pace of the game, you prefer straightforward strategies over complex ones, and there is one card you have always loved. You open a browser. You are immediately confronted with tier lists, meta snapshots, matchup percentages, budget guides, sideboard options, and countless different versions of the same archetype. An hour later you have twenty tabs open and still no deck.</p>
-
-      <p>What if instead you could just type:</p>
-
-      <blockquote><em>"I like MTG, I want to play Modern and I have $400 of a budget. I am usually proactive and like to set the pace of the game. I tend to prefer straightforward and clear strategies. I do not like to think too much or worry about the meta or what other players play. There is one card I particularly love and I would like to play, and it is Dark Confidant."</em></blockquote>
-
-      <p>And get back a competitive, fully constructed 75-card deck built around exactly that? This is the problem <strong>Deck Confidant</strong> is trying to solve.</p>
-
-      <h3>The Problem With Existing Tools</h3>
-      <p>Current MTG deck tools fall into two categories. The first shows you a list and says "here is what the pros play", useful if you want to copy exactly, less useful when you are working with half the budget or have a specific card you want to build around. The second lets you search and filter cards manually, which requires you to already know what you are looking for. Neither understands your preferences. Neither knows that you hate complicated game plans, or that you find discard-heavy matchups frustrating, or that you have a soft spot for a particular card and want to build around it.</p>
-      <p>Deck building is not a search problem. It is a <strong>personalisation problem</strong>, and that is what makes it interesting to solve with machine learning.</p>
-
-      <h3>How It Works</h3>
-      <p>Deck Confidant is built on a production-grade data pipeline that ingests every Modern-legal card from the <strong>Scryfall API</strong> and real tournament decklists scraped from <strong>MTGTop8</strong> and <strong>MTGDecks.net</strong>, all stored in <strong>Databricks Delta Lake</strong> and transformed through a <strong>dbt pipeline</strong> with automated data quality tests at every layer.</p>
-      <p>The machine learning side works in two stages. The first is a <strong>card signal classifier</strong>: 774 labeled tournament decklists from MTGTop8 are used to learn which non-land cards signal which play style. Ragavan and Ocelot Pride signal Aggro. Counterspell and Terminus signal Control. Amulet of Vigor and Goryo's Vengeance signal Combo. Any new deck can be classified automatically by scoring its cards against these learned signals — no hardcoded rules, no manual maintenance.</p>
-      <p>The second stage is <strong>hierarchical clustering</strong>: rather than running one flat k-means over all decks, the system first separates decks into macro categories (Aggro, Combo, Control — Big Mana, Control — Permission, Midrange — Taxes, Midrange — Domain, Midrange — Black Grind) and then clusters within each category to surface specific archetypes. This means Dimir Control separates cleanly from UrzaTron, and Death and Taxes separates from Boros Energy, because they are being compared within the right peer group.</p>
-      <p>Play style matching uses <strong>sentence-transformers</strong> to embed natural language descriptions and match them against enriched archetype profiles. Describe how you want to play and the system finds the closest fit across 8 macro categories and 20+ named archetypes. The final stage — currently in progress — is a <strong>deck construction engine</strong> that takes the matched archetype, applies budget filtering, validates the mana curve, and outputs a legal 75-card deck.</p>
-
-      <h3>Skills</h3>
-      <table class="skills-table">
-        <tr><td class="skill-name">Databricks</td><td class="skill-desc">Cloud data infrastructure. Used to store and query card and tournament data in Delta Lake tables, run ingestion notebooks, and orchestrate the ML pipeline.</td></tr>
-        <tr><td class="skill-name">dbt</td><td class="skill-desc">Data transformation and testing. Used to build the full staging, intermediate, and mart model pipeline with automated quality tests and auto-generated documentation.</td></tr>
-        <tr><td class="skill-name">Python</td><td class="skill-desc">Primary language across the project. Used for API ingestion, web scraping, data processing, and all ML and NLP model code.</td></tr>
-        <tr><td class="skill-name">scikit-learn</td><td class="skill-desc">Machine learning. Used for hierarchical k-means clustering — macro category separation followed by archetype discovery within each category.</td></tr>
-        <tr><td class="skill-name">sentence-transformers</td><td class="skill-desc">NLP embeddings. Used to encode play style descriptions and match them against enriched archetype profiles using cosine similarity.</td></tr>
-        <tr><td class="skill-name">Streamlit</td><td class="skill-desc">Frontend application. The final interface where a player describes their preferences and receives a fully constructed deck in return.</td></tr>
-        <tr><td class="skill-name">SQL</td><td class="skill-desc">Used throughout the dbt models for data cleaning, feature engineering, and building the analytical tables that power the recommender.</td></tr>
-      </table>
-
-      <h3>Roadmap</h3>
-      <p><strong>Completed</strong></p>
-      <ul style="list-style:none; padding-left:0; line-height:2.2;">
-        <li>&#x2611; Data ingestion pipeline from Scryfall, MTGTop8, and MTGDecks.net</li>
-        <li>&#x2611; Databricks Delta Lake setup with raw, staging, intermediate, and mart layers</li>
-        <li>&#x2611; Full dbt transformation pipeline with automated quality tests</li>
-        <li>&#x2611; Card signal classifier — learns macro labels from 774 labeled tournament decklists</li>
-        <li>&#x2611; Hierarchical k-means clustering across 8 macro categories</li>
-        <li>&#x2611; NLP play style matching via sentence-transformer embeddings</li>
-        <li>&#x2611; Pipeline controller with ban list detection and staleness checking</li>
-      </ul>
-      <p><strong>In Progress</strong></p>
-      <ul style="list-style:none; padding-left:0; line-height:2.2;">
-        <li>&#x2610; Deck construction engine with budget filtering and curve validation</li>
-        <li>&#x2610; Card swap cascade engine with synergy scoring</li>
-      </ul>
-      <p><strong>Coming Next</strong></p>
-      <ul style="list-style:none; padding-left:0; line-height:2.2;">
-        <li>&#x2610; Streamlit application deployable as deckconfidant.io</li>
-        <li>&#x2610; Matchup matrix from tournament results</li>
-      </ul>
-
-      <h3>Deck Archetype Quiz</h3>
-      <p>The classifier is only as good as its training data. To collect richer labels, I built a small quiz: given 5 key non-land cards from a top-20 meta deck, tag it with strategy descriptors (Aggro, Combo, Graveyard, Denial…) and guess the archetype name. Each response feeds directly into the training pipeline.</p>
-      <p><button id="quiz-toggle-btn" onclick="toggleQuiz()" style="background:transparent; border:1px solid var(--rust); color:var(--rust); padding:0.5rem 1.2rem; font-family:inherit; font-size:0.82rem; letter-spacing:0.08em; cursor:pointer; border-radius:2px; transition:all 0.2s;" onmouseover="this.style.background='var(--rust)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--rust)'">Try the Deck Tagger &#x2192;</button></p>
-      <div id="quiz-container" style="display:none; margin-top:1.5rem; border:1px solid var(--border); border-radius:4px; overflow:hidden; background:#0e0c09; padding:1.5rem; font-family:'Courier New',monospace; color:#e8dcc8;">
-        <div id="quiz-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #282420; padding-bottom:1rem; margin-bottom:1.5rem;">
-          <div>
-            <div style="font-size:0.62rem; letter-spacing:0.25em; color:#d67134; text-transform:uppercase; margin-bottom:0.25rem;">Deck Confidant</div>
-            <div id="quiz-title" style="font-family:Georgia,serif; font-size:1.2rem; font-style:italic;">Deck Tagger</div>
-          </div>
-          <div style="text-align:right">
-            <div id="quiz-progress-label" style="font-size:0.62rem; color:#d67134; letter-spacing:0.2em; text-transform:uppercase;">1 / 20</div>
-            <div style="margin-top:0.4rem; height:2px; width:90px; background:#282420; border-radius:2px; overflow:hidden; margin-left:auto;">
-              <div id="quiz-progress-fill" style="height:100%; background:#d67134; transition:width 0.4s; width:5%;"></div>
-            </div>
-          </div>
-        </div>
-        <div id="quiz-app"></div>
-      </div>
-
-      <div class="pm-links">
-        <a href="#" onclick="openLink(event,'deck_confidant')">GitHub Repository &#x2192;</a>
-      </div>`
-  },
-
   {
     slug:    'galaxy-clustering',
     tag:     'Galaxy Clustering · HST · JWST · 2022–2025',
@@ -982,6 +898,89 @@ const projects = [
       <p>Paper linked below.</p>
       <div class="pm-links">
         <a href="#" onclick="openLink(event,'p4')">Galaxy mergers paper →</a>
+      </div>`
+  },
+  
+  {
+    slug:    'deck-confidant',
+    tag:     'Databricks · dbt · Python · NLP · 2026 - In Progress',
+    title:   'Deck Confidant: A Smarter Way to Build Your MTG Deck',
+    year:    'What if you could just describe how you want to play and get a deck back?',
+    thumb:   'images/WIP.jpg',
+    visible: true,
+    content: `
+      <p>You sit down to build a Modern deck. You know a few things about yourself: you have a $400 budget, you like to be proactive and set the pace of the game, you prefer straightforward strategies over complex ones, and there is one card you have always loved. You open a browser. You are immediately confronted with tier lists, meta snapshots, matchup percentages, budget guides, sideboard options, and countless different versions of the same archetype. An hour later you have twenty tabs open and still no deck.</p>
+
+      <p>What if instead you could just type:</p>
+
+      <blockquote><em>"I like MTG, I want to play Modern and I have $400 of a budget. I am usually proactive and like to set the pace of the game. I tend to prefer straightforward and clear strategies. I do not like to think too much or worry about the meta or what other players play. There is one card I particularly love and I would like to play, and it is Dark Confidant."</em></blockquote>
+
+      <p>And get back a competitive, fully constructed 75-card deck built around exactly that? This is the problem <strong>Deck Confidant</strong> is trying to solve.</p>
+
+      <h3>The Problem With Existing Tools</h3>
+      <p>Current MTG deck tools fall into two categories. The first shows you a list and says "here is what the pros play", useful if you want to copy exactly, less useful when you are working with half the budget or have a specific card you want to build around. The second lets you search and filter cards manually, which requires you to already know what you are looking for. Neither understands your preferences. Neither knows that you hate complicated game plans, or that you find discard-heavy matchups frustrating, or that you have a soft spot for a particular card and want to build around it.</p>
+      <p>Deck building is not a search problem. It is a <strong>personalisation problem</strong>, and that is what makes it interesting to solve with machine learning.</p>
+
+      <h3>How It Works</h3>
+      <p>Deck Confidant is built on a production-grade data pipeline that ingests every Modern-legal card from the <strong>Scryfall API</strong> and real tournament decklists scraped from <strong>MTGTop8</strong> and <strong>MTGDecks.net</strong>, all stored in <strong>Databricks Delta Lake</strong> and transformed through a <strong>dbt pipeline</strong> with automated data quality tests at every layer.</p>
+      <p>The machine learning side works in two stages. The first is a <strong>card signal classifier</strong>: 774 labeled tournament decklists from MTGTop8 are used to learn which non-land cards signal which play style. Ragavan and Ocelot Pride signal Aggro. Counterspell and Terminus signal Control. Amulet of Vigor and Goryo's Vengeance signal Combo. Any new deck can be classified automatically by scoring its cards against these learned signals — no hardcoded rules, no manual maintenance.</p>
+      <p>The second stage is <strong>hierarchical clustering</strong>: rather than running one flat k-means over all decks, the system first separates decks into macro categories (Aggro, Combo, Control — Big Mana, Control — Permission, Midrange — Taxes, Midrange — Domain, Midrange — Black Grind) and then clusters within each category to surface specific archetypes. This means Dimir Control separates cleanly from UrzaTron, and Death and Taxes separates from Boros Energy, because they are being compared within the right peer group.</p>
+      <p>Play style matching uses <strong>sentence-transformers</strong> to embed natural language descriptions and match them against enriched archetype profiles. Describe how you want to play and the system finds the closest fit across 8 macro categories and 20+ named archetypes. The final stage — currently in progress — is a <strong>deck construction engine</strong> that takes the matched archetype, applies budget filtering, validates the mana curve, and outputs a legal 75-card deck.</p>
+
+      <h3>Skills</h3>
+      <table class="skills-table">
+        <tr><td class="skill-name">Databricks</td><td class="skill-desc">Cloud data infrastructure. Used to store and query card and tournament data in Delta Lake tables, run ingestion notebooks, and orchestrate the ML pipeline.</td></tr>
+        <tr><td class="skill-name">dbt</td><td class="skill-desc">Data transformation and testing. Used to build the full staging, intermediate, and mart model pipeline with automated quality tests and auto-generated documentation.</td></tr>
+        <tr><td class="skill-name">Python</td><td class="skill-desc">Primary language across the project. Used for API ingestion, web scraping, data processing, and all ML and NLP model code.</td></tr>
+        <tr><td class="skill-name">scikit-learn</td><td class="skill-desc">Machine learning. Used for hierarchical k-means clustering — macro category separation followed by archetype discovery within each category.</td></tr>
+        <tr><td class="skill-name">sentence-transformers</td><td class="skill-desc">NLP embeddings. Used to encode play style descriptions and match them against enriched archetype profiles using cosine similarity.</td></tr>
+        <tr><td class="skill-name">Streamlit</td><td class="skill-desc">Frontend application. The final interface where a player describes their preferences and receives a fully constructed deck in return.</td></tr>
+        <tr><td class="skill-name">SQL</td><td class="skill-desc">Used throughout the dbt models for data cleaning, feature engineering, and building the analytical tables that power the recommender.</td></tr>
+      </table>
+
+      <h3>Roadmap</h3>
+      <p><strong>Completed</strong></p>
+      <ul style="list-style:none; padding-left:0; line-height:2.2;">
+        <li>&#x2611; Data ingestion pipeline from Scryfall, MTGTop8, and MTGDecks.net</li>
+        <li>&#x2611; Databricks Delta Lake setup with raw, staging, intermediate, and mart layers</li>
+        <li>&#x2611; Full dbt transformation pipeline with automated quality tests</li>
+        <li>&#x2611; Card signal classifier — learns macro labels from 774 labeled tournament decklists</li>
+        <li>&#x2611; Hierarchical k-means clustering across 8 macro categories</li>
+        <li>&#x2611; NLP play style matching via sentence-transformer embeddings</li>
+        <li>&#x2611; Pipeline controller with ban list detection and staleness checking</li>
+      </ul>
+      <p><strong>In Progress</strong></p>
+      <ul style="list-style:none; padding-left:0; line-height:2.2;">
+        <li>&#x2610; Deck construction engine with budget filtering and curve validation</li>
+        <li>&#x2610; Card swap cascade engine with synergy scoring</li>
+      </ul>
+      <p><strong>Coming Next</strong></p>
+      <ul style="list-style:none; padding-left:0; line-height:2.2;">
+        <li>&#x2610; Streamlit application deployable as deckconfidant.io</li>
+        <li>&#x2610; Matchup matrix from tournament results</li>
+      </ul>
+
+      <h3>Deck Archetype Quiz</h3>
+      <p>The classifier is only as good as its training data. To collect richer labels, I built a small quiz: given 5 key non-land cards from a top-20 meta deck, tag it with strategy descriptors (Aggro, Combo, Graveyard, Denial…) and guess the archetype name. Each response feeds directly into the training pipeline.</p>
+      <p><button id="quiz-toggle-btn" onclick="toggleQuiz()" style="background:transparent; border:1px solid var(--rust); color:var(--rust); padding:0.5rem 1.2rem; font-family:inherit; font-size:0.82rem; letter-spacing:0.08em; cursor:pointer; border-radius:2px; transition:all 0.2s;" onmouseover="this.style.background='var(--rust)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--rust)'">Try the Deck Tagger &#x2192;</button></p>
+      <div id="quiz-container" style="display:none; margin-top:1.5rem; border:1px solid var(--border); border-radius:4px; overflow:hidden; background:#0e0c09; padding:1.5rem; font-family:'Courier New',monospace; color:#e8dcc8;">
+        <div id="quiz-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #282420; padding-bottom:1rem; margin-bottom:1.5rem;">
+          <div>
+            <div style="font-size:0.62rem; letter-spacing:0.25em; color:#d67134; text-transform:uppercase; margin-bottom:0.25rem;">Deck Confidant</div>
+            <div id="quiz-title" style="font-family:Georgia,serif; font-size:1.2rem; font-style:italic;">Deck Tagger</div>
+          </div>
+          <div style="text-align:right">
+            <div id="quiz-progress-label" style="font-size:0.62rem; color:#d67134; letter-spacing:0.2em; text-transform:uppercase;">1 / 20</div>
+            <div style="margin-top:0.4rem; height:2px; width:90px; background:#282420; border-radius:2px; overflow:hidden; margin-left:auto;">
+              <div id="quiz-progress-fill" style="height:100%; background:#d67134; transition:width 0.4s; width:5%;"></div>
+            </div>
+          </div>
+        </div>
+        <div id="quiz-app"></div>
+      </div>
+
+      <div class="pm-links">
+        <a href="#" onclick="openLink(event,'deck_confidant')">GitHub Repository &#x2192;</a>
       </div>`
   }
 
@@ -1328,4 +1327,5 @@ async function handleSubmit(e) {
 </script>
 </body>
 </html>
+
 
