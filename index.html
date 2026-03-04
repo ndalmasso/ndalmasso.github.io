@@ -1002,7 +1002,7 @@ async function handleSubmit(e) {
     {id:"Graveyard",   label:"Graveyard"},
     {id:"Disruption",  label:"Disruption"},
   ];
-  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbw36lqdvx4CLrJaR_W-yq3LGRwdVH_hX-tW7geHLP-nc1wNJBIMZjUA3M0o0sQdMkoRdA/exec";
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwaLX3ivejKmUjMJanSR6V9EtwunjcirCX26YhPIt0ikc5YGGsZnwu9WqR3ogU3Oi2vBg/exec";
 
   const DECKS = [
     { name: "Boros Aggro", top8: ["Blood Moon","Thraben Charm","Goblin Bombardment","Ragavan, Nimble Pilferer","Galvanic Discharge","Phlage, Titan of Fire's Fury","Guide of Souls","Ocelot Pride"], distractors: ["Death And Taxes","UR Aggro","Affinity","4/5c Aggro"] },
@@ -1131,7 +1131,16 @@ async function handleSubmit(e) {
     qResponses.push(entry);
     qPhase = "result";
     qRender();
-    fetch(SHEETS_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify(entry) })
+    const params = new URLSearchParams({
+      deck_name: entry.deck_name || "",
+      key_cards: entry.key_cards || "",
+      tag_1: entry.tag_1 || "",
+      tag_2: entry.tag_2 || "",
+      tag_3: entry.tag_3 || "",
+      user_label: entry.user_label || "",
+      submitted_at: entry.submitted_at || "",
+    });
+    fetch(SHEETS_URL + "?" + params.toString(), { method:"GET", mode:"no-cors" })
       .then(() => { const s = document.getElementById('quiz-status'); if(s) s.textContent = '✓ Saved to Google Sheets'; })
       .catch(() => { const s = document.getElementById('quiz-status'); if(s) s.textContent = 'Saved locally'; });
   };
