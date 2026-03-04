@@ -710,7 +710,7 @@ const projects = [
       </ul>
 
       <h3>Deck Archetype Quiz</h3>
-      <p>The classifier is only as good as its training data. To collect richer labels, I built a small quiz: given 4 key non-land cards from a top-20 meta deck, tag it with strategy descriptors (Aggro, Combo, Graveyard, Denial…) and guess the archetype name. Each response feeds directly into the training pipeline.</p>
+      <p>The classifier is only as good as its training data. To collect richer labels, I built a small quiz: given 5 key non-land cards from a top-20 meta deck, tag it with strategy descriptors (Aggro, Combo, Graveyard, Denial…) and guess the archetype name. Each response feeds directly into the training pipeline.</p>
       <p><button id="quiz-toggle-btn" onclick="toggleQuiz()" style="background:transparent; border:1px solid var(--rust); color:var(--rust); padding:0.5rem 1.2rem; font-family:inherit; font-size:0.82rem; letter-spacing:0.08em; cursor:pointer; border-radius:2px; transition:all 0.2s;" onmouseover="this.style.background='var(--rust)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--rust)'">Try the Deck Tagger &#x2192;</button></p>
       <div id="quiz-container" style="display:none; margin-top:1.5rem; border:1px solid var(--border); border-radius:4px; overflow:hidden; background:#0e0c09; padding:1.5rem; font-family:'Courier New',monospace; color:#e8dcc8;">
         <div id="quiz-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #282420; padding-bottom:1rem; margin-bottom:1.5rem;">
@@ -1328,3 +1328,4 @@ async function handleSubmit(e) {
 </script>
 </body>
 </html>
+
