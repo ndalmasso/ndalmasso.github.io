@@ -235,7 +235,7 @@
     .proj-modal-content h3 { font-family:var(--font-s); font-size:1.25rem; color:var(--sand); font-weight:400; margin:2.5rem 0 .8rem; }
     .proj-modal-content .pm-img { width:100%; display:block; border:1px solid var(--border); border-radius:3px; margin:2rem 0; background:var(--charcoal); }
     .proj-modal-content .pm-img img { width:100%; display:block; border-radius:2px; }
-    .proj-modal-content .pm-img.placeholder { aspect-ratio:16/7; display:flex; align-items:center; justify-content:center; font-size:.68rem; color:var(--sand-dim); text-transform:uppercase; letter-spacing:.12em; }
+    .proj-modal-content .pm-img.placeholder { aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:.68rem; color:var(--sand-dim); text-transform:uppercase; letter-spacing:.12em; }
     .proj-modal-content .pm-caption { font-size:.75rem; color:var(--sand-dim); text-align:center; margin-top:-1.5rem; margin-bottom:2rem; font-style:italic; letter-spacing:.03em; }
     .proj-modal-content .pm-img-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:2rem 0 .5rem; }
     .proj-modal-content .pm-img-row .pm-img { margin:0; }
@@ -302,7 +302,7 @@
     .bubble::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--rust); transform:scaleX(0); transition:transform .4s cubic-bezier(.16,1,.3,1); }
     .bubble:hover::after { transform:scaleX(1); }
     .b-thumb-ph { width:100%; background:var(--charcoal); margin-bottom:1.5rem; display:flex; align-items:center; justify-content:center; font-size:.7rem; color:var(--sand-dim); text-transform:uppercase; letter-spacing:.1em; border-radius:2px; overflow:hidden; transition: background 0.4s ease; }
-    .b-thumb-ph:not(:has(img)) { aspect-ratio:16/7; }
+    .b-thumb-ph:not(:has(img)) { aspect-ratio:16/9; }
     .b-thumb-ph img { width:100%; height:auto; display:block; }
     .b-title { font-family:var(--font-s); font-size:1.4rem; color:var(--sand); margin-bottom:.4rem; }
     .b-year { font-size:.8rem; color:var(--sand-dim); }
@@ -651,6 +651,7 @@ function downloadCV(e) {
 const projects = [
 
   {
+    slug:    'deck-confidant',
     tag:     'Databricks · dbt · Python · NLP · 2025',
     title:   'Deck Confidant: A Smarter Way to Build Your MTG Deck',
     year:    'What if you could just describe how you want to play and get a deck back?',
@@ -733,6 +734,7 @@ const projects = [
   },
 
   {
+    slug:    'galaxy-clustering',
     tag:     'Galaxy Clustering · HST · JWST · 2022–2025',
     title:   'From HST to JWST: Pushing Galaxy Clustering to the Edge of the Observable',
     year:    'What Galaxy Clustering Really Tells Us About Dark Matter.',
@@ -763,6 +765,7 @@ const projects = [
   },
 
   {
+    slug:    'aria',
     tag:     'ARIA · AI · ML · 2025',
     title:   'ARIA - Adaptive Running Intelligent Assistant',
     year:    "Your playlist doesn't know you're dying at kilometre three. ARIA does.",
@@ -787,6 +790,7 @@ const projects = [
   },
 
   {
+    slug:    'slit-loss',
     tag:     'Spectroscopy · Spectrographs · JWST · 2025',
     title:   'Slit Loss Corrections in JWST Spectroscopy',
     year:    'NIRISS vs NIRSpec: A JWST Showdown.',
@@ -816,6 +820,7 @@ const projects = [
   },
 
   {
+    slug:    'niriss-catalog',
     tag:     'Spectroscopy · Catalog · JWST · 2025',
     title:   'NIRISS Spectroscopic Catalog',
     year:    'The first NIRISS spectroscopic catalogue. 488 redshifts. One cluster. The whole early Universe in a single field.',
@@ -840,7 +845,120 @@ const projects = [
       <div class="pm-links"><a href="#" onclick="openLink(event,'p5')">NIRISS catalogue paper →</a></div>`
   },
 
+  /* Gz9p3 */
   {
+    slug:    'gz9p3',
+    tag:     'Spectroscopy · JWST · High-z · 2023',
+    title:   'A Massive Interacting Galaxy 510 Million Years After the Big Bang',
+    year:    'One of the brightest galaxies ever confirmed in the epoch of reionization. It should not exist this early.',
+    thumb:   'images/Figure_1_270223.png',
+    visible: true,
+    content: `
+      <p>
+          · How do you confirm a galaxy at the edge of the observable Universe?<br>
+          · What does light from half a billion years after the Big Bang even look like?<br><br>
+
+          This is a co-author project led by the brilliant <a href="https://www.linkedin.com/in/kit-boyett-80b424198/" target="_blank" style="color:var(--rust);">Dr. Kit Boyett</a>,
+          carried out within the <strong>GLASS (Grism Lens-Amplified Survey from Space)</strong> collaboration,
+          and published in <strong>Nature Astronomy</strong>, the most prestigious journal in the field.
+          The target: a rare, massive, interacting galaxy at <strong>z = 9.3127</strong>,
+          just <strong>525 million years after the Big Bang</strong>, observed with
+          <strong>JWST (James Webb Space Telescope)</strong>.
+          My contribution was the modelling of the <strong>Lyman break</strong> to independently
+          confirm the spectroscopic redshift from the galaxy's spectral continuum.
+      </p>
+
+      <div class="pm-img"><img src="images/Figure_1_270223.png"></div>
+      <p class="pm-caption">
+          JWST NIRCam imaging and NIRSpec spectrum of Gz9p3 across six broadband filters,
+          with emission lines and the Lyman break marked. The system shows a clear double-core morphology
+          and an extended tidal tail consistent with an ongoing merger.
+      </p>
+
+      <h3>The Galaxy</h3>
+      <p>
+          The object, nicknamed <strong>Gz9p3</strong>, is one of the <strong>brightest and most massive galaxies</strong>
+          spectroscopically confirmed in the epoch of reionization. With a stellar mass of
+          roughly <strong>2.5 × 10⁹ solar masses</strong> and a star formation rate of
+          <strong>25 solar masses per year</strong>, it should not really exist as massive as it does
+          so early in cosmic history. Finding it is a bit like discovering a fully grown tree
+          in a forest that was only planted six months ago.
+      </p>
+      <p>
+          The <strong>NIRSpec (Near Infrared Spectrograph)</strong> high-resolution spectrum revealed
+          oxygen, neon and hydrogen emission lines, a metal-poor
+          <strong>ISM (Interstellar Medium)</strong> at roughly one tenth of solar metallicity,
+          and an electron density higher than what is typically seen in galaxies at lower redshifts.
+          All of this paints a picture of a young, intensely star-forming system caught in the act
+          of rapid assembly.
+      </p>
+
+      <h3>The Lyman Break and My Contribution</h3>
+      <p>
+          Every galaxy at high redshift carries a characteristic fingerprint in its spectrum:
+          the <strong>Lyman break</strong>, a sharp drop in flux at a rest-frame wavelength of 1216 Å
+          caused by neutral hydrogen absorbing virtually all light blueward of that point.
+          Because this feature shifts to longer wavelengths as the Universe expands,
+          its observed position tells you directly how far back in time you are looking.
+      </p>
+      <p>
+          My role was to model this break in the NIRSpec continuum independently of the emission lines,
+          fitting it as a step function and using <strong>Monte Carlo (MC) sampling</strong>
+          to place robust constraints on its location. The best fit redshift was
+          <strong>z = 9.35</strong>, with a <strong>95% confidence interval of z = 9.30–9.36</strong>,
+          consistent with the emission line redshift of <strong>z = 9.3127 ± 0.0002</strong>.
+          Two completely independent methods, same answer. That agreement is what makes a
+          redshift confirmation robust.
+          The spectrum also showed a flux deficit just redward of the break, evidence of
+          <strong>Lyα damping</strong> from the surrounding neutral gas, which we interpreted as a sign
+          that this galaxy may not sit within a large ionized bubble in the
+          <strong>IGM (Intergalactic Medium)</strong>.
+      </p>
+
+      <div class="pm-img"><img src="images/lyman_break_9.3_200223.png"></div>
+      <p class="pm-caption">
+          NIRSpec constraints on the Lyman break, with a best fit redshift of z = 9.35, independently
+          consistent with the emission line solution. This is the analysis I led for the paper.
+      </p>
+
+      <div class="pm-img"><img src="images/spec_phot_SED_210223_convert_format.png"></div>
+      <p class="pm-caption">
+          Best fit spectral energy distribution model overlaid on the NIRSpec spectrum and broadband
+          photometry for the main component of Gz9p3, corrected for slit losses and gravitational lensing.
+      </p>
+
+      <h3>A Merger 525 Million Years After the Big Bang</h3>
+      <p>
+          Gz9p3 is not just massive. It is also clearly <strong>interacting</strong>.
+          The combined NIRCam imaging reveals a <strong>double core</strong> and an elongated
+          <strong>clumpy tidal tail</strong>, the hallmark signature of two galaxies in the middle
+          of a collision. Morphological parameters confirm this unambiguously:
+          the system satisfies every standard criterion for merger classification.
+      </p>
+
+      <div class="pm-img"><img src="images/Clump_figure_220223.png"></div>
+      <p class="pm-caption">
+          Combined F150W+F200W imaging of Gz9p3 at 20 mas/pixel, showing the double core and
+          four tidal tail clumps. Clumpiness parameter c = 0.56 confirms this is no ordinary galaxy.
+      </p>
+
+      <p>
+          The leading interpretation is that Gz9p3 is building its mass rapidly through mergers,
+          a process that our current models of galaxy formation struggle to reproduce at this
+          early a time. It is either hosted in an exceptionally rare dark matter halo,
+          or our understanding of <strong>star formation efficiency</strong> in the first
+          billion years needs to be revised upward. Either way, it is exactly the kind of
+          object JWST was built to find.
+      </p>
+
+      <div class="pm-links">
+          <a href="#" onclick="openLink(event,'p2')">Gz9p3 paper →</a>
+      </div>
+    `
+  },
+
+  {
+    slug:    'galaxy-mergers',
     tag:     'Galaxy Mergers · NIRCam · JWST · 2024',
     title:   'Galaxy Mergers Across 13 Billion Years of Cosmic History',
     year:    'One in ten galaxies is colliding right now. That number has not changed since the dawn of time.',
@@ -899,6 +1017,8 @@ function openProj(idx) {
   renderProj();
   document.getElementById('projOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
+  const slug = visibleProjects[currentVisibleIdx].slug;
+  if (slug) history.replaceState(null, '', '?project=' + slug);
 }
 
 function renderProj() {
@@ -911,6 +1031,8 @@ function renderProj() {
   document.getElementById('projPrev').disabled = (currentVisibleIdx === 0);
   document.getElementById('projNext').disabled = (currentVisibleIdx === visibleProjects.length - 1);
   document.getElementById('projModal').scrollTop = 0;
+  const slug = p.slug;
+  if (slug) history.replaceState(null, '', '?project=' + slug);
 }
 
 function navProj(dir) {
@@ -923,7 +1045,17 @@ function navProj(dir) {
 function closeProjModal() {
   document.getElementById('projOverlay').classList.remove('active');
   document.body.style.overflow = '';
+  history.replaceState(null, '', window.location.pathname);
 }
+
+// Deep-link: open project from URL on page load
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('project');
+  if (!slug) return;
+  const match = visibleProjects.find(p => p.slug === slug);
+  if (match) openProj(match.idx);
+})();
 function overlayClick(e) {
   if (e.target === document.getElementById('projOverlay')) closeProjModal();
 }
