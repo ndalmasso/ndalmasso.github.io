@@ -554,7 +554,24 @@
 <footer><p>© 2025 Nicolò Dalmasso</p></footer>
 
 <script>
-/* ── THEME TOGGLE ── */
+/* ════════════════════════════════════════════════════════════════════
+   § 1  CONFIG
+   ════════════════════════════════════════════════════════════════════
+   Toggle features here without touching anything else in the file.
+
+   SHOW_TAGGER  true  → Deck Tagger button + widget appear inside the
+                        Deck Confidant project modal.
+                false → The entire tagger is hidden. The rest of the
+                        Deck Confidant post is completely untouched.
+   ════════════════════════════════════════════════════════════════════ */
+
+const SHOW_TAGGER = false;
+
+
+/* ════════════════════════════════════════════════════════════════════
+   § 2  THEME
+   ════════════════════════════════════════════════════════════════════ */
+
 const html = document.documentElement;
 const savedTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
@@ -566,7 +583,11 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   localStorage.setItem('theme', next);
 });
 
-/* ── CURSOR ── */
+
+/* ════════════════════════════════════════════════════════════════════
+   § 3  CURSOR
+   ════════════════════════════════════════════════════════════════════ */
+
 const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 const cur = document.getElementById('cursor');
 
@@ -586,11 +607,22 @@ if (!isTouchDevice) {
   cur.style.display = 'none';
 }
 
-/* ── REVEAL ── */
-const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: .1 });
+
+/* ════════════════════════════════════════════════════════════════════
+   § 4  SCROLL REVEAL
+   ════════════════════════════════════════════════════════════════════ */
+
+const obs = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+  { threshold: .1 }
+);
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-/* ── LINKS ── */
+
+/* ════════════════════════════════════════════════════════════════════
+   § 5  LINKS
+   ════════════════════════════════════════════════════════════════════ */
+
 const links = {
   gh:               atob('aHR0cHM6Ly9naXRodWIuY29tL25kYWxtYXNzbw=='),
   li:               atob('aHR0cHM6Ly93d3cubGlua2VkaW4uY29tL2luL25pY29sby1kYWxtYXNzby8='),
@@ -610,23 +642,11 @@ const links = {
 function goLink(k)      { window.open(links[k], '_blank'); }
 function openLink(e, k) { e.stopPropagation(); window.open(links[k], '_blank'); }
 
-function toggleQuiz() {
-  const container = document.getElementById('quiz-container');
-  const btn = document.getElementById('quiz-toggle-btn');
-  if (container.style.display === 'none') {
-    container.style.display = 'block';
-    btn.textContent = 'Hide Deck Tagger ↑';
-    if (!container.dataset.loaded) {
-      container.dataset.loaded = '1';
-      initQuiz();
-    }
-  } else {
-    container.style.display = 'none';
-    btn.textContent = 'Try the Deck Tagger →';
-  }
-}
 
-/* ── CV DOWNLOAD ── */
+/* ════════════════════════════════════════════════════════════════════
+   § 6  CV DOWNLOAD
+   ════════════════════════════════════════════════════════════════════ */
+
 function downloadCV(e) {
   e.preventDefault();
   const url = 'files/Nicolo_Dalmasso_CV.pdf';
@@ -645,9 +665,57 @@ function downloadCV(e) {
     .catch(() => window.open(url, '_blank'));
 }
 
-/* ═══════════════════════════════════════════════════════
-   PROJECT DATA
-   ═══════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════════════
+   § 7  DECK TAGGER — toggle helper
+   ════════════════════════════════════════════════════════════════════
+   Called by the button injected inside the Deck Confidant content.
+   Only reachable when SHOW_TAGGER = true (button isn't rendered otherwise).
+   ════════════════════════════════════════════════════════════════════ */
+
+function toggleTagger() {
+  const container = document.getElementById('quiz-container');
+  const btn       = document.getElementById('quiz-toggle-btn');
+  if (container.style.display === 'none') {
+    container.style.display = 'block';
+    btn.textContent = 'Hide Deck Tagger ↑';
+    if (!container.dataset.loaded) {
+      container.dataset.loaded = '1';
+      initQuiz();
+    }
+  } else {
+    container.style.display = 'none';
+    btn.textContent = 'Try the Deck Tagger →';
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   § 8  PROJECT DATA
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Tagger block — injected into Deck Confidant content only when
+   SHOW_TAGGER = true. Set it to false and this whole chunk disappears. */
+const TAGGER_BLOCK = SHOW_TAGGER ? `
+      <h3>Deck Archetype Tagger</h3>
+      <p>The classifier is only as good as its training data. To collect richer labels, I built a small tagger: given 5 key non-land cards from a top-20 meta deck, tag it with strategy descriptors (Aggro, Combo, Graveyard, Denial…) and guess the archetype name. Each response feeds directly into the training pipeline.</p>
+      <p><button id="quiz-toggle-btn" onclick="toggleTagger()" style="background:transparent; border:1px solid var(--rust); color:var(--rust); padding:0.5rem 1.2rem; font-family:inherit; font-size:0.82rem; letter-spacing:0.08em; cursor:pointer; border-radius:2px; transition:all 0.2s;" onmouseover="this.style.background='var(--rust)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--rust)'">Try the Deck Tagger &#x2192;</button></p>
+      <div id="quiz-container" style="display:none; margin-top:1.5rem; border:1px solid var(--border); border-radius:4px; overflow:hidden; background:#0e0c09; padding:1.5rem; font-family:'Courier New',monospace; color:#e8dcc8;">
+        <div id="quiz-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #282420; padding-bottom:1rem; margin-bottom:1.5rem;">
+          <div>
+            <div style="font-size:0.62rem; letter-spacing:0.25em; color:#d67134; text-transform:uppercase; margin-bottom:0.25rem;">Deck Confidant</div>
+            <div id="quiz-title" style="font-family:Georgia,serif; font-size:1.2rem; font-style:italic;">Deck Tagger</div>
+          </div>
+          <div style="text-align:right">
+            <div id="quiz-progress-label" style="font-size:0.62rem; color:#d67134; letter-spacing:0.2em; text-transform:uppercase;">1 / 20</div>
+            <div style="margin-top:0.4rem; height:2px; width:90px; background:#282420; border-radius:2px; overflow:hidden; margin-left:auto;">
+              <div id="quiz-progress-fill" style="height:100%; background:#d67134; transition:width 0.4s; width:5%;"></div>
+            </div>
+          </div>
+        </div>
+        <div id="quiz-app"></div>
+      </div>` : '';
+
 const projects = [
   {
     slug:    'galaxy-clustering',
@@ -761,7 +829,6 @@ const projects = [
       <div class="pm-links"><a href="#" onclick="openLink(event,'p5')">NIRISS catalogue paper →</a></div>`
   },
 
-  /* Gz9p3 */
   {
     slug:    'gz9p3',
     tag:     'Spectroscopy · JWST · High-z · 2023',
@@ -783,14 +850,12 @@ const projects = [
           My contribution was the modelling of the <strong>Lyman break</strong> to independently
           confirm the spectroscopic redshift from the galaxy's spectral continuum.
       </p>
-
       <div class="pm-img"><img src="images/Figure_1_270223.png"></div>
       <p class="pm-caption">
           JWST NIRCam imaging and NIRSpec spectrum of Gz9p3 across six broadband filters,
           with emission lines and the Lyman break marked. The system shows a clear double-core morphology
           and an extended tidal tail consistent with an ongoing merger.
       </p>
-
       <h3>The Galaxy</h3>
       <p>
           The object, nicknamed <strong>Gz9p3</strong>, is one of the <strong>brightest and most massive galaxies</strong>
@@ -808,7 +873,6 @@ const projects = [
           All of this paints a picture of a young, intensely star-forming system caught in the act
           of rapid assembly.
       </p>
-
       <h3>The Lyman Break and My Contribution</h3>
       <p>
           Every galaxy at high redshift carries a characteristic fingerprint in its spectrum:
@@ -830,19 +894,16 @@ const projects = [
           that this galaxy may not sit within a large ionized bubble in the
           <strong>IGM (Intergalactic Medium)</strong>.
       </p>
-
       <div class="pm-img"><img src="images/lyman_break_9.3_200223.png"></div>
       <p class="pm-caption">
           NIRSpec constraints on the Lyman break, with a best fit redshift of z = 9.35, independently
           consistent with the emission line solution. This is the analysis I led for the paper.
       </p>
-
       <div class="pm-img"><img src="images/spec_phot_SED_210223_convert_format.png"></div>
       <p class="pm-caption">
           Best fit spectral energy distribution model overlaid on the NIRSpec spectrum and broadband
           photometry for the main component of Gz9p3, corrected for slit losses and gravitational lensing.
       </p>
-
       <h3>A Merger 525 Million Years After the Big Bang</h3>
       <p>
           Gz9p3 is not just massive. It is also clearly <strong>interacting</strong>.
@@ -851,13 +912,11 @@ const projects = [
           of a collision. Morphological parameters confirm this unambiguously:
           the system satisfies every standard criterion for merger classification.
       </p>
-
       <div class="pm-img"><img src="images/Clump_figure_220223.png"></div>
       <p class="pm-caption">
           Combined F150W+F200W imaging of Gz9p3 at 20 mas/pixel, showing the double core and
           four tidal tail clumps. Clumpiness parameter c = 0.56 confirms this is no ordinary galaxy.
       </p>
-
       <p>
           The leading interpretation is that Gz9p3 is building its mass rapidly through mergers,
           a process that our current models of galaxy formation struggle to reproduce at this
@@ -866,11 +925,9 @@ const projects = [
           billion years needs to be revised upward. Either way, it is exactly the kind of
           object JWST was built to find.
       </p>
-
       <div class="pm-links">
           <a href="#" onclick="openLink(event,'p2')">Gz9p3 paper →</a>
-      </div>
-    `
+      </div>`
   },
 
   {
@@ -900,7 +957,7 @@ const projects = [
         <a href="#" onclick="openLink(event,'p4')">Galaxy mergers paper →</a>
       </div>`
   },
-  
+
   {
     slug:    'deck-confidant',
     tag:     'Databricks · dbt · Python · NLP · 2026',
@@ -960,33 +1017,19 @@ const projects = [
         <li>&#x2610; Matchup matrix from tournament results</li>
       </ul>
 
-      <h3>Deck Archetype Quiz</h3>
-      <p>The classifier is only as good as its training data. To collect richer labels, I built a small quiz: given 5 key non-land cards from a top-20 meta deck, tag it with strategy descriptors (Aggro, Combo, Graveyard, Denial…) and guess the archetype name. Each response feeds directly into the training pipeline.</p>
-      <p><button id="quiz-toggle-btn" onclick="toggleQuiz()" style="background:transparent; border:1px solid var(--rust); color:var(--rust); padding:0.5rem 1.2rem; font-family:inherit; font-size:0.82rem; letter-spacing:0.08em; cursor:pointer; border-radius:2px; transition:all 0.2s;" onmouseover="this.style.background='var(--rust)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--rust)'">Try the Deck Tagger &#x2192;</button></p>
-      <div id="quiz-container" style="display:none; margin-top:1.5rem; border:1px solid var(--border); border-radius:4px; overflow:hidden; background:#0e0c09; padding:1.5rem; font-family:'Courier New',monospace; color:#e8dcc8;">
-        <div id="quiz-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #282420; padding-bottom:1rem; margin-bottom:1.5rem;">
-          <div>
-            <div style="font-size:0.62rem; letter-spacing:0.25em; color:#d67134; text-transform:uppercase; margin-bottom:0.25rem;">Deck Confidant</div>
-            <div id="quiz-title" style="font-family:Georgia,serif; font-size:1.2rem; font-style:italic;">Deck Tagger</div>
-          </div>
-          <div style="text-align:right">
-            <div id="quiz-progress-label" style="font-size:0.62rem; color:#d67134; letter-spacing:0.2em; text-transform:uppercase;">1 / 20</div>
-            <div style="margin-top:0.4rem; height:2px; width:90px; background:#282420; border-radius:2px; overflow:hidden; margin-left:auto;">
-              <div id="quiz-progress-fill" style="height:100%; background:#d67134; transition:width 0.4s; width:5%;"></div>
-            </div>
-          </div>
-        </div>
-        <div id="quiz-app"></div>
-      </div>
+      ${TAGGER_BLOCK}
 
       <div class="pm-links">
         <a href="#" onclick="openLink(event,'deck_confidant')">GitHub Repository &#x2192;</a>
       </div>`
   }
-
 ];
 
-/* ── BUILD BUBBLES ── */
+
+/* ════════════════════════════════════════════════════════════════════
+   § 9  PROJECT GRID — build bubbles
+   ════════════════════════════════════════════════════════════════════ */
+
 const bubblesEl = document.getElementById('bubblesGrid');
 const visibleProjects = projects.map((p, i) => ({ ...p, idx: i })).filter(p => p.visible);
 
@@ -1005,10 +1048,13 @@ visibleProjects.forEach(p => {
 });
 
 if (visibleProjects.length % 2 !== 0) bubblesEl.classList.add('odd-count');
-
 if (!isTouchDevice) attachCursorListeners();
 
-/* ── MODAL LOGIC ── */
+
+/* ════════════════════════════════════════════════════════════════════
+   § 10  PROJECT MODAL
+   ════════════════════════════════════════════════════════════════════ */
+
 let currentVisibleIdx = 0;
 
 function openProj(idx) {
@@ -1047,13 +1093,14 @@ function closeProjModal() {
   history.replaceState(null, '', window.location.pathname);
 }
 
-// Deep-link: open project from URL on page load
+// Deep-link: open project from URL hash on page load
 (function() {
   const slug = window.location.hash.replace('#', '');
   if (!slug) return;
   const match = visibleProjects.find(p => p.slug === slug);
   if (match) openProj(match.idx);
 })();
+
 function overlayClick(e) {
   if (e.target === document.getElementById('projOverlay')) closeProjModal();
 }
@@ -1065,7 +1112,11 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') navProj(+1);
 });
 
-/* ── SWIPE ── */
+
+/* ════════════════════════════════════════════════════════════════════
+   § 11  SWIPE (touch navigation between projects)
+   ════════════════════════════════════════════════════════════════════ */
+
 let touchStartX = 0;
 let touchStartY = 0;
 let swipeHandled = false;
@@ -1101,134 +1152,192 @@ projModal.addEventListener('touchend', e => {
   }
 }, { passive: true });
 
-/* ── CONTACT MODAL ── */
+
+/* ════════════════════════════════════════════════════════════════════
+   § 12  CONTACT MODAL
+   ════════════════════════════════════════════════════════════════════ */
+
 function openModal()  { document.getElementById('contactModal').classList.add('active');    document.body.style.overflow = 'hidden'; }
 function closeModal() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = ''; }
 
 async function handleSubmit(e) {
   e.preventDefault();
   try {
-    const res = await fetch(e.target.action, { method: 'POST', body: new FormData(e.target), headers: { 'Accept': 'application/json' } });
-    if (res.ok) { e.target.style.display = 'none'; document.getElementById('formSuccess').style.display = 'block'; }
+    const res = await fetch(e.target.action, {
+      method: 'POST',
+      body: new FormData(e.target),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      e.target.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    }
   } catch { alert('Error sending message.'); }
 }
 </script>
 
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     § 13  DECK TAGGER  (self-contained IIFE — no globals leaked)
+            Runs only when SHOW_TAGGER = true causes the toggle button
+            and quiz-container to be injected into the Deck Confidant
+            modal content. initQuiz() is called lazily on first open.
+     ═══════════════════════════════════════════════════════════════════ -->
 <script>
-// ── DECK TAGGER QUIZ ──────────────────────────────────────────
 (function() {
+
+  /* ── constants ── */
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwaLX3ivejKmUjMJanSR6V9EtwunjcirCX26YhPIt0ikc5YGGsZnwu9WqR3ogU3Oi2vBg/exec';
+
   const TAGS = [
-    {id:"Aggro",       label:"Aggro"},
-    {id:"Control",     label:"Control"},
-    {id:"Combo",       label:"Combo"},
-    {id:"Midrange",    label:"Midrange"},
-    {id:"Big Mana",    label:"Big Mana"},
-    {id:"Tempo",       label:"Tempo"},
-    {id:"Prison",      label:"Prison"},
-    {id:"Ramp",        label:"Ramp"},
-    {id:"Tokens",      label:"Tokens"},
-    {id:"Denial",      label:"Denial"},
-    {id:"Permission",  label:"Permission"},
-    {id:"Graveyard",   label:"Graveyard"},
-    {id:"Disruption",  label:"Disruption"},
+    {id:'Aggro',       label:'Aggro'},
+    {id:'Control',     label:'Control'},
+    {id:'Combo',       label:'Combo'},
+    {id:'Midrange',    label:'Midrange'},
+    {id:'Big Mana',    label:'Big Mana'},
+    {id:'Tempo',       label:'Tempo'},
+    {id:'Prison',      label:'Prison'},
+    {id:'Ramp',        label:'Ramp'},
+    {id:'Tokens',      label:'Tokens'},
+    {id:'Denial',      label:'Denial'},
+    {id:'Permission',  label:'Permission'},
+    {id:'Graveyard',   label:'Graveyard'},
+    {id:'Disruption',  label:'Disruption'},
   ];
-  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwaLX3ivejKmUjMJanSR6V9EtwunjcirCX26YhPIt0ikc5YGGsZnwu9WqR3ogU3Oi2vBg/exec";
 
   const DECKS = [
-    { name: "Boros Aggro", top8: ["Blood Moon","Thraben Charm","Goblin Bombardment","Ragavan, Nimble Pilferer","Galvanic Discharge","Phlage, Titan of Fire's Fury","Guide of Souls","Ocelot Pride"], distractors: ["Death And Taxes","UR Aggro","Affinity","4/5c Aggro"] },
-    { name: "UrzaTron", top8: ["Trinisphere","Chalice of the Void","Vexing Bauble","Dismember","Expedition Map","Kozilek's Command","Ugin, Eye of the Storms","Tormod's Crypt"], distractors: ["Eldrazi Ramp","Eldrazi Aggro","UW Control","Dimir Control"] },
-    { name: "Ruby Storm", top8: ["Past in Flames","Grapeshot","Wrenn's Resolve","Ruby Medallion","Wish","Manamorphose","Desperate Ritual","Pyretic Ritual"], distractors: ["Living End","Allosaurus Combo","UR Aggro","Instant Reanimator"] },
-    { name: "Death And Taxes", top8: ["Wrath of the Skies","Consign to Memory","Ephemerate","Quantum Riddler","Solitude","Phelia, Exuberant Shepherd","Ragavan, Nimble Pilferer","Mystical Dispute"], distractors: ["Boros Aggro","UW Control","Affinity","Death's Shadow"] },
-    { name: "Dimir Control", top8: ["Consign to Memory","Force of Negation","Fatal Push","Spell Snare","Mystical Dispute","Orcish Bowmasters","Counterspell","Kaito, Bane of Nightmares"], distractors: ["UW Control","Instant Reanimator","UB Mill","Death's Shadow"] },
-    { name: "Eldrazi Ramp", top8: ["Kozilek's Return","Trinisphere","Kozilek's Command","Unholy Heat","Devourer of Destiny","Talisman of Impulse","Sowing Mycospawn","Emrakul, the Promised End"], distractors: ["UrzaTron","Eldrazi Aggro","Broodscale Bloodchief","4/5c Aggro"] },
-    { name: "Living End", top8: ["Commandeer","Endurance","Force of Negation","Mystical Dispute","Shardless Agent","Generous Ent","Subtlety","Living End"], distractors: ["Allosaurus Combo","Simic Birthing Ritual","Reanimator","Instant Reanimator"] },
-    { name: "4/5c Aggro", top8: ["Consign to Memory","Stubborn Denial","Leyline Binding","Territorial Kavu","Scion of Draco","Leyline of the Guildpact","Ragavan, Nimble Pilferer","Lightning Bolt"], distractors: ["Boros Aggro","Death's Shadow","Allosaurus Combo","Eldrazi Ramp"] },
-    { name: "Instant Reanimator", top8: ["Thoughtseize","Force of Negation","Teferi, Time Raveler","Consign to Memory","Goryo's Vengeance","Wrath of the Skies","Ephemerate","Atraxa, Grand Unifier"], distractors: ["Reanimator","Dimir Control","Death's Shadow","UB Mill"] },
-    { name: "Affinity", top8: ["Tormod's Crypt","Mishra's Bauble","Metallic Rebuke","Consign to Memory","Urza's Saga","Mox Opal","Shadowspear","Lavaspur Boots"], distractors: ["Broodscale Bloodchief","Eldrazi Aggro","UR Aggro","Boros Aggro"] },
-    { name: "Amulet Titan", top8: ["Vexing Bauble","Urza's Saga","Summoner's Pact","Primeval Titan","Amulet of Vigor","Dismember","Spelunking","Arboreal Grazer"], distractors: ["Simic Birthing Ritual","Eldrazi Ramp","UrzaTron","Allosaurus Combo"] },
-    { name: "Simic Birthing Ritual", top8: ["Endurance","Harbinger of the Seas","Force of Negation","Abhorrent Oculus","Birthing Ritual","Subtlety","Coiling Oracle","Flare of Denial"], distractors: ["Amulet Titan","Living End","Allosaurus Combo","4/5c Aggro"] },
-    { name: "Allosaurus Combo", top8: ["Hooting Mandrills","Veil of Summer","Consign to Memory","Neoform","Xenagos, God of Revels","Endurance","Allosaurus Rider","Griselbrand"], distractors: ["Living End","Simic Birthing Ritual","Instant Reanimator","Ruby Storm"] },
-    { name: "Broodscale Bloodchief", top8: ["Vexing Bauble","Blade of the Bloodchief","Urza's Saga","Emrakul, the Promised End","Soul-Guide Lantern","Basking Broodscale","Pithing Needle","Malevolent Rumble"], distractors: ["Affinity","Eldrazi Aggro","UrzaTron","Reanimator"] },
-    { name: "Reanimator", top8: ["Consign to Memory","Archon of Cruelty","Persist","Faithless Looting","Psychic Frog","Emperor of Bones","Fatal Push","Thoughtseize"], distractors: ["Instant Reanimator","Living End","Dimir Control","Death's Shadow"] },
-    { name: "UW Control", top8: ["Wrath of the Skies","Solitude","Teferi, Time Raveler","Consign to Memory","Counterspell","Mystical Dispute","Prismatic Ending","Isochron Scepter"], distractors: ["Dimir Control","Death And Taxes","UB Mill","Instant Reanimator"] },
-    { name: "Eldrazi Aggro", top8: ["Dismember","Wastescape Battlemage","Vexing Bauble","Thought-Knot Seer","Kozilek's Command","Devourer of Destiny","It That Heralds the End","Eldrazi Linebreaker"], distractors: ["Eldrazi Ramp","UrzaTron","Affinity","Broodscale Bloodchief"] },
-    { name: "UB Mill", top8: ["Tasha's Hideous Laughter","Fatal Push","Surgical Extraction","Archive Trap","Drown in the Loch","Ruin Crab","Hedron Crab","Extirpate"], distractors: ["Dimir Control","Instant Reanimator","Death's Shadow","UW Control"] },
-    { name: "UR Aggro", top8: ["Unholy Heat","Violent Urge","Dragon's Rage Channeler","Expressive Iteration","Lava Dart","Preordain","Cori-Steel Cutter","Surgical Extraction"], distractors: ["Boros Aggro","Ruby Storm","Death's Shadow","4/5c Aggro"] },
-    { name: "Death's Shadow", top8: ["Cling to Dust","Street Wraith","Consign to Memory","Thoughtseize","Moonshadow","Death's Shadow","Mishra's Bauble","Nethergoyf"], distractors: ["Dimir Control","Instant Reanimator","4/5c Aggro","UR Aggro"] },
+    { name: 'Boros Aggro',          top8: ['Blood Moon','Thraben Charm','Goblin Bombardment','Ragavan, Nimble Pilferer','Galvanic Discharge','Phlage, Titan of Fire\'s Fury','Guide of Souls','Ocelot Pride'],                     distractors: ['Death And Taxes','UR Aggro','Affinity','4/5c Aggro'] },
+    { name: 'UrzaTron',             top8: ['Trinisphere','Chalice of the Void','Vexing Bauble','Dismember','Expedition Map','Kozilek\'s Command','Ugin, Eye of the Storms','Tormod\'s Crypt'],                                       distractors: ['Eldrazi Ramp','Eldrazi Aggro','UW Control','Dimir Control'] },
+    { name: 'Ruby Storm',           top8: ['Past in Flames','Grapeshot','Wrenn\'s Resolve','Ruby Medallion','Wish','Manamorphose','Desperate Ritual','Pyretic Ritual'],                                                              distractors: ['Living End','Allosaurus Combo','UR Aggro','Instant Reanimator'] },
+    { name: 'Death And Taxes',      top8: ['Wrath of the Skies','Consign to Memory','Ephemerate','Quantum Riddler','Solitude','Phelia, Exuberant Shepherd','Ragavan, Nimble Pilferer','Mystical Dispute'],                          distractors: ['Boros Aggro','UW Control','Affinity','Death\'s Shadow'] },
+    { name: 'Dimir Control',        top8: ['Consign to Memory','Force of Negation','Fatal Push','Spell Snare','Mystical Dispute','Orcish Bowmasters','Counterspell','Kaito, Bane of Nightmares'],                                   distractors: ['UW Control','Instant Reanimator','UB Mill','Death\'s Shadow'] },
+    { name: 'Eldrazi Ramp',         top8: ['Kozilek\'s Return','Trinisphere','Kozilek\'s Command','Unholy Heat','Devourer of Destiny','Talisman of Impulse','Sowing Mycospawn','Emrakul, the Promised End'],                        distractors: ['UrzaTron','Eldrazi Aggro','Broodscale Bloodchief','4/5c Aggro'] },
+    { name: 'Living End',           top8: ['Commandeer','Endurance','Force of Negation','Mystical Dispute','Shardless Agent','Generous Ent','Subtlety','Living End'],                                                               distractors: ['Allosaurus Combo','Simic Birthing Ritual','Reanimator','Instant Reanimator'] },
+    { name: '4/5c Aggro',          top8: ['Consign to Memory','Stubborn Denial','Leyline Binding','Territorial Kavu','Scion of Draco','Leyline of the Guildpact','Ragavan, Nimble Pilferer','Lightning Bolt'],                     distractors: ['Boros Aggro','Death\'s Shadow','Allosaurus Combo','Eldrazi Ramp'] },
+    { name: 'Instant Reanimator',   top8: ['Thoughtseize','Force of Negation','Teferi, Time Raveler','Consign to Memory','Goryo\'s Vengeance','Wrath of the Skies','Ephemerate','Atraxa, Grand Unifier'],                          distractors: ['Reanimator','Dimir Control','Death\'s Shadow','UB Mill'] },
+    { name: 'Affinity',             top8: ['Tormod\'s Crypt','Mishra\'s Bauble','Metallic Rebuke','Consign to Memory','Urza\'s Saga','Mox Opal','Shadowspear','Lavaspur Boots'],                                                   distractors: ['Broodscale Bloodchief','Eldrazi Aggro','UR Aggro','Boros Aggro'] },
+    { name: 'Amulet Titan',         top8: ['Vexing Bauble','Urza\'s Saga','Summoner\'s Pact','Primeval Titan','Amulet of Vigor','Dismember','Spelunking','Arboreal Grazer'],                                                        distractors: ['Simic Birthing Ritual','Eldrazi Ramp','UrzaTron','Allosaurus Combo'] },
+    { name: 'Simic Birthing Ritual',top8: ['Endurance','Harbinger of the Seas','Force of Negation','Abhorrent Oculus','Birthing Ritual','Subtlety','Coiling Oracle','Flare of Denial'],                                             distractors: ['Amulet Titan','Living End','Allosaurus Combo','4/5c Aggro'] },
+    { name: 'Allosaurus Combo',     top8: ['Hooting Mandrills','Veil of Summer','Consign to Memory','Neoform','Xenagos, God of Revels','Endurance','Allosaurus Rider','Griselbrand'],                                               distractors: ['Living End','Simic Birthing Ritual','Instant Reanimator','Ruby Storm'] },
+    { name: 'Broodscale Bloodchief',top8: ['Vexing Bauble','Blade of the Bloodchief','Urza\'s Saga','Emrakul, the Promised End','Soul-Guide Lantern','Basking Broodscale','Pithing Needle','Malevolent Rumble'],                   distractors: ['Affinity','Eldrazi Aggro','UrzaTron','Reanimator'] },
+    { name: 'Reanimator',           top8: ['Consign to Memory','Archon of Cruelty','Persist','Faithless Looting','Psychic Frog','Emperor of Bones','Fatal Push','Thoughtseize'],                                                    distractors: ['Instant Reanimator','Living End','Dimir Control','Death\'s Shadow'] },
+    { name: 'UW Control',           top8: ['Wrath of the Skies','Solitude','Teferi, Time Raveler','Consign to Memory','Counterspell','Mystical Dispute','Prismatic Ending','Isochron Scepter'],                                     distractors: ['Dimir Control','Death And Taxes','UB Mill','Instant Reanimator'] },
+    { name: 'Eldrazi Aggro',        top8: ['Dismember','Wastescape Battlemage','Vexing Bauble','Thought-Knot Seer','Kozilek\'s Command','Devourer of Destiny','It That Heralds the End','Eldrazi Linebreaker'],                     distractors: ['Eldrazi Ramp','UrzaTron','Affinity','Broodscale Bloodchief'] },
+    { name: 'UB Mill',              top8: ['Tasha\'s Hideous Laughter','Fatal Push','Surgical Extraction','Archive Trap','Drown in the Loch','Ruin Crab','Hedron Crab','Extirpate'],                                                distractors: ['Dimir Control','Instant Reanimator','Death\'s Shadow','UW Control'] },
+    { name: 'UR Aggro',             top8: ['Unholy Heat','Violent Urge','Dragon\'s Rage Channeler','Expressive Iteration','Lava Dart','Preordain','Cori-Steel Cutter','Surgical Extraction'],                                       distractors: ['Boros Aggro','Ruby Storm','Death\'s Shadow','4/5c Aggro'] },
+    { name: 'Death\'s Shadow',      top8: ['Cling to Dust','Street Wraith','Consign to Memory','Thoughtseize','Moonshadow','Death\'s Shadow','Mishra\'s Bauble','Nethergoyf'],                                                      distractors: ['Dimir Control','Instant Reanimator','4/5c Aggro','UR Aggro'] },
   ];
 
-  function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-  function pick5(arr) { return shuffle(arr).slice(0, 5); }
-  function buildOptions(d) { return shuffle([d.name, ...d.distractors]); }
+  /* ── helpers ── */
+  function shuffle(arr)    { return [...arr].sort(() => Math.random() - 0.5); }
+  function pick5(arr)      { return shuffle(arr).slice(0, 5); }
+  function buildOpts(d)    { return shuffle([d.name, ...d.distractors]); }
+  function eb(t)           { return `<div style="font-size:.62rem;letter-spacing:.25em;color:#d67134;text-transform:uppercase;margin-bottom:.45rem;margin-top:1.6rem;">${t}</div>`; }
+  function hint(t)         { return `<p style="font-size:.72rem;color:rgba(232,220,200,.4);margin-bottom:1rem;line-height:1.65;">${t}</p>`; }
 
-  let qOrder, qCards, qOptions, qIdx, qTags, qPhase, qResponses, qScore;
+  /* ── state ── */
+  let qOrder, qCards, qOptions, qIdx, qTags, qPhase, qResponses;
 
+  /* ── public init (called lazily by toggleTagger on first open) ── */
   window.initQuiz = function() {
-    qOrder = shuffle(DECKS);
-    qCards = qOrder.map(d => pick5(d.top8));
-    qOptions = qOrder.map(d => buildOptions(d));
-    qIdx = 0; qTags = []; qPhase = "tags"; qResponses = []; qScore = 0;
+    qOrder     = shuffle(DECKS);
+    qCards     = qOrder.map(d => pick5(d.top8));
+    qOptions   = qOrder.map(d => buildOpts(d));
+    qIdx       = 0;
+    qTags      = [];
+    qPhase     = 'tags';
+    qResponses = [];
     qRender();
   };
 
+  /* ── progress bar ── */
   function qUpdateProgress() {
-    const lbl = document.getElementById('quiz-progress-label');
+    const lbl  = document.getElementById('quiz-progress-label');
     const fill = document.getElementById('quiz-progress-fill');
-    if (lbl) lbl.textContent = `${qIdx + 1} / ${qOrder.length}`;
-    if (fill) fill.style.width = `${((qIdx + 1) / qOrder.length) * 100}%`;
+    if (lbl)  lbl.textContent   = `${qIdx + 1} / ${qOrder.length}`;
+    if (fill) fill.style.width  = `${((qIdx + 1) / qOrder.length) * 100}%`;
   }
 
-  function eb(text) { return `<div style="font-size:.62rem;letter-spacing:.25em;color:#d67134;text-transform:uppercase;margin-bottom:.45rem;margin-top:1.6rem;">${text}</div>`; }
-  function hint(text) { return `<p style="font-size:.72rem;color:rgba(232,220,200,.4);margin-bottom:1rem;line-height:1.65;">${text}</p>`; }
-
+  /* ── main render ── */
   function qRender() {
     if (qIdx >= qOrder.length) { qRenderDone(); return; }
+
     const ttl = document.getElementById('quiz-title');
     if (ttl) ttl.textContent = 'Deck Tagger';
     qUpdateProgress();
-    const deck = qOrder[qIdx];
+
+    const deck  = qOrder[qIdx];
     const cards = qCards[qIdx];
-    const opts = qOptions[qIdx];
+    const opts  = qOptions[qIdx];
 
     let html = eb('Key Cards');
-    html += cards.map((c,i) => `<div style="background:#1c1710;border:1px solid #282420;border-radius:3px;padding:.75rem 1rem;font-family:Georgia,serif;font-size:.95rem;font-style:italic;color:#e8dcc8;display:flex;align-items:center;gap:.85rem;margin-bottom:.4rem;"><span style="color:#d67134;font-size:.58rem;font-family:'Courier New',monospace;font-style:normal;flex-shrink:0;">${String(i+1).padStart(2,'0')}</span>${c}</div>`).join('');
+    html += cards.map((c, i) =>
+      `<div style="background:#1c1710;border:1px solid #282420;border-radius:3px;padding:.75rem 1rem;font-family:Georgia,serif;font-size:.95rem;font-style:italic;color:#e8dcc8;display:flex;align-items:center;gap:.85rem;margin-bottom:.4rem;">` +
+      `<span style="color:#d67134;font-size:.58rem;font-family:'Courier New',monospace;font-style:normal;flex-shrink:0;">${String(i+1).padStart(2,'0')}</span>${c}</div>`
+    ).join('');
 
-    if (qPhase === "tags") {
+    if (qPhase === 'tags') {
       html += eb('Step 1 — Tag this deck');
       html += hint('Select up to 3 strategy tags in priority order. First click = primary identity.');
+
       if (qTags.length > 0) {
         html += `<div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem;">` +
-          qTags.map((t,i) => `<div style="display:flex;align-items:center;gap:.28rem;background:#d67134;color:#fff;padding:.2rem .52rem;border-radius:2px;font-size:.68rem;"><span style="opacity:.65;font-size:.56rem;">${i+1}</span><span>${t.tag}</span><span onclick="qRemoveTag('${t.tag}')" style="cursor:pointer;opacity:.6;margin-left:.1rem;">×</span></div>`).join('') +
-        `</div>`;
+          qTags.map((t, i) =>
+            `<div style="display:flex;align-items:center;gap:.28rem;background:#d67134;color:#fff;padding:.2rem .52rem;border-radius:2px;font-size:.68rem;">` +
+            `<span style="opacity:.65;font-size:.56rem;">${i+1}</span><span>${t.tag}</span>` +
+            `<span onclick="qRemoveTag('${t.tag}')" style="cursor:pointer;opacity:.6;margin-left:.1rem;">×</span></div>`
+          ).join('') + `</div>`;
       }
+
       html += `<div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem;">` +
         TAGS.map(t => {
-          const i2 = qTags.findIndex(x => x.tag === t.id);
+          const i2  = qTags.findIndex(x => x.tag === t.id);
           const sel = i2 >= 0;
           const dis = !sel && qTags.length >= 3;
-          return `<button onclick="${dis ? '' : `qToggleTag('${t.id}')`}" style="background:${sel ? 'rgba(214,113,52,.15)' : 'transparent'};border:1px solid ${sel ? '#d67134' : '#282420'};color:${sel ? '#d67134' : dis ? 'rgba(232,220,200,.18)' : 'rgba(232,220,200,.62)'};padding:.36rem .75rem;font-size:.72rem;cursor:${dis ? 'not-allowed' : 'pointer'};border-radius:2px;font-family:'Courier New',monospace;display:flex;align-items:center;gap:.28rem;">${sel ? `<span style="background:#d67134;color:#fff;width:13px;height:13px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:bold;">${i2+1}</span>` : ''}${t.label}</button>`;
-        }).join('') +
-      `</div>`;
+          return `<button onclick="${dis ? '' : `qToggleTag('${t.id}')`}" ` +
+            `style="background:${sel ? 'rgba(214,113,52,.15)' : 'transparent'};` +
+            `border:1px solid ${sel ? '#d67134' : '#282420'};` +
+            `color:${sel ? '#d67134' : dis ? 'rgba(232,220,200,.18)' : 'rgba(232,220,200,.62)'};` +
+            `padding:.36rem .75rem;font-size:.72rem;cursor:${dis ? 'not-allowed' : 'pointer'};` +
+            `border-radius:2px;font-family:'Courier New',monospace;display:flex;align-items:center;gap:.28rem;">` +
+            (sel ? `<span style="background:#d67134;color:#fff;width:13px;height:13px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:bold;">${i2+1}</span>` : '') +
+            `${t.label}</button>`;
+        }).join('') + `</div>`;
+
       const active = qTags.length > 0;
-      html += `<button onclick="qNextPhase()" ${active ? '' : 'disabled'} style="width:100%;padding:.82rem;background:${active ? '#d67134' : '#1c1710'};border:1px solid ${active ? '#d67134' : '#282420'};color:#fff;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;cursor:${active ? 'pointer' : 'not-allowed'};border-radius:2px;font-family:'Courier New',monospace;">Next — Deck Tagger →</button>`;
+      html += `<button onclick="qNextPhase()" ${active ? '' : 'disabled'} ` +
+        `style="width:100%;padding:.82rem;background:${active ? '#d67134' : '#1c1710'};` +
+        `border:1px solid ${active ? '#d67134' : '#282420'};color:#fff;font-size:.7rem;` +
+        `letter-spacing:.18em;text-transform:uppercase;cursor:${active ? 'pointer' : 'not-allowed'};` +
+        `border-radius:2px;font-family:'Courier New',monospace;">Next — Guess the deck →</button>`;
     }
 
-    if (qPhase === "name") {
+    if (qPhase === 'name') {
       html += eb('Step 2 — Which deck is this?');
       html += hint('Pick the archetype name that best matches these cards.');
-      html += opts.map(name => `<button onclick="qSelectName(this)" data-name="${name.replace(/"/g,'&quot;')}" style="background:transparent;border:1px solid #282420;color:rgba(232,220,200,.78);padding:.78rem 1rem;font-size:.88rem;cursor:pointer;border-radius:3px;text-align:left;font-family:Georgia,serif;font-style:italic;width:100%;margin-bottom:.42rem;display:block;transition:border-color .14s,color .14s;" onmouseover="this.style.borderColor='#d67134';this.style.color='#e8dcc8'" onmouseout="this.style.borderColor='#282420';this.style.color='rgba(232,220,200,.78)'">${name}</button>`).join('');
+      html += opts.map(name =>
+        `<button onclick="qSelectName(this)" data-name="${name.replace(/"/g,'&quot;')}" ` +
+        `style="background:transparent;border:1px solid #282420;color:rgba(232,220,200,.78);` +
+        `padding:.78rem 1rem;font-size:.88rem;cursor:pointer;border-radius:3px;text-align:left;` +
+        `font-family:Georgia,serif;font-style:italic;width:100%;margin-bottom:.42rem;display:block;` +
+        `transition:border-color .14s,color .14s;" ` +
+        `onmouseover="this.style.borderColor='#d67134';this.style.color='#e8dcc8'" ` +
+        `onmouseout="this.style.borderColor='#282420';this.style.color='rgba(232,220,200,.78)'">${name}</button>`
+      ).join('');
     }
 
-    if (qPhase === "result") {
+    if (qPhase === 'result') {
       const last = qResponses[qResponses.length - 1];
-      html += `<div style="border:1px solid rgba(214,113,52,.2);border-radius:3px;padding:1rem 1.2rem;margin-bottom:1.2rem;margin-top:1.6rem;">
-        <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem;color:#d67134;">Your label</div>
-        <div style="font-family:Georgia,serif;font-size:1rem;font-style:italic;">${last.user_label}</div>
-      </div>`;
+      html += `<div style="border:1px solid rgba(214,113,52,.2);border-radius:3px;padding:1rem 1.2rem;margin-bottom:1.2rem;margin-top:1.6rem;">` +
+        `<div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem;color:#d67134;">Your label</div>` +
+        `<div style="font-family:Georgia,serif;font-size:1rem;font-style:italic;">${last.user_label}</div></div>`;
       html += eb('Your tags');
       html += `<div style="display:flex;gap:.32rem;flex-wrap:wrap;">` +
-        qTags.map((t,i) => `<span style="background:${i===0 ? 'rgba(214,113,52,.2)' : 'rgba(214,113,52,.07)'};border:1px solid ${i===0 ? 'rgba(214,113,52,.5)' : 'rgba(214,113,52,.2)'};color:${i===0 ? '#d67134' : 'rgba(214,113,52,.55)'};font-size:.66rem;padding:.16rem .5rem;border-radius:2px;">${i+1}. ${t.tag}</span>`).join('') +
-      `</div>`;
+        qTags.map((t, i) =>
+          `<span style="background:${i===0 ? 'rgba(214,113,52,.2)' : 'rgba(214,113,52,.07)'};` +
+          `border:1px solid ${i===0 ? 'rgba(214,113,52,.5)' : 'rgba(214,113,52,.2)'};` +
+          `color:${i===0 ? '#d67134' : 'rgba(214,113,52,.55)'};font-size:.66rem;padding:.16rem .5rem;border-radius:2px;">${i+1}. ${t.tag}</span>`
+        ).join('') + `</div>`;
       html += `<div id="quiz-status" style="font-size:.68rem;color:rgba(232,220,200,.4);margin:.6rem 0;min-height:1rem;"></div>`;
       html += `<button onclick="qNextDeck()" style="width:100%;padding:.82rem;background:#d67134;border:1px solid #d67134;color:#fff;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Courier New',monospace;">${qIdx + 1 >= qOrder.length ? 'See Results' : 'Next Deck →'}</button>`;
     }
@@ -1236,84 +1345,95 @@ async function handleSubmit(e) {
     document.getElementById('quiz-app').innerHTML = html;
   }
 
+  /* ── tag interactions ── */
   window.qToggleTag = function(tag) {
     const i = qTags.findIndex(t => t.tag === tag);
-    if (i >= 0) { qTags.splice(i, 1); qTags.forEach((t,j) => t.priority = j+1); }
+    if (i >= 0) { qTags.splice(i, 1); qTags.forEach((t, j) => t.priority = j+1); }
     else if (qTags.length < 3) { qTags.push({ tag, priority: qTags.length + 1 }); }
     qRender();
   };
-  window.qRemoveTag = function(tag) { window.qToggleTag(tag); };
-  window.qNextPhase = function() { if (qTags.length > 0) { qPhase = "name"; qRender(); } };
+  window.qRemoveTag  = function(tag) { window.qToggleTag(tag); };
+  window.qNextPhase  = function() { if (qTags.length > 0) { qPhase = 'name'; qRender(); } };
 
+  /* ── name selection → save → show result ── */
   window.qSelectName = function(btn) {
     const name = btn.getAttribute('data-name');
     const deck = qOrder[qIdx];
-    
     const entry = {
-      deck_name: deck.name,
-      key_cards: qCards[qIdx].join(", "),
-      tag_1: qTags[0]?.tag || null,
-      tag_2: qTags[1]?.tag || null,
-      tag_3: qTags[2]?.tag || null,
-      user_label: name,
+      deck_name:    deck.name,
+      key_cards:    qCards[qIdx].join(', '),
+      tag_1:        qTags[0]?.tag || null,
+      tag_2:        qTags[1]?.tag || null,
+      tag_3:        qTags[2]?.tag || null,
+      user_label:   name,
       submitted_at: new Date().toISOString(),
     };
     qResponses.push(entry);
-    qPhase = "result";
+    qPhase = 'result';
     qRender();
+
     const params = new URLSearchParams({
-      deck_name: entry.deck_name || "",
-      key_cards: entry.key_cards || "",
-      tag_1: entry.tag_1 || "",
-      tag_2: entry.tag_2 || "",
-      tag_3: entry.tag_3 || "",
-      user_label: entry.user_label || "",
-      submitted_at: entry.submitted_at || "",
+      deck_name:    entry.deck_name    || '',
+      key_cards:    entry.key_cards    || '',
+      tag_1:        entry.tag_1        || '',
+      tag_2:        entry.tag_2        || '',
+      tag_3:        entry.tag_3        || '',
+      user_label:   entry.user_label   || '',
+      submitted_at: entry.submitted_at || '',
     });
-    fetch(SHEETS_URL + "?" + params.toString(), { method:"GET", mode:"no-cors" })
-      .then(() => { const s = document.getElementById('quiz-status'); if(s) s.textContent = '✓ Saved to Google Sheets'; })
-      .catch(() => { const s = document.getElementById('quiz-status'); if(s) s.textContent = 'Saved locally'; });
+    fetch(SHEETS_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' })
+      .then(() => { const s = document.getElementById('quiz-status'); if (s) s.textContent = '✓ Saved to Google Sheets'; })
+      .catch(() => { const s = document.getElementById('quiz-status'); if (s) s.textContent = 'Saved locally'; });
   };
 
+  /* ── advance to next deck ── */
   window.qNextDeck = function() {
-    qIdx++; qTags = []; qPhase = "tags";
+    qIdx++; qTags = []; qPhase = 'tags';
     if (qIdx >= qOrder.length) { qRenderDone(); return; }
     qRender();
   };
 
+  /* ── done screen ── */
   function qRenderDone() {
-    const ttl = document.getElementById('quiz-title'); if(ttl) ttl.textContent = 'Tagger Complete';
-    const lbl = document.getElementById('quiz-progress-label'); if(lbl) lbl.textContent = `${qOrder.length} / ${qOrder.length}`;
-    const fill = document.getElementById('quiz-progress-fill'); if(fill) fill.style.width = '100%';
-    const app = document.getElementById('quiz-app');
+    const ttl  = document.getElementById('quiz-title');           if (ttl)  ttl.textContent   = 'Tagger Complete';
+    const lbl  = document.getElementById('quiz-progress-label'); if (lbl)  lbl.textContent   = `${qOrder.length} / ${qOrder.length}`;
+    const fill = document.getElementById('quiz-progress-fill');  if (fill) fill.style.width  = '100%';
+    const app  = document.getElementById('quiz-app');
     if (!app) return;
+
     app.innerHTML = `
       <div style="text-align:center;padding:2rem 0;">
-        <div style="font-family:Georgia,serif;font-size:4rem;color:#d67134;line-height:1;">${qScore}<span style="font-size:.45em;opacity:.5">/${qOrder.length}</span></div>
-        
         <p style="font-size:.8rem;color:rgba(232,220,200,.5);margin-top:1rem;line-height:1.75;">Tags and labels saved. Thanks for contributing to the training data.</p>
         <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0;">
           <button onclick="qExportCSV()" style="background:transparent;border:1px solid #282420;color:rgba(232,220,200,.7);padding:.45rem 1rem;font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Courier New',monospace;">Export CSV</button>
           <button id="q-copy-btn" onclick="qCopyDatabricks()" style="background:transparent;border:1px solid #d67134;color:#d67134;padding:.45rem 1rem;font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Courier New',monospace;">Copy Databricks Cell</button>
         </div>
         <div style="display:flex;flex-direction:column;gap:.45rem;text-align:left;">
-          ${qResponses.map(r => `<div style="background:#1c1710;border:1px solid ${r.user_label===r.deck_name ? 'rgba(74,138,74,.3)' : 'rgba(214,113,52,.2)'};border-radius:3px;padding:.7rem 1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;">
-            <div>
-              <div style="font-family:Georgia,serif;font-size:.85rem;font-style:italic;margin-bottom:.25rem;">${r.deck_name}</div>
-              <div style="display:flex;gap:.25rem;flex-wrap:wrap;">${[r.tag_1,r.tag_2,r.tag_3].filter(Boolean).map((t,j)=>`<span style="font-size:.58rem;color:#d67134;border:1px solid rgba(214,113,52,.3);padding:.08rem .38rem;border-radius:2px;">${j+1}. ${t}</span>`).join('')}</div>
-            </div>
-            
-          </div>`).join('')}
+          ${qResponses.map(r =>
+            `<div style="background:#1c1710;border:1px solid rgba(214,113,52,.2);border-radius:3px;padding:.7rem 1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;">
+              <div>
+                <div style="font-family:Georgia,serif;font-size:.85rem;font-style:italic;margin-bottom:.25rem;">${r.deck_name}</div>
+                <div style="display:flex;gap:.25rem;flex-wrap:wrap;">
+                  ${[r.tag_1,r.tag_2,r.tag_3].filter(Boolean).map((t,j) =>
+                    `<span style="font-size:.58rem;color:#d67134;border:1px solid rgba(214,113,52,.3);padding:.08rem .38rem;border-radius:2px;">${j+1}. ${t}</span>`
+                  ).join('')}
+                </div>
+              </div>
+            </div>`
+          ).join('')}
         </div>
       </div>`;
   }
 
+  /* ── export helpers ── */
   window.qExportCSV = function() {
-    const h = ["deck_name","key_cards","tag_1","tag_2","tag_3","user_label","submitted_at"];
+    const h    = ['deck_name','key_cards','tag_1','tag_2','tag_3','user_label','submitted_at'];
     const rows = qResponses.map(r => h.map(k => `"${(r[k]||'').toString().replace(/"/g,'""')}"`).join(','));
-    const blob = new Blob([[h.join(','), ...rows].join('\n')], { type:'text/csv' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = 'deck_tagger.csv'; a.click();
+    const blob = new Blob([[h.join(','), ...rows].join('\n')], { type: 'text/csv' });
+    const a    = document.createElement('a');
+    a.href     = URL.createObjectURL(blob);
+    a.download = 'deck_tagger.csv';
+    a.click();
   };
 
   window.qCopyDatabricks = function() {
@@ -1323,11 +1443,8 @@ async function handleSubmit(e) {
       if (btn) { btn.textContent = '✓ Paste in Databricks'; btn.style.color = '#8aaa8a'; btn.style.borderColor = '#4a8a4a'; }
     });
   };
+
 })();
 </script>
 </body>
 </html>
-
-
-
-
