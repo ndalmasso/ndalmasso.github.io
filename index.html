@@ -717,6 +717,51 @@ const TAGGER_BLOCK = SHOW_TAGGER ? `
       </div>` : '';
 
 const projects = [
+{
+    slug:    'echo',
+    tag:     'Databricks · dbt · LightGBM · SHAP · 2025',
+    title:   'ECHO: Engagement & Churn Health Observatory',
+    year:    'Every disengaged patient left a signal before they went quiet. Can we catch it in time?',
+    thumb:   'images/echo_11.png',
+    visible: true,
+    content: `
+      <p>Digital health platforms face a problem traditional clinics do not: patients can disengage silently, with no formal discharge event to mark their departure. No missed appointment, no cancellation. Just absence. The question ECHO tries to answer is whether the signal is already there, buried in routine EHR data, before it becomes irreversible.</p>
+      <p>Specifically: can visit history, clinical complexity, cost, and demographics predict who is about to lapse, and can that prediction be built on a production-grade pipeline that would work at scale?</p>
+
+      <div class="pm-img"><img src="images/echo_06.png"></div>
+      <p class="pm-caption">Churn rate rises monotonically with age. The 65+ cohort disengages at 30.4%, more than four times the rate of patients under 35.</p>
+
+      <h3>The Pipeline</h3>
+      <p>The data comes from <strong>Synthea</strong>, an open-source synthetic EHR generator by MITRE. Realistic patient records, no real people involved. Raw CSV files land in Databricks Delta Lake and flow through a three-layer <strong>medallion architecture</strong> built entirely with dbt models. Bronze handles ingestion. Silver joins patients to encounters, computes inter-visit intervals, and aggregates conditions. Gold produces a single validated feature table: one row per patient, nine features, one churn label.</p>
+      <p>A patient is <em>churned</em> if they have had no encounter in the last 365 days , consistent with annual review cycles in primary care. 20 of 117 patients qualify, a 17% prevalence low enough to make the modelling genuinely hard.</p>
+
+      <h3>Four Patient Segments</h3>
+      <p>Before touching the churn model, K-Means clustering on six behavioural features surfaces four distinct profiles. The optimal k=4 is selected via elbow method and silhouette scores.</p>
+
+      <div class="pm-img"><img src="images/echo_08.png"></div>
+      <p class="pm-caption">UMAP projection of the feature space. Healthy Engagers (green) form a clearly separated cluster. At-Risk Complex patients (red) sit embedded within the Stable Users mass. Their risk is not visible from any single feature alone.</p>
+
+      <p><strong>Healthy Engagers</strong> are young, low-complexity, barely churn (3%). <strong>Stable Users</strong> are the core retained cohort: middle-aged, moderate engagement, 19% churn. <strong>At-Risk Complex</strong> patients are elderly, extremely high-utilisation, 60% churned: the highest-priority outreach target. <strong>Lost High-Need</strong> patients are fully disengaged despite historically intense clinical contact. Perhaps counterintuitively, higher condition counts do not protect against churn. The most clinically complex segments disengage the most.</p>
+
+      <h3>The Model</h3>
+      <p>A <strong>LightGBM</strong> classifier trained on the Gold features achieves <strong>AUC-ROC = 0.737</strong> , meaningful signal for a 117-patient cohort that would sharpen considerably at scale.</p>
+
+      <div class="pm-img"><img src="images/echo_10.png"></div>
+      <p class="pm-caption">ROC curve on the held-out test set. The model correctly ranks a churned patient above an active one approximately 74% of the time.</p>
+
+      <h3>What Actually Drives Churn</h3>
+      <p>SHAP analysis identifies <strong>age</strong> as the dominant predictor, followed by <strong>income</strong> and total encounters. Claim cost ranks fourth. Demographic and socioeconomic factors drive disengagement more than clinical complexity, a finding that shifts the focus of any retention strategy away from clinical intervention and toward financial support and targeted outreach.</p>
+
+      <div class="pm-img"><img src="images/echo_11.png"></div>
+      <p class="pm-caption">SHAP feature importance ranked by mean absolute contribution. Age and income dominate. The disengagement signal is socioeconomic before it is clinical.</p>
+
+      <p>For health-focused digital platforms (think AI scribing, weight management, digital GP services), the implication is direct: means-tested subsidies and proactive cost communication are retention tools, not just nice-to-haves.</p>
+
+      <div class="pm-links">
+        <a href="https://github.com/ndalmasso/echo" target="_blank">GitHub Repository →</a>
+      </div>`
+  },
+
   {
     slug:    'galaxy-clustering',
     tag:     'Galaxy Clustering · HST · JWST · 2022–2025',
@@ -1448,4 +1493,3 @@ async function handleSubmit(e) {
 </script>
 </body>
 </html>
-
